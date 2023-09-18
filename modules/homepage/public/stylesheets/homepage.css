@@ -1,0 +1,46 @@
+body {
+    font-family: 'Poppins', sans-serif !important;
+    color: #fff;
+    scroll-behavior: smooth;
+    overflow: auto;
+  }
+  .custom-button {
+    position: relative;
+    overflow: hidden;
+    /* other button styles... */
+}
+
+.button-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.custom-button span, .custom-button i {
+    position: relative;
+    z-index: 2;
+}
+
+.custom-button:hover .button-svg rect {
+    animation: move 5s linear infinite;
+}
+
+@keyframes move {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(100px);
+    }
+}
+.custom-spacer{
+  background-image: linear-gradient(135deg, rgb(239, 239, 239) 33.33%, #191b29 33.33%, #191b29 50%, rgb(239, 239, 239) 50%, rgb(239, 239, 239) 83.33%, #191b29 83.33%, #191b29 100%);background-size: 56.57px 56.57px;
+height: 26px;
+width: 56px;
+float: right;
+margin-top: -1px;
+margin-bottom: -1px;
+}

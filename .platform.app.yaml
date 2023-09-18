@@ -1,0 +1,18 @@
+name: betclic-hollandais
+
+type: nodejs:18
+
+disk: 512
+
+mounts:
+  'logs':
+    source: local
+    source_path: logs
+
+dependencies:
+    nodejs:
+        sharp: "*"
+
+web:
+    commands:
+        start: "npm start"

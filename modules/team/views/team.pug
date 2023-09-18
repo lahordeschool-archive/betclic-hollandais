@@ -1,0 +1,12 @@
+extends ../../_common/views/layout
+
+block content
+  link(rel="stylesheet", href="/stylesheets/activities.css")
+  .row 
+    .col-2 
+    .col-8
+        p Your team :
+            ul
+            each member in users
+                li= member.firstname 
+    .col-2

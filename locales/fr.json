@@ -1,0 +1,75 @@
+{
+  "profile": {
+    "name": "{{firstname}} {{lastname}}",
+    "labels": {
+      "seniority": "Ancienneté",
+      "missionLog": "Journaux de mission",
+      "intermission": "Intermission",
+      "months": "mois",
+      "days": "jours"
+    }
+  },
+  "team": {
+    "title": "Équipe: {{name}}",
+    "labels": {
+      "avgSeniority": "Ancienneté moyenne",
+      "avgMissionLog": "Journaux de mission moyen",
+      "avgIntermission": "Intermission moyenne",
+      "months": "mois",
+      "days": "jours"
+    }
+  },
+  "releaseNote": {
+    "latest": "Dernière mise à jour",
+    "version": "Version"
+  },
+  "missionLog": {
+    "title": "Journaux de mission",
+    "labels": {
+      "missionLogs": "Journaux de mission",
+      "late": "En retard",
+      "missionOrders": "Ordres de mission",
+      "noMissionOrder": "Aucun ordre de mission",
+      "addNew": "Ajouter un nouveau journal de mission",
+      "rejectedLogs": "Journaux rejetés",
+      "actionNeeded": "Action requise",
+      "pendingLogs": "Journaux en attente",
+      "waitingApproval": "En attente d'approbation",
+      "validatedLogs": "Journaux validés",
+      "allClear": "Tout va bien",
+      "month": "Mois",
+      "status": "Statut",
+      "note": "Note",
+      "actions": "Actions",
+      "addMissionLogModalTitle": "Ajouter un journal de mission",
+      "selectMonthLabel": "Mois",
+      "submit": "Soumettre",
+      "cancel": "Annuler",
+      "confirmDeleteModalTitle": "Supprimer le journal de mission",
+      "confirmDeleteMessage": "Êtes-vous sûr de vouloir supprimer ce journal de mission?",
+      "confirmDelete": "Confirmer la suppression"
+    }
+  },
+  "missionLogTable": {
+    "buttons": {
+      "edit": "Éditer",
+      "delete": "Supprimer"
+    }
+  },
+  "missionLogForm": {
+    "title": "Journal de mission {{monthText}}/{{yearText}}",
+    "headers": {
+      "missionOrders": "Ordres de mission"
+    },
+    "labels": {
+      "leaves": "Congés",
+      "intermission": "Interruption"
+    },
+    "placeholders": {
+      "note": "Note"
+    },
+    "buttons": {
+      "submit": "Soumettre"
+    }
+  }
+}

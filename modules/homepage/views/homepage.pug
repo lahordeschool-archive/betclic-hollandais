@@ -1,0 +1,314 @@
+extends ../../_common/views/layout-offline
+
+block content
+  .row.jumbotron.bg-dark-custom(style="min-height: 600px;")
+    .col-md-3
+    .col-md-6.text-white.text-center
+      h1(display="inline" style="margin-top: 7rem; font-size: 3.125rem; font-weight: bold;") The ultimate 
+        span.rainbow-text-loop gamification 
+        span and challenging tool for your team.
+      br
+      p Work can be enjoyable and challenging at the same time. Starship brings the fun of gaming to your workday. Embark on a thrilling journey full of adventures and quests that will motivate and engage your team like never before.
+      br
+      a.btn.btn-primary(href="/login" style="font-size: 1.125rem; padding: 15px;") Get Started 
+      span &nbsp;&nbsp; or
+      a(href="/login?join=true#" style="font-size: 1.125rem; padding: 15px; color: #fff; text-decoration: none;") Join a team
+      br
+      br
+    .col-md-3
+  .row.flex-nowrap.bg-white
+    .col-md-3 
+    .col-md-6(style="background: #000; color: #fff; height: 150px; margin-top: -75px; border-radius: 10px; padding: 0px;")
+      div(style="width: 100%; height: 25px; background: #39373A; border-top-right-radius: 5px; border-top-left-radius: 5px;") 
+        i.bi.bi-circle-fill(style="font-size: 10px; color: red; margin-right: 10px; margin-left: 10px;")
+        i.bi.bi-circle-fill(style="font-size: 10px; color: orange; margin-right: 10px;")
+        i.bi.bi-circle-fill(style="font-size: 10px; color: green; ")
+      p(style="padding: 20px;") Autopilot AI > bip boop... loading your starship autopilot AI program...  
+    .col-md-3  
+  .row.flex-nowrap.bg-white#features
+    .col
+      .row
+        .col-3 
+        .col-6.text-center
+          .row.text-center
+            .col-6.d-flex.align-items-start(style="padding-top: 40px;")
+              .i.bi.bi-rocket-fill(style="font-size: 2rem; color: #FFF; margin-top: 10px; margin-right: 10px; background: #191b29; border-radius: 10px; min-width: 50px; height: 50px;")
+              div
+                h3.fs-2.align-items-center(style="min-height: 150px;") Create your starship and teams
+                p Design and customize your ship to reflect your team's personality and style. Choose from a variety of ship designs and add your own customizations to make it truly unique. 
+            .col-6.d-flex.align-items-start(style="padding-top: 40px;")
+              .i.bi.bi-robot(style="font-size: 2rem; color: #FFF; margin-top: 10px; margin-right: 10px; background: #191b29; border-radius: 10px; min-width: 50px; height: 50px;")
+              div
+                h3.fs-2.align-items-center(style="min-height: 150px;")  Autopilot AI companion
+                p Our AI-powered Autopilot will guide your crew through the story, adding an extra layer of excitement to your experience. Our AI can suggest activities that are tailored to your team's needs and interests.
+            .col-6.d-flex.align-items-start(style="padding-top: 40px;")
+              .i.bi.bi-calendar2-check(style="font-size: 2rem; color: #FFF; margin-top: 10px; margin-right: 10px; background: #191b29; border-radius: 10px; min-width: 50px; height: 50px;")
+              div
+                h3.fs-2.align-items-center(style="min-height: 150px;") Assign and Complete Activities 
+                p Activities in Starship are like quests in a game, but for work. Complete activities to earn experience points and badges, level up your crew, and unlock new challenges.
+            .col-6.d-flex.align-items-start(style="padding-top: 40px;")
+              .i.bi.bi-nut(style="font-size: 2rem; color: #FFF; margin-top: 10px; margin-right: 10px; background: #191b29; border-radius: 10px; min-width: 50px; height: 50px;")
+              div
+                h3.fs-2.align-items-center(style="min-height: 150px;") Rewards and Badges
+                p Earn experience points and badges as you complete activities and level up your crew. Customize your badges to reflect your team's achievements and accomplishments.
+                br
+        .col-3
+  .row.flex-nowrap#integrations
+    .col
+      .row
+        .col-3 
+        .col-6.text-center
+          .row(style="padding-top: 20px;") 
+            p
+            h3 Starship is designed to integrate seamlessly with your favorite tools and platforms. 
+            p
+            p Here's how we can connect with your team:
+            p
+            .row
+              .col-2 
+              .col-4.m-auto
+                button.btn.btn-outline-secondary.text-center(style="color: #fff;")
+                  i.fab.fa-microsoft
+                  span &nbsp; Office 365 login
+              .col-4.m-auto
+                button.btn.btn-outline-secondary(style="color: #fff;")
+                  i.fab.fa-google
+                  span &nbsp; Google login 
+              .col-2
+            .row
+              p
+              p
+              br
+              p Collaboration tool integration to create a thriving ship community:
+              br
+              br
+              .row 
+                .col-2
+                .col-3
+                  p
+                    i.fab.fa-slack(style="font-size: 3em; border: 1px solid #fff; padding: 20px; border-radius: 50%;")
+                    br
+                    h5(style="margin-top: 10px;") &nbsp; Slack 
+                .col-3
+                  p
+                    i.fab.fa-microsoft(style="font-size: 3em; border: 1px solid #fff; padding: 20px; border-radius: 50%;")
+                    br
+                    h5(style="margin-top: 10px;") &nbsp; Teams 
+                .col-3
+                  p
+                    i.fab.fa-discord(style="font-size: 3em; border: 1px solid #fff; padding: 20px; border-radius: 50%;")
+                    br
+                    h5(style="margin-top: 10px;") &nbsp; Discord 
+                
+            .row
+              p
+            .row
+              .col-1
+                i.bi.bi-code-slash(style="font-size: 3em;") 
+              .col-11
+                p API Integration: Use Starship's API to connect with other third-party tools and platforms. This can help you automate your workflows and streamline your operations.
+            .row
+              p
+  .row.flex-nowrap.bg-white
+    .col.py-3
+      .row(style="padding: 15px; padding-right: 0px;").text-center
+         
+        h2#pricing Pricing
+        p Starship offers flexible pricing plans that allow you to pay for what you use. Here are our current plans:
+        .row
+          .col-2
+          .col-2
+            .card.text-center(style="min-height: 100%;") 
+              .card-header.py-3 
+                h5 Free Plan
+              .card-body
+                .card-title 
+                  h3 $
+                    b 0
+                    span /month
+                  ul.list-unstyled.mt-3.mb-4(style="text-align: left;")
+                    li 
+                      .row
+                        .col-1
+                          i.bi.bi-check-circle-fill(style="color: green;")
+                        .col-10
+                          span Unlimited users and teams
+                    li 
+                      .row
+                        .col-1 
+                          i.bi.bi-check-circle-fill(style="color: green;")
+                        .col-10
+                          span Up to 
+                          b 10  
+                          span activities or tokens per month
+                    li 
+                      .row
+                        .col-1  
+                          i.bi.bi-check-circle-fill(style="color: green; ")
+                        .col-10
+                          span Manually created activities
+          .col-2
+            .card.text-center(style="min-height: 100%;") 
+              .card-header.py-3 
+                h5 Basic Plan
+              .card-body
+                .card-title 
+                  h3 $
+                    b 25
+                    span /month
+                  ul.list-unstyled.mt-3.mb-4(style="text-align: left;")
+                    li
+                      .row 
+                        .col-1 
+                          i.bi.bi-check-circle-fill(style="color: green; ")
+                        .col-10
+                          span Unlimited users and teams
+                    li 
+                      .row
+                        .col-1
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span Up to 
+                          b 100 
+                          span activities or tokens per month
+                    li 
+                      .row
+                        .col-1 
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span Manually created activities
+                    li  
+                      .row
+                        .col-1
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span Recurring activities
+          .col-2
+            .card.text-center(style="min-height: 100%;") 
+              .card-header.py-3 
+                h5 Pro Plan
+              .card-body
+                .card-title 
+                  h3 $
+                    b 100
+                    span /month
+                  ul.list-unstyled.mt-3.mb-4(style="text-align: left;")
+                    li  
+                      .row
+                        .col-1
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span Unlimited users and teams
+                    li  
+                      .row
+                        .col-1
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span Up to 
+                          b 500 
+                          span activities or tokens per month
+                    li  
+                      .row
+                        .col-1
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span Manually created activities
+                    li  
+                      .row
+                        .col-1
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span Recurring activities
+                    li  
+                      .row
+                        .col-1
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span API integration
+                    li 
+                      .row
+                        .col-1 
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span Activities created by AI
+          .col-2
+            .card.text-center(style="min-height: 100%;")  
+              .card-header.py-3 
+                h5 Enterprise Plan
+              .card-body
+                .card-title 
+                  h3 Let's talk
+                  ul.list-unstyled.mt-3.mb-4(style="text-align: left;")
+                    li 
+                      .row
+                        .col-1 
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span Unlimited users and teams
+                    li 
+                      .row
+                        .col-1 
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          b Unlimited 
+                          span activities or tokens per month
+                    li 
+                      .row
+                        .col-1 
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span Manually created activities
+                    li 
+                      .row
+                        .col-1 
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span Recurring activities
+                    li 
+                      .row
+                        .col-1 
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span API integration
+                    li 
+                      .row
+                        .col-1 
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span Activities created by AI
+                    li 
+                      .row
+                        .col-1 
+                          i.bi.bi-check-circle-fill(style="color: green; margin-right: 10px;")
+                        .col-10
+                          span Low code integration tool
+          .col-2
+        .row 
+          .col-2 
+          .col-8
+            br 
+            i In addition to our standard plans, we also offer add-ons and customizations that can help you tailor your Starship experience to your specific needs. Contact us to learn more about our custom solutions.
+            p
+            p Join the Starship community today and start gamifying your team's work experience!  
+
+          .col-2
+  .row 
+    .col-3 
+    .col-6.text-center
+      br
+      h2#join Start your journey today 
+      br
+      i Don't wait any longer to elevate your team's productivity and engagement. Join the Starship community today and take your team on a journey they'll never forget!
+      p
+      br
+      a.btn.btn-primary(href="/login" style="font-size: 1.125rem; padding: 15px; margin-top: 10px;") Get Started 
+      span &nbsp;&nbsp; or
+      a(href="/login?join=true#" style="font-size: 1.125rem; padding: 15px; color: #fff; text-decoration: none;") Join a team
+
+      p(style="margin-top: 50px; margin-bottom: 50px;")
+  
+      hr.my-4
+
+
+
+  link(rel='stylesheet', href='/stylesheets/homepage.css')

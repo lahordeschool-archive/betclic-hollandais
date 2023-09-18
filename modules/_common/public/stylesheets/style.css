@@ -1,0 +1,228 @@
+:root {
+  --primary-color: #5f2eea;
+  --secondary-color: #23b199;
+  --background-color: #111111;
+  --background-box-color: #191b29;
+  --background-box-color-secondary: #2f323e;
+  --secondary-gradient-color: #21363f;
+  --menu-item-color: #fff;
+  --menu-item-link-color: #dffff6;
+  --h4-color: #b8b9bd;
+  --btn-primary-color: #eff0f3;
+}
+
+.btn-primary {
+  background-color: var(--btn-primary-color) !important;
+  border-color: var(--btn-primary-color) !important;
+}
+
+body {
+  font-family: "Poppins", sans-serif !important;
+  color: #fff;
+  scroll-behavior: smooth;
+  overflow: auto;
+}
+.bg-dark-custom {
+  background: var(--primary-color) !important;
+}
+.bg-dark-custom-body {
+  background: var(--background-color) !important;
+  padding: 20px;
+}
+a {
+  color: #00b7ff;
+}
+.header-bar {
+  background: var(--background-box-color) !important;
+  padding: 20px;
+  padding-top: 0px;
+  width: 100vw;
+  height: 56px;
+  position: fixed;
+  top: 0px;
+  z-index: 99;
+  border-bottom: 1px solid var(--background-box-color-secondary);
+}
+.header-profile {
+  background: var(--background-box-color-secondary) !important;
+  color: var(--menu-item-color) !important;
+  width: 30px;
+  border-radius: 50%;
+  text-align: center;
+  height: 30px;
+  padding-top: 4px;
+  font-size: 17px;
+  float: left;
+}
+.header-profile-container {
+  position: fixed;
+  right: 20px;
+  width: 155px;
+  margin-top: 5px;
+  padding-top: 7px;
+  height: 46px;
+  padding-right: 5px;
+  border-radius: 25px;
+}
+.header-profile-container:hover {
+  background: var(--background-box-color-secondary) !important;
+  cursor: pointer;
+}
+.profile-menu {
+  position: fixed;
+  top: 56px;
+  right: 20px;
+  background: var(--background-box-color-secondary) !important;
+  color: #fff;
+  width: 276px;
+}
+
+.profile-menu h5 {
+  padding: 10px;
+  margin: 0px;
+  border-bottom: 1px solid var(--background-box-color);
+}
+.profile-menu ul {
+  list-style: none;
+  padding-left: 10px;
+  margin-top: 10px;
+}
+.hidden {
+  display: none;
+}
+.show {
+  display: block;
+}
+
+.profile-menu ul > li a {
+  color: #fff;
+  text-decoration: none;
+  width: 100%;
+  display: block;
+}
+.profile-menu ul > li a span {
+  margin-left: 10px;
+}
+.main-title {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.progress-bar {
+  background: var(--secondary-color) !important;
+
+  background: linear-gradient(
+    to right,
+    var(--secondary-color),
+    var(--secondary-gradient-color)
+  ) !important;
+}
+.icon-officers {
+  color: red !important;
+}
+.text-bg-info {
+  background-color: white !important;
+  color: black !important;
+}
+.text-bg-alert {
+  background-color: red !important;
+  color: white !important;
+}
+.badge-level {
+  margin-top: -20px !important;
+  z-index: 99;
+  position: relative;
+  width: 50%;
+  display: block !important;
+}
+.notif {
+  color: red !important;
+  font-size: 10px !important;
+  margin-right: -5px;
+  float: right;
+  z-index: 99;
+  position: relative;
+}
+button > .notif {
+  margin-top: 5px !important;
+}
+.toast-header,
+.toast-body {
+  background-color: var(--primary-color) !important;
+  color: #fff !important;
+}
+
+.top-profile-name {
+  padding-top: 25px;
+  text-align: left;
+  color: #fff;
+}
+.top-profile-name a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+}
+.float-right {
+  float: right;
+}
+.profile-image {
+  width: 85px;
+}
+.progress {
+  background-color: var(--background-box-color-secondary) !important;
+  border-radius: 0 !important;
+}
+h2.menu-item {
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+h2.menu-item > a {
+  padding-right: 10px;
+  padding-left: 10px;
+  padding-bottom: 5px;
+  border-radius: 10px;
+}
+h2.menu-item > a > i {
+  font-size: 24px;
+  color: var(--menu-item-color);
+}
+.current-menu {
+  color: var(--primary-color) !important;
+}
+.current-menu-a {
+  background-color: var(--menu-item-link-color) !important;
+}
+.card-layout {
+  padding-bottom: 25px !important;
+  background: var(--background-box-color) !important;
+
+  margin: 10px !important;
+  padding: 35px;
+}
+.card-layout h1 {
+  color: var(--primary-color) !important;
+  font-weight: bold;
+  letter-spacing: -2px;
+}
+
+.card-layout h4 {
+  font-size: 1em !important;
+  color: var(--h4-color) !important;
+}
+
+.card-layout p {
+  color: #fff !important;
+}
+
+.card-title a {
+  text-decoration: none;
+  color: #fff !important;
+}
+
+.card-layout .spacer-card {
+  margin-top: 25px;
+  margin-bottom: 25px;
+  width: 100%;
+  height: 10px;
+  border-bottom: 1px solid var(--background-box-color-secondary);
+}

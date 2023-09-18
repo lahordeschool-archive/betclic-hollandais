@@ -1,0 +1,50 @@
+{
+  "name": "betclic-hollandais",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www",
+    "test": "mocha",
+    "convert-images": "find . -name '*.png' -exec bash -c 'npx imagemin {} --plugin=webp --out-dir=$(dirname {})/ && echo Converted {} to WebP' \\;"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "compression": "^1.7.4",
+    "connect-mongodb-session": "^3.1.1",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "fs": "^0.0.1-security",
+    "helmet": "^6.1.5",
+    "http-errors": "~1.6.2",
+    "i18n": "^0.15.1",
+    "jsonwebtoken": "^9.0.1",
+    "moment-timezone": "^0.5.43",
+    "mongoose": "^7.0.4",
+    "morgan": "~1.9.0",
+    "node-cron": "^3.0.2",
+    "node-mailjet": "^6.0.2",
+    "nodemon": "^2.0.22",
+    "openai": "^3.2.1",
+    "passport": "^0.6.0",
+    "passport-azure-ad": "^4.3.5",
+    "passport-azure-ad-oauth2": "^0.0.4",
+    "passport-google-oauth20": "^2.0.0",
+    "pug": "2.0.0-beta11",
+    "rotating-file-stream": "^3.1.0",
+    "bcrypt": "^5.1.1",
+    "mongodb": "^6.0.0",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2"
+  },
+  "devDependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "imagemin": "^8.0.1",
+    "imagemin-webp": "^8.0.0",
+    "mocha": "^5.1.1",
+    "supertest": "^3.0.0"
+  }
+}

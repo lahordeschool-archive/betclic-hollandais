@@ -1,0 +1,20 @@
+extends ../../_common/views/layout-offline
+
+block content
+    .row.align-items-center.g-lg-5.py-5(style="min-height: 65vh;")
+        .col-3
+
+        .col-3.text-center.text-lg-start
+            h1.display-4.fw-bold.lh-1.text-body-emphasis.mb-3 Login
+            p.col-lg-10.fs-4 Hey oh matelos. Merci de t'identifier avant de rejoindre le jeu.
+            p.col-lg-10.fs-4 Good luck out there.
+        .col-3.mx-auto
+            form.p-4.p-md-5.border.rounded-3.bg-body-tertiary
+                .form-floating.mb-3
+                    a.btn.btn-primary.btn-block.text-center(href='/login/auth/azureadoauth2', style="width: 100%; color: #fff;")
+                        span.ms-icon
+                            i.fab.fa-microsoft
+                        span &nbsp; Connect with Microsoft
+
+        .col-2
+

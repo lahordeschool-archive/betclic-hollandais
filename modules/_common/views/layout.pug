@@ -1,0 +1,93 @@
+doctype html
+html(data-bs-theme="dark")
+  head
+    title Mission Log
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css', crossorigin='anonymous', referrerpolicy='no-referrer')
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css")
+    link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css',  crossorigin='anonymous', referrerpolicy='no-referrer')
+    link(href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet")
+    link(rel="stylesheet", href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css")
+    link(rel="stylesheet", href="/stylesheets/jquery.dataTables.min.css")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js")
+    script(src="/scripts/jquery.dataTables.min.js")
+    link(rel="icon", type="image/png", href="/images/favicon.png")
+  body(class="bg-dark text-white")
+    .container-fluid
+      .row.flex-nowrap(style="height: 100vh;")
+        .col-auto.col-md-1.col-xl-1.col-xxl-1.px-sm-2.px-0.bg-dark-custom(style="max-width: 56px; padding: 0px !important;")
+          .d-flex.flex-column.align-items-center.align-items-sm-start.px-3.pt-2.text-white.min-vh-100(style="padding-top: 0px !important; padding-left: 0px !important; padding-right: 0px !important; width: 56px; position: fixed;")
+            h2.text-center.menu-item
+              a(href="/profile")
+                img(src="/images/logo.png", class="logo" style="height: 24px; margin-left: -5px;" data-toggle="tooltip" data-placement="right" title="Homepage")
+            h2.text-center.menu-item
+              if(url && url.includes("profile"))
+                a(href="/profile"  data-toggle="tooltip" data-placement="right" title="Profile").current-menu-a
+                  i.bi.bi-person-heart.current-menu
+                  if user.notifications.includes("profile")  
+                    i.bi.bi-circle-fill.notif
+              else
+                a(href="/profile" data-toggle="tooltip" data-placement="right" title="Profile")
+                  i.bi.bi-person-heart
+                  if user.notifications.includes("profile")  
+                    i.bi.bi-circle-fill.notif
+            h2.text-center.menu-item
+              if(url && url.includes("missionLog"))
+                a(href="/missionLog"  data-toggle="tooltip" data-placement="right" title="Mission log").current-menu-a
+                  i.bi.bi-calendar2-heart.current-menu
+                  if user.notifications.includes("missionLog")  
+                    i.bi.bi-circle-fill.notif
+              else
+                a(href="/missionLog"  data-toggle="tooltip" data-placement="right" title="Mission log")
+                  i.bi.bi-calendar2-heart
+                  if user.notifications.includes("missionLog")  
+                    i.bi.bi-circle-fill.notif
+            h2.text-center.menu-item
+              if(url && url.includes("leaves"))
+                a(href="/leaves"  data-toggle="tooltip" data-placement="right" title="Leaves").current-menu-a
+                  i.bi.bi-airplane-fill.current-menu
+                  if user.notifications.includes("leaves")  
+                    i.bi.bi-circle-fill.notif
+              else
+                a(href="/leaves"  data-toggle="tooltip" data-placement="right" title="Leaves")
+                  i.bi.bi-airplane-fill
+                  if user.notifications.includes("leaves")  
+                    i.bi.bi-circle-fill.notif            
+            if user.isAdmin
+              h2.text-center.menu-item
+                if(url && url.includes("admin"))
+                  a(href="/admin"  data-toggle="tooltip" data-placement="right" title="Team admin").current-menu-a
+                    i.bi.bi-person-gear.current-menu
+                    if user.notifications.includes("admin")  
+                      i.bi.bi-circle-fill.notif     
+                else 
+                  a(href="/admin"  data-toggle="tooltip" data-placement="right" title="Team admin")
+                    i.bi.bi-person-gear
+                    if user.notifications.includes("admin")  
+                      i.bi.bi-circle-fill.notif    
+        .col.py-3.bg-dark-custom-body
+          .row.header-bar(style="")
+            .col-12
+              h3(style="float: left; margin-top: 14px; font-size: 20px;") #{title}
+              div.header-profile-container
+                h5.header-profile FD
+                p(style="width: 100px; float: left; margin-top: -5px; font-size: 0.8em; margin-left: 10px;") 
+                  span #{__('profile.name', { firstname: user.firstname, lastname: user.lastname })}
+                  br
+                  span #{user.team.name}
+          .row(style="padding: 15px; margin-top: 56px;" )
+            block content
+    .profile-menu.hidden 
+      .row
+        .col-12
+          h5 My account
+          ul 
+            li 
+              a(href="/logout") 
+                i.bi.bi-box-arrow-right
+                span Logout
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js', crossorigin='anonymous', referrerpolicy='no-referrer')
+    script(src="/scripts/textAnimate.js")
+    script.
+      const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+      const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))

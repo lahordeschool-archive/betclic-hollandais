@@ -1,0 +1,55 @@
+:root {
+  --primary-color: #000;
+  --secondary-color: #23b199;
+  --background-color: #eff0f3;
+  --background-box-color: #eff0f3;
+  --background-box-color-secondary: #2f323e;
+  --secondary-gradient-color: #21363f;
+  --menu-item-color: #6c7080;
+  --menu-item-link-color: #45202f;
+  --h4-color: #b8b9bd;
+}
+html,
+body {
+  width: 100%;
+  color: #000;
+}
+.navbar-brand {
+  color: #000 !important;
+}
+.bg-dark {
+  background-color: var(--background-box-color) !important;
+}
+.bg-white{
+  background: #000 !important;
+  color: #191b29 !important;
+}
+.bg-dark-custom {
+  background: var(--background-box-color) !important;
+  color: #000;
+}
+.bg-dark-custom-body {
+  background: var(--background-box-color) !important;
+
+}
+.btn-primary{
+  background-color: #5F2EEA !important;
+  border-color: #5F2EEA !important;
+}
+.rainbow-text-loop {
+  -webkit-animation: rainbow 5s; 
+  color: #5F2EEA;
+}
+@keyframes rainbow{
+  0%{color: #fff;}
+  10%{color: purple;}
+  20%{color: #fe4655;}
+  30%{color: CadetBlue;}
+  40%{color: yellow;}
+  50%{color: #fe4655;}
+  60%{color: green;}
+  70%{color: cyan;}
+  80%{color: DeepPink;}
+  90%{color: DodgerBlue;}
+  100%{color: #fe4655;}
+ }
