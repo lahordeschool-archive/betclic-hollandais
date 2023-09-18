@@ -1,6 +1,0 @@
-Extract the Intent from the user message. 
-Possible itents values are : ${intents}. 
-Reply in the following format:  
-Intent: intentValue
-If none is relevant, reply:
-Intent: None

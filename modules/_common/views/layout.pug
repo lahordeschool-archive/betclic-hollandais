@@ -1,7 +1,7 @@
 doctype html
 html(data-bs-theme="dark")
   head
-    title Mission Log
+    title Betclic Hollandais
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css', crossorigin='anonymous', referrerpolicy='no-referrer')
     link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css")
@@ -30,41 +30,7 @@ html(data-bs-theme="dark")
                 a(href="/profile" data-toggle="tooltip" data-placement="right" title="Profile")
                   i.bi.bi-person-heart
                   if user.notifications.includes("profile")  
-                    i.bi.bi-circle-fill.notif
-            h2.text-center.menu-item
-              if(url && url.includes("missionLog"))
-                a(href="/missionLog"  data-toggle="tooltip" data-placement="right" title="Mission log").current-menu-a
-                  i.bi.bi-calendar2-heart.current-menu
-                  if user.notifications.includes("missionLog")  
-                    i.bi.bi-circle-fill.notif
-              else
-                a(href="/missionLog"  data-toggle="tooltip" data-placement="right" title="Mission log")
-                  i.bi.bi-calendar2-heart
-                  if user.notifications.includes("missionLog")  
-                    i.bi.bi-circle-fill.notif
-            h2.text-center.menu-item
-              if(url && url.includes("leaves"))
-                a(href="/leaves"  data-toggle="tooltip" data-placement="right" title="Leaves").current-menu-a
-                  i.bi.bi-airplane-fill.current-menu
-                  if user.notifications.includes("leaves")  
-                    i.bi.bi-circle-fill.notif
-              else
-                a(href="/leaves"  data-toggle="tooltip" data-placement="right" title="Leaves")
-                  i.bi.bi-airplane-fill
-                  if user.notifications.includes("leaves")  
-                    i.bi.bi-circle-fill.notif            
-            if user.isAdmin
-              h2.text-center.menu-item
-                if(url && url.includes("admin"))
-                  a(href="/admin"  data-toggle="tooltip" data-placement="right" title="Team admin").current-menu-a
-                    i.bi.bi-person-gear.current-menu
-                    if user.notifications.includes("admin")  
-                      i.bi.bi-circle-fill.notif     
-                else 
-                  a(href="/admin"  data-toggle="tooltip" data-placement="right" title="Team admin")
-                    i.bi.bi-person-gear
-                    if user.notifications.includes("admin")  
-                      i.bi.bi-circle-fill.notif    
+                    i.bi.bi-circle-fill.notif  
         .col.py-3.bg-dark-custom-body
           .row.header-bar(style="")
             .col-12

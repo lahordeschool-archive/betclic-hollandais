@@ -1,6 +1,6 @@
 "https://{default}/":
     type: upstream
-    upstream: "mission-log:http"
+    upstream: "betclic-hollandais:http"
 "https://www.{default}/":
     type: redirect
     to: "https://{default}/"
