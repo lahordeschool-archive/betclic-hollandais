@@ -10,43 +10,9 @@ block content
                   | &nbsp; #{__('profile.name', { firstname: user.firstname, lastname: user.lastname })}
                 div.spacer-card 
                 .row 
-                    .col-4
-                        p= __('profile.labels.seniority')
-                        h5 #{seniorityMonths} #{__('profile.labels.months')}
-                    .col-4
-                        p= __('profile.labels.missionLog')
-                        h5 #{missionLogValidatedCount}
-                    .col-4
-                        p= __('profile.labels.intermission')
-                        h5 #{totalIntermissionDays} #{__('profile.labels.days')}
     .col-6
         .card.mission-card-title.card-layout(style="height: 96%")
             .row
                 h1 
                   i.bi.bi-people-fill.text-center(style="font-size: 1em;")
-                  | &nbsp; #{__('team.title', { name: user.team.name })}
-                div.spacer-card 
-                .row 
-                    .col-4
-                        p= __('team.labels.avgSeniority')
-                        h5 #{teamSeniorityMonths} #{__('team.labels.months')}
-                    .col-4
-                        p= __('team.labels.avgMissionLog')
-                        h5 #{teamAverageMissionLogs}
-                    .col-4
-                        p= __('team.labels.avgIntermission')
-                        h5 #{teamAverageIntermissionDays} #{__('team.labels.days')}
-  // Latest Release Note
-  if latestReleaseNote
-    .row.g-0 
-      .col-12 
-        .card.mission-card-title.card-layout(style="height: 96%")
-          h1 
-            i.bi.bi-cpu-fill.text-center(style="font-size: 1em;")
-            | &nbsp; #{__('releaseNote.latest')}
-          div.spacer-card 
-          p #{__('releaseNote.version')}: #{latestReleaseNote.version}
-          p #{latestReleaseNote.title}
-          //- Convert line breaks to space lines in the description
-          - const descriptionWithLineBreaks = latestReleaseNote.description.replace(/\n/g, "<br>")
-          p !{descriptionWithLineBreaks}
+                  | test

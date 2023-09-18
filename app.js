@@ -11,8 +11,6 @@ const compression = require("compression");
 const rfs = require("rotating-file-stream");
 const helmet = require("helmet");
 const { emitter } = require("./lib/emitter");
-const discordClient = require("./lib/discordClient");
-const { loadCrons } = require("./lib/cron");
 const i18n = require('i18n');
 const lang = require('./lib/lang');
 
@@ -70,8 +68,7 @@ app.use(logger("combined", { stream: accessLogStream }));
 connect()
   .then(() => {
     console.log('Connected to MongoDB');
-    // Set up crons
-    loadCrons();
+
   })
   .catch((err) => {
     console.error('Error connecting to MongoDB', err);

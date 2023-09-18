@@ -9,12 +9,20 @@ block content
             p.col-lg-10.fs-4 Hey oh matelos. Merci de t'identifier avant de rejoindre le jeu.
             p.col-lg-10.fs-4 Good luck out there.
         .col-3.mx-auto
-            form.p-4.p-md-5.border.rounded-3.bg-body-tertiary
+            form.p-4.p-md-5.border.rounded-3.bg-body-tertiary(action="/login", method="post")
                 .form-floating.mb-3
-                    a.btn.btn-primary.btn-block.text-center(href='/login/auth/azureadoauth2', style="width: 100%; color: #fff;")
-                        span.ms-icon
-                            i.fab.fa-microsoft
-                        span &nbsp; Connect with Microsoft
-
+                    .row
+                        .col-6
+                            label(for="floatingInput") Email
+                            br
+                            input#floatingInput(type="email", placeholder="email", name="email", required)
+                        .col-6
+                            label(for="floatingInput") Mot de passe
+                            br
+                            input#floatingInput(type="password", placeholder="password", name="password", required)
+                    .row 
+                        .col-12
+                            button.btn.btn-primary(type="submit") Login
+                            a(href="/login/register") Créer un compte
         .col-2
 

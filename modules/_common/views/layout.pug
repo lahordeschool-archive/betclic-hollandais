@@ -24,23 +24,13 @@ html(data-bs-theme="dark")
               if(url && url.includes("profile"))
                 a(href="/profile"  data-toggle="tooltip" data-placement="right" title="Profile").current-menu-a
                   i.bi.bi-person-heart.current-menu
-                  if user.notifications.includes("profile")  
-                    i.bi.bi-circle-fill.notif
               else
                 a(href="/profile" data-toggle="tooltip" data-placement="right" title="Profile")
                   i.bi.bi-person-heart
-                  if user.notifications.includes("profile")  
-                    i.bi.bi-circle-fill.notif  
         .col.py-3.bg-dark-custom-body
           .row.header-bar(style="")
             .col-12
               h3(style="float: left; margin-top: 14px; font-size: 20px;") #{title}
-              div.header-profile-container
-                h5.header-profile FD
-                p(style="width: 100px; float: left; margin-top: -5px; font-size: 0.8em; margin-left: 10px;") 
-                  span #{__('profile.name', { firstname: user.firstname, lastname: user.lastname })}
-                  br
-                  span #{user.team.name}
           .row(style="padding: 15px; margin-top: 56px;" )
             block content
     .profile-menu.hidden 
