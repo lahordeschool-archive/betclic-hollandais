@@ -5,16 +5,19 @@ const disconnect = require("../../../lib/auth").disconnect;
 const passport = require("passport");
 const User = require("../../../models/user");
 
+module.exports = function (io) {
+  const router = express.Router();
 
-/* GET home page. */
-router.get("/", (req, res) => {
+  /* GET home page. */
+  router.get("/", (req, res) => {
     if (req.isAuthenticated()) {
-        res.redirect("/profile");
+      res.redirect("/game");
     } else {
-        res.redirect("/login");
+      res.redirect("/login");
     }
-});
+  });
 
-router.get("/logout", disconnect);
+  router.get("/logout", disconnect);
 
-module.exports = router;
+  return router;
+};

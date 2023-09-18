@@ -21,6 +21,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  iaCode: {
+    type: String,
+    default: "",
+  },
+
 });
 
 userSchema.statics.findUserByEmail = async function(email) {

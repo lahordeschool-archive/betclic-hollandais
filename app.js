@@ -1,5 +1,6 @@
 // Import dependencies
 require('dotenv').config();
+const http = require('http');
 const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -27,6 +28,9 @@ const app = express();
 
 const port = process.env.SERVER_PORT || 4000; // Default port is 3000 if PORT env variable is not set
 app.set("port", port);
+
+const server = http.createServer(app);
+const io = require('socket.io')(server);
 
 i18n.configure({
   locales: ['en', 'fr'],
@@ -104,7 +108,7 @@ const readModulesFolder = (folderPath) => {
     else if (file.endsWith(".router.js") && folderPath.endsWith("routes")) {
       // If the file ends with '.router.js' and its parent folder is routes, load the router module
       const routerName = path.basename(file, ".router.js");
-      const router = require(filePath);
+      const router = require(filePath)(io);
       if (routerName === "homepage") {
         app.use("/", router);
       } else {
@@ -141,5 +145,4 @@ app.use(function (err, req, res) {
 });
 
 
-
-module.exports = app;
+module.exports = { app, server, io };
