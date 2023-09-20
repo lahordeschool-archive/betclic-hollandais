@@ -4,12 +4,12 @@ const disconnect = require("../../../lib/auth").disconnect;
 const passport = require("passport");
 const User = require("../../../models/user");
 const Players_GameController = require('("../../../controller/Players_GameController');
+const gameController = new Players_GameController();
 
 module.exports = function(io) {
   const router = express.Router();
 
-  // Initialisez votre contrôleur avec io si nécessaire
-  const gameController = new Players_GameController(io);
+  
 
   
 
