@@ -1,6 +1,5 @@
 window.addEventListener("load", ()=>{
     var cubes = null;
-    var rollBtn = document.querySelector('.rollBtn');
     var currentClass = [];
     
     var allDices = [];
@@ -402,8 +401,6 @@ const GameUI = (() => {
        
     }
 
-    rollBtn.addEventListener("click", GameEngine.rollDices);
-
     return {
         displayDices: displayDices
     };
@@ -552,7 +549,12 @@ GameConfig.init();
     });
 
     objectionBtn.addEventListener('click', () =>{
-        GameEngine.objection();
+        if(JSON.stringify(GameEngine.getCurrentBet()) == JSON.stringify([0,2]))
+        {
+            alert("vous ne pouvez pas constester en debut de manche");
+        }else{
+            GameEngine.objection();
+        }
     });
 
     pacoSwitchBtn.addEventListener('click', () =>{

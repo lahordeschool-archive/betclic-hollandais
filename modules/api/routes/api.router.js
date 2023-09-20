@@ -3,22 +3,52 @@ let isAuthenticated = require("../../../lib/auth").isAuthenticated;
 const disconnect = require("../../../lib/auth").disconnect;
 const passport = require("passport");
 const User = require("../../../models/user");
+const Players_GameController = require('("../../../controller/Players_GameController');
 
 module.exports = function(io) {
   const router = express.Router();
 
-//console.log(io)
-  // Socket.io event handling
-  io.on('connection', (socket) => {
-    // ... any socket event handlers specific to this module
+  // Initialisez votre contrôleur avec io si nécessaire
+  const gameController = new Players_GameController(io);
 
-    socket.on('someEvent', (data) => {
-      // handle the 'someEvent' here
+  
+
+
+
+  //console.log(io)
+  // io.io event handling
+  io.on('launch', (io) => {
+    gameController.init();
     });
 
-    // ... any other socket events
+  io.on('newBet', (newBet) => {
 
+    io.on('objection', () => {
+      objection();
+    });
+
+    if(gameController.VerifyBet(newBet)){
+      gameController.bet(newBet[0], newBet[1]);
+    }else{
+      io.emit('BetInvalid');
+    }
+    
+    if(gameController.beginManche){
+      gameController.playerList.forEach(player => {
+        io.emit( player.name , { dices: player.dices });
+      });
+      io.emit('totalDices' , { totalDices: allDices.length });
+      gameController.beginManche = flase;
+    }
+    
+    io.emit('playersList' , { playersList: getPlayerListWithoutDicesValue() });
+    io.emit('currentBet' , { currentBet: getCurrentBet() });
+    io.emit('currentManche' , { currentManche: currentManche });
+    io.emit('currentRound' , { currentRound: currentRound });
+    io.emit('currentPlayerName' , { currentPlayerName: playerList[currentPlayer].name });
   });
+
+
 
   /* GET game page. */
   router.get("/", (req, res) => {
