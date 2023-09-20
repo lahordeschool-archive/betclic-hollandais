@@ -101,6 +101,7 @@ const readModulesFolder = (folderPath) => {
     const filePath = path.join(folderPath, file);
     if (folderPath.endsWith("public")) {
       app.use(express.static(folderPath));
+      
     } else if (file.endsWith(".listener.js") && folderPath.endsWith("listeners")) {
       // If the file ends with '.listener.js' and its parent folder is listeners, load the listener module
       require(filePath);

@@ -3,12 +3,12 @@ html(lang="en")
 	head
 		meta(charset="utf-8")
 		title Perudo
-		link(rel="stylesheet", href="main.css")
-		script(src="http://code.jquery.com/jquery-1.11.3.min.js")
-		script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js")
+		link(rel="stylesheet", href="main.css", type="text/css")
+		script(src="http://code.jquery.com/jquery-1.11.3.min.js", type="text/js")
+		script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js", type="text/js")
 		style.
 			body { margin: 0; }
-		script(async, src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js")
+		script(async, src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js", type="text/js")
 		script(type="importmap").
 			{
 				"imports": {
@@ -16,8 +16,8 @@ html(lang="en")
 					"three/addons/": "https://unpkg.com/three@0.155.0/examples/jsm/"
 				}
 			}
-		script(src="public/game-client.js")
-		script(type="module", src="main.js")
+		script(src="public/game-client.js", type="text/js")
+		script(type="module", src="main.js", type="text/js")
 	body
 		form#registrationForm
 			input(type="text", id="username", placeholder="Username")
