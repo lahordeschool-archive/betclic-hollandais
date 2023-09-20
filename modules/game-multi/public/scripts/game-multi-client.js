@@ -1,3 +1,4 @@
+console.log("test 425");
 window.addEventListener("load", ()=>{
     var cubes = null;
     var currentClass = [];
@@ -25,7 +26,7 @@ window.addEventListener("load", ()=>{
 
     clientName = localStorage.getItem('UserName');
     
-    console.log("test 425");
+    
 
     console.log("nom du client :", clientName);
 
