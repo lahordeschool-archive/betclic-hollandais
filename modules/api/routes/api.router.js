@@ -11,6 +11,16 @@ gameController.address = "1111";
 module.exports = function(io) {
   const router = express.Router();
 
+  io.on('connection', (socket) => {
+    console.log(`A client connected with ID: ${socket.id}`);
+    socket.on('connected', () => {
+      console.log('Client connected and sent a "connected" message');
+      // Handle the event here
+    });
+  });
+
+  
+
   //console.log(io)
   // io.io event handling
   io.on('launch', (io) => {

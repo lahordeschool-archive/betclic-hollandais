@@ -1,5 +1,6 @@
 console.log("test 425");
-window.addEventListener("load", ()=>{
+var socket;
+window.addEventListener("load", async ()=>{
     var cubes = null;
     var currentClass = [];
 
@@ -31,11 +32,18 @@ window.addEventListener("load", ()=>{
     });
       
 
-    const socket = io.connect('http://localhost:4000');
+    socket = await io.connect('http://localhost:4000');
 
     //clientName = localStorage.getItem('UserName');
-    
-    
+
+
+      socket.on('connect', () => {
+        console.log('Connected to the server from client');
+        // You can perform actions here when the connection is established
+        console.log(socket);
+        socket.emit('connected');
+      });
+
 
     console.log("nom du client :", clientName);
 
