@@ -22,15 +22,22 @@ window.addEventListener("load", ()=>{
     let actualPlayerName = "";
     let playerDices = [];
 
-    const socket = io('http://localhost:4000');
+    
+    $.get("/api/getUserInfos", function(data) {
+        clientName = data.firstname;
+        console.log(clientName);  // Affiche "Hugo"
+    }).fail(function() {
+        console.error("Erreur lors de la récupération des informations de l'utilisateur.");
+    });
+      
 
-    clientName = localStorage.getItem('UserName');
+    const socket = io.connect('http://localhost:4000');
+
+    //clientName = localStorage.getItem('UserName');
     
     
 
     console.log("nom du client :", clientName);
-
-    socket.emit('PartyUser', clientName);
 
     socket.on('currentPlayerName', (currentPlayerName) => {
         actualPlayerName = currentPlayerName;

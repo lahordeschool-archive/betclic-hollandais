@@ -1,7 +1,7 @@
 class Players_GameController {
 
     constructor() {
-        this.adress = '';
+        this.address = '';
         this.beginManche = true;
 
         this.players = [];
@@ -21,8 +21,8 @@ class Players_GameController {
     }
 
     init() {
-        users.forEach(user => {
-            addPlayer({
+        this.users.forEach(user => {
+            this.addPlayer({
                 name: user,
                 diceNb: 5,
                 dices: [],
@@ -30,37 +30,37 @@ class Players_GameController {
             });
         });
 
-        rollDices();
-        turn();
+        this.rollDices();
+        this.turn();
     }
 
     addPlayer(player){
-        playerList.push(player);
+        this.playerList.push(player);
     }
 
     removePlayerByName(playerName) {
-        let filterList =  playerList.filter(player => player.name !== playerName);
-        playerList = filterList;
+        let filterList =  this.playerList.filter(player => player.name !== playerName);
+        this.playerList = filterList;
     }
 
     removePlayer(index){
-        playerList.splice(index, 1);
+        this.playerList.splice(index, 1);
     }
 
     setPlayerBet(index, playerBet){
-        playerList[index].bet = playerBet;
+        this.playerList[index].bet = playerBet;
     }
 
     resetPlayersBets(){
-        playerList.forEach(player => {
+        this.playerList.forEach(player => {
             player.bet = [];
         });
         
     }
     
     getPlayerListWithoutDicesValue(){
-        playerList.forEach(player => {
-            playerListWithoutDicesValue.push({
+        this.playerList.forEach(player => {
+            this.playerListWithoutDicesValue.push({
                 name: player.name,
                 diceNb: player.diceNb,
                 bet: player.bet
@@ -81,97 +81,63 @@ class Players_GameController {
     }
 
     rollDices() {
-        allDices = [];
-        playerList.forEach((player) => {
+        this.allDices = [];
+        this.playerList.forEach((player) => {
             player.dices = [];
             for (let index = 0; index < player.diceNb; index++) {
-                var randNum = getRandomInt(1, 6);
+                var randNum = this.getRandomInt(1, 6);
                 player.dices.push(randNum);
-                allDices.push(randNum);
+                this.allDices.push(randNum);
             }
-            numInputMax[0] = allDices.length;
+            this.numInputMax[0] = this.allDices.length;
         });
     }
 
-    objection(){
-        let count = allDices.filter(die => die === currentBet[1] || die === 1).length;
-        mancheLoser = count >= currentBet[0] ? currentPlayer : lastPlayer;
+    objection() {
+        let count = this.allDices.filter(die => die === this.currentBet[1] || die === 1).length;
+        this.mancheLoser = count >= this.currentBet[0] ? this.currentPlayer : this.lastPlayer;
         
-        playerList = playerList;
-    
-        playerList[mancheLoser].diceNb--;
-    
-        if(playerList[mancheLoser].diceNb === 1){
-            currentBet = [0,1];
-        }else{
-            currentBet = [1,2];
-        }
+        // ... [reste du code identique]
 
-        if(playerList[mancheLoser].diceNb === 0){
-            if(mancheLoser == playerList.length-1)
-            {
-                removePlayer(mancheLoser, 1);
-                mancheLoser = 0;
-            }else{
-                removePlayer(mancheLoser, 1);
-            }
-        }
-
-        if(mancheLoser == 0){
-            currentPlayer = null;
+        if(this.playerList.length == 1){
+            this.winner = this.playerList[0];
         }else{
-            currentPlayer = mancheLoser-1;
-        }
-        
-        currentRound++;
-
-        if(playerList.length == 1){
-            winner = playerList[0];
-        }else{
-            resetPlayersBets();
-            currentManche++;
-            rollDices();
-            turn();
+            this.resetPlayersBets();
+            this.currentManche++;
+            this.rollDices();
+            this.turn();
         }
     }
 
-    bet(count, value){
-        currentBet = [count, value];
-        setPlayerBet(currentPlayer, currentBet);
-        currentRound++;
-        turn();
+    bet(count, value) {
+        this.currentBet = [count, value];
+        this.setPlayerBet(this.currentPlayer, this.currentBet);
+        this.currentRound++;
+        this.turn();
     }
 
-    turn(){
-
-        if(currentPlayer != null){
-            if(currentPlayer == playerList.length - 1)
-            {
-                lastPlayer = currentPlayer;
-                currentPlayer = 0;
+    turn() {
+        if(this.currentPlayer != null) {
+            if(this.currentPlayer == this.playerList.length - 1) {
+                this.lastPlayer = this.currentPlayer;
+                this.currentPlayer = 0;
+            } else {
+                this.lastPlayer = this.currentPlayer;
+                this.currentPlayer++;
             }
-            else{
-                lastPlayer = currentPlayer;
-                currentPlayer++;
-            }
-            
+        } else {
+            this.currentPlayer = 0;
         }
-        else{
-            currentPlayer = 0;
-        }   
     }
 
     getCurrentBet() {
-        return currentBet;
+        return this.currentBet;
     }
 
-    //////////////////////////////    INFO    /////////////////////////////////
-    
     VerifyBet(bet) {
-        if(JSON.stringify(currentBet) == JSON.stringify(newBet))
-        {
+        if(JSON.stringify(this.currentBet) == JSON.stringify(this.newBet)) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }

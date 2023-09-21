@@ -6,14 +6,10 @@ const User = require("../../../models/user");
 const Players_GameController = require('("../../../controller/Players_GameController');
 const gameController = new Players_GameController();
 
+gameController.address = "1111";
+
 module.exports = function(io) {
   const router = express.Router();
-
-  
-
-  
-
-
 
   //console.log(io)
   // io.io event handling
@@ -21,7 +17,7 @@ module.exports = function(io) {
     gameController.init();
     });
 
-  io.on('newBet', (newBet) => {
+    io.on('newBet', (newBet) => {
 
     io.on('objection', () => {
       objection();
@@ -38,7 +34,7 @@ module.exports = function(io) {
         io.emit( player.name , { dices: player.dices });
       });
       io.emit('totalDices' , { totalDices: allDices.length });
-      gameController.beginManche = flase;
+      gameController.beginManche = fase;
     }
     
     io.emit('playersList' , { playersList: getPlayerListWithoutDicesValue() });
@@ -46,9 +42,18 @@ module.exports = function(io) {
     io.emit('currentManche' , { currentManche: currentManche });
     io.emit('currentRound' , { currentRound: currentRound });
     io.emit('currentPlayerName' , { currentPlayerName: playerList[currentPlayer].name });
+
   });
 
-
+  /* GET user info */
+  router.get("/getUserInfos", (req, res) => {
+    if (req.isAuthenticated()) {
+        res.send(req.user);
+        gameController.addPlayer(req.user);
+    } else {
+        res.redirect("/login");
+    }
+  });
 
   /* GET game page. */
   router.get("/", (req, res) => {
