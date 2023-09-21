@@ -15,20 +15,21 @@ module.exports = function(io) {
   // io.io event handling
   io.on('launch', (io) => {
     gameController.init();
-    });
+  });
 
-    io.on('newBet', (newBet) => {
+  io.on('newBet', (newBet) => {
 
-    io.on('objection', () => {
-      objection();
-    });
+  io.on('objection', () => {
+    objection();
+  });
 
-    if(gameController.VerifyBet(newBet)){
-      gameController.bet(newBet[0], newBet[1]);
-    }else{
-      io.emit('BetInvalid');
-    }
-    
+  if(gameController.VerifyBet(newBet)){
+    gameController.bet(newBet[0], newBet[1]);
+  }else{
+    io.emit('BetInvalid');
+  }
+  
+  io.on('MajRequest', () => {
     if(gameController.beginManche){
       gameController.playerList.forEach(player => {
         io.emit( player.name , { dices: player.dices });
@@ -42,8 +43,11 @@ module.exports = function(io) {
     io.emit('currentManche' , { currentManche: currentManche });
     io.emit('currentRound' , { currentRound: currentRound });
     io.emit('currentPlayerName' , { currentPlayerName: playerList[currentPlayer].name });
-
   });
+
+  
+
+});
 
   /* GET user info */
   router.get("/getUserInfos", (req, res) => {

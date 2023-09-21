@@ -284,14 +284,17 @@ window.addEventListener("load", ()=>{
         let value = parseInt(customNum[1].querySelector('.num-input').value);
         
         socket.emit( 'newBet' , { newBet: [count,value] });
+        socket.emit('MajRequest');
     });
 
     objectionBtn.addEventListener('click', () =>{
         socket.emit( 'objection' );
+        socket.emit('MajRequest');
     });
 
     playBtn.addEventListener('click', () =>{
         socket.emit( 'launch' );
+        socket.emit('MajRequest');
         console.log("lancement")
     });
 
