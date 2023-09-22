@@ -1,5 +1,15 @@
-console.log("test 425");
 var socket;
+var numInputMax = [9,6];
+var numInputMin = [0,0];
+var clientName = '';
+var playerList = [];
+var actualManche = 0;
+var actualRound = 0;
+var actualBet = [0,2];
+var actualtotalDices = 0;
+var actualPlayerIndex = 0;
+var playerDices = [];
+
 window.addEventListener("load", async ()=>{
     var cubes = null;
     var currentClass = [];
@@ -11,25 +21,6 @@ window.addEventListener("load", async ()=>{
     const betBtn = document.querySelector('.betBtn');
     const playBtn = document.querySelector('.playBtn');
     const objectionBtn = document.querySelector('.objectionBtn');
-    const numInputMax = [9,6];
-    const numInputMin = [0,0];
-
-    let clientName = "";
-    let playerList = [];
-    let actualManche = 0;
-    let actualRound = 0;
-    let actualBet = [0,2];
-    let actualtotalDices = 0;
-    let actualPlayerName = "";
-    let playerDices = [];
-
-    
-    $.get("/api/getUserInfos", function(data) {
-        clientName = data.firstname;
-        console.log(clientName);  // Affiche "Hugo"
-    }).fail(function() {
-        console.error("Erreur lors de la récupération des informations de l'utilisateur.");
-    });
       
 
     socket = await io.connect('http://localhost:4000');
@@ -37,71 +28,67 @@ window.addEventListener("load", async ()=>{
     //clientName = localStorage.getItem('UserName');
 
 
-      socket.on('connect', () => {
-        console.log('Connected to the server from client');
+    socket.on('connect', () => {
+    console.log('Connected to the server from client');
         // You can perform actions here when the connection is established
         console.log(socket);
         socket.emit('connected');
-      });
 
+        $.get("/api/getUserInfos", function(data) {
+            clientName = data.firstname;
+            console.log(data.firstname);
+            console.log(data.id);
+            socket.emit('connectPlayer', {name: clientName, mail: data.id});
 
-    console.log("nom du client :", clientName);
+        }).fail(function() {
+            console.error("Erreur lors de la récupération des informations de l'utilisateur.");
+        });
 
-    socket.on('currentPlayerName', (currentPlayerName) => {
-        actualPlayerName = currentPlayerName;
-        refreshCompteur();
-        refreshDisplay();
-        console.log(currentPlayerName);
+        socket.on(clientName, (dices) => {
+            playerDices = dices;
+            console.log("Mes dés =",dices);
+            GameUI.displayDices();
+        }); 
+
+        socket.on(clientName+'currentPlayer', (currentPlayer) => {
+            actualPlayerIndex = currentPlayer;
+            console.log("Players actuel =",actualPlayerIndex);
+            refreshCompteur();
+            refreshDisplay();
+        });
+    
+        socket.on(clientName+'playersList', (playersList) => {
+            playerList = playersList;
+            console.log("list des joueur = ",playersList);
+        });
+    
+        socket.on(clientName+'currentBet', (currentBet) => {
+            actualBet = currentBet;
+            console.log("bet actuel =",currentBet);
+        });
+    
+        socket.on(clientName+'currentManche', (currentManche) => {
+            actualManche = currentManche;
+            console.log("manche actuel =",currentManche);
+        });
+    
+        socket.on(clientName+'currentRound', (currentRound) => {
+            actualRound = currentRound;
+            console.log("round actuel =",currentRound);
+        });
+    
+        socket.on(clientName+'totalDices', (totalDices) => {
+            actualtotalDices = totalDices;
+            console.log("total des dés =",totalDices);
+        });
+    
+        socket.on(clientName+'BetInvalid', () => {
+            if(playerList[actualPlayerIndex].name === clientName){
+                alert("vous devait surencherir ou passer en paco");
+            }
+        });
+
     });
-
-    socket.on('playersList', (playersList) => {
-        playerList = playersList;
-        refreshCompteur();
-        refreshDisplay();
-        console.log(playersList);
-    });
-
-    socket.on('currentBet', (currentBet) => {
-        actualBet = currentBet;
-        refreshCompteur();
-        refreshDisplay();
-        console.log(currentBet);
-    });
-
-    socket.on('currentManche', (currentManche) => {
-        actualManche = currentManche;
-        refreshCompteur();
-        refreshDisplay();
-        console.log(currentManche);
-    });
-
-    socket.on('currentRound', (currentRound) => {
-        actualRound = currentRound;
-        refreshCompteur();
-        refreshDisplay();
-        console.log(currentRound);
-    });
-
-    socket.on('totalDices', (totalDices) => {
-        actualtotalDices = totalDices;
-        refreshCompteur();
-        refreshDisplay();
-        console.log(totalDices);
-    });
-
-    socket.on(clientName, (dices) => {
-        playerDices = dices;
-        refreshCompteur();
-        refreshDisplay();
-        console.log(dices);
-    });
-
-    socket.on('BetInvalid', () => {
-        if(actualPlayerName === clientName){
-            alert("vous devait surencherir ou passer en paco");
-        }
-    });
-
 
 
 // 5. Interface utilisateur
@@ -110,18 +97,7 @@ window.addEventListener("load", async ()=>{
         
 
         function displayDices(){
-
-            let userPlayer = null;
-            playerList.forEach((player) => {
-                if(player.name == clientName){
-                    userPlayer = player; 
-                }
-            });
-
-            //console.log(" nb dices :", cubes.length);
-
-            if(userPlayer == null || (cubes != null  && cubes.length > userPlayer.diceNb)  ){
-                
+            if((cubes != null  && cubes.length > playerDices.length)  ){
                 if(cubes.length == 0){
                     cubes = 0;
                 }else if(cubes != 0){
@@ -133,7 +109,7 @@ window.addEventListener("load", async ()=>{
 
             if(cubes == null){
                 let dicesScene = document.querySelector('.dices-scene');
-
+                console.log('initilisation des dés');
                 // Définissez le contenu de chaque cube
                 let cubeHTML = `
                     <div class = "scene">
@@ -148,11 +124,8 @@ window.addEventListener("load", async ()=>{
                     </div>
                 `;
 
-                // Définissez n (le nombre de fois que vous voulez répéter le bloc)
-                let n = userPlayer.diceNb; 
-
                 // Utilisez une boucle pour ajouter le cube n fois
-                for (let i = 0; i < n; i++) {
+                for (let i = 0; i < playerDices.length; i++) {
                     dicesScene.innerHTML += cubeHTML;
                     console.log("add cube");
                 }
@@ -160,7 +133,7 @@ window.addEventListener("load", async ()=>{
             }
             if(cubes != 0){
                 cubes.forEach((cube, index) => {
-                    var showClass = 'show-' + userPlayer.dices[index];
+                    var showClass = 'show-' + playerDices[index];
                         
                     if ( currentClass[index] ) {
                         cube.classList.remove( currentClass[index] );
@@ -215,6 +188,7 @@ window.addEventListener("load", async ()=>{
 
         });
         
+        console.log('actualBet before display =', actualBet);
         betCount.value = actualBet[0];
         betValue.value = actualBet[1];
     }
@@ -230,7 +204,9 @@ window.addEventListener("load", async ()=>{
             numInputMin[0] = 1;
             
         }
-        else{
+        else if(actualBet[0] === 0){
+            numInputMin[0] = 1;
+        }else{
             numInputMin[0] = actualBet[0];
         }
 
@@ -249,8 +225,8 @@ window.addEventListener("load", async ()=>{
         }
         let gameInfoHTML = `
             <div class="round-info">
-                <span>Manche: </span><span>`+ GameConfig.actualManche +`</span>
-                <span>Round: </span><span>`+ GameConfig.actualRound +`</span>
+                <span>Manche: </span><span>`+ actualManche +`</span>
+                <span>Round: </span><span>`+ actualRound +`</span>
             </div>
         `;
 
@@ -264,9 +240,9 @@ window.addEventListener("load", async ()=>{
             });
         }
         
-
+        console.log("state playerList before foreach = ",playerList)
         playerList.forEach(player => {
-            if(player != playerList[currentPlayer]){
+            if(player != playerList[actualPlayerIndex]){
                 let PlayerHTML = `
                     <div class="player">
                         <h3>`+ player.name +`</h3>
@@ -278,7 +254,6 @@ window.addEventListener("load", async ()=>{
                 playersScene.innerHTML += PlayerHTML;
 
             }
-            
         });
         
 
@@ -288,16 +263,21 @@ window.addEventListener("load", async ()=>{
     }
 
     betBtn.addEventListener('click', () =>{
-        let count = parseInt(customNum[0].querySelector('.num-input').value);
-        let value = parseInt(customNum[1].querySelector('.num-input').value);
+        if(playerList[actualPlayerIndex].name === clientName){
+            let count = parseInt(customNum[0].querySelector('.num-input').value);
+            let value = parseInt(customNum[1].querySelector('.num-input').value);
+            
+            socket.emit( 'newBet' , [count,value]);
+            socket.emit('MajRequest');
+        }
         
-        socket.emit( 'newBet' , { newBet: [count,value] });
-        socket.emit('MajRequest');
     });
 
     objectionBtn.addEventListener('click', () =>{
-        socket.emit( 'objection' );
-        socket.emit('MajRequest');
+        if(playerList[actualPlayerIndex].name === clientName){
+            socket.emit( 'objection' );
+            socket.emit('MajRequest');
+        }
     });
 
     playBtn.addEventListener('click', () =>{
