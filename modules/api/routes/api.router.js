@@ -39,7 +39,7 @@ module.exports = function(io) {
       if(gameController.VerifyBet(newBet)){
         gameController.bet(newBet[0], newBet[1]);
       }else{
-        socket.emit(`${gameController.playerList[gameController.currentPlayer].name}`+'BetInvalid');
+        socket.emit(gameController.playerList[gameController.currentPlayer].name+'BetInvalid');
       }
     });
 
@@ -59,16 +59,16 @@ module.exports = function(io) {
 
           console.log('envoie a ', `${player.name}`);
           console.log('dés = ', player.dices);
-          socket.emit( `${player.name}` , player.dices);
+          socket.emit( player.name , player.dices);
           
           
         }
         
-        socket.emit(`${player.name}`+'playersList' ,  gameController.getPlayerListWithoutDicesValue() );
-        socket.emit(`${player.name}`+'currentBet' , gameController.currentBet);
-        socket.emit(`${player.name}`+'currentManche' , gameController.currentManche);
-        socket.emit(`${player.name}`+'currentRound' , gameController.currentRound);
-        socket.emit(`${player.name}`+'currentPlayer' , gameController.currentPlayer);
+        socket.emit(player.name+'playersList' ,  gameController.getPlayerListWithoutDicesValue() );
+        socket.emit(player.name+'currentBet' , gameController.currentBet);
+        socket.emit(player.name+'currentManche' , gameController.currentManche);
+        socket.emit(player.name+'currentRound' , gameController.currentRound);
+        socket.emit(player.name+'currentPlayer' , gameController.currentPlayer);
 
       });
       gameController.beginManche = false;

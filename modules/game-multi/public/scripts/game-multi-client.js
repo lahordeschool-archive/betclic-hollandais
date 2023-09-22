@@ -21,7 +21,19 @@ window.addEventListener("load", async ()=>{
     const betBtn = document.querySelector('.betBtn');
     const playBtn = document.querySelector('.playBtn');
     const objectionBtn = document.querySelector('.objectionBtn');
-      
+    const refreshBtn = document.querySelector('.refreshBtn');
+    
+    if(localStorage.getItem('UserFirstName') == null){
+        $.get("/api/getUserInfos", function(data) {
+            clientName = data.firstname;
+            localStorage.setItem('UserFirstName', clientName);
+            localStorage.setItem('UserMail', data.id);
+        }).fail(function() {
+            console.error("Erreur lors de la récupération des informations de l'utilisateur.");
+        });
+    }
+
+    clientName = localStorage.getItem('UserFirstName');
 
     socket = await io.connect('http://localhost:4000');
 
@@ -34,15 +46,7 @@ window.addEventListener("load", async ()=>{
         console.log(socket);
         socket.emit('connected');
 
-        $.get("/api/getUserInfos", function(data) {
-            clientName = data.firstname;
-            console.log(data.firstname);
-            console.log(data.id);
-            socket.emit('connectPlayer', {name: clientName, mail: data.id});
-
-        }).fail(function() {
-            console.error("Erreur lors de la récupération des informations de l'utilisateur.");
-        });
+        socket.emit('connectPlayer', {name: clientName, mail: localStorage.getItem('UserMail')});
 
         socket.on(clientName, (dices) => {
             playerDices = dices;
@@ -106,7 +110,7 @@ window.addEventListener("load", async ()=>{
                 }
                 
             }
-
+            console.log('Avant initilisation des dés ',cubes);
             if(cubes == null){
                 let dicesScene = document.querySelector('.dices-scene');
                 console.log('initilisation des dés');
@@ -284,6 +288,10 @@ window.addEventListener("load", async ()=>{
         socket.emit( 'launch' );
         socket.emit('MajRequest');
         console.log("lancement")
+    });
+
+    refreshBtn.addEventListener('click', () =>{
+        socket.emit('MajRequest');
     });
 
     pacoSwitchBtn.addEventListener('click', () =>{
