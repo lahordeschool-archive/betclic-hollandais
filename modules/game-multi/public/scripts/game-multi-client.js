@@ -35,7 +35,7 @@ window.addEventListener("load", async ()=>{
 
     clientName = localStorage.getItem('UserFirstName');
 
-    socket = await io.connect('https://multi-joueur-xg3tshy-bjjhuouee7ih4.fr-4.platformsh.site');
+    socket = await io.connect('https://multi-joueur-xg3tshy-bjjhuouee7ih4.fr-4.platformsh.site::4000');
 
     //clientName = localStorage.getItem('UserName');
 
