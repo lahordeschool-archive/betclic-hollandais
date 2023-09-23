@@ -7,12 +7,6 @@
     "test": "mocha",
     "convert-images": "find . -name '*.png' -exec bash -c 'npx imagemin {} --plugin=webp --out-dir=$(dirname {})/ && echo Converted {} to WebP' \\;"
   },
-  "proxy": {
-    "/socket.io": {
-      "target": "ws://localhost:8888",
-      "ws": true
-    }
-  },
   "dependencies": {
     "axios": "^1.4.0",
     "bcrypt": "^5.1.1",
