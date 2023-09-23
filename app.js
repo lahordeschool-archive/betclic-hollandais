@@ -14,9 +14,12 @@ const helmet = require("helmet");
 const { emitter } = require("./lib/emitter");
 const i18n = require('i18n');
 const lang = require('./lib/lang');
+const flash = require('connect-flash');
+
+const app = express();
+app.use(flash());
 
 // Import lib
-const { passport } = require('./lib/auth');
 const { connect, createStore } = require('./lib/database');
 
 // Require all models dynamically
@@ -24,7 +27,6 @@ fs.readdirSync(path.join(__dirname, 'models')).forEach((file) => {
   require(path.join(__dirname, 'models', file));
 });
 
-const app = express();
 
 const port = process.env.SERVER_PORT || 4000; // Default port is 3000 if PORT env variable is not set
 app.set("port", port);
@@ -87,6 +89,8 @@ app.use(
   })
 );
 
+
+const { passport } = require('./lib/auth');
 app.use(passport.initialize());
 app.use(passport.session());
 
