@@ -85,6 +85,7 @@ window.addEventListener("load", async ()=>{
             else{
                 canPlay = false;
             }
+            displayActualPlayer.value = playerList[actualPlayerIndex].name;
             refreshCompteur();
             refreshDisplay();
         });
@@ -223,7 +224,6 @@ window.addEventListener("load", async ()=>{
         betCount.value = actualBet[0];
         betValue.value = actualBet[1];
         console.log('current player =', playerList[actualPlayerIndex].name);
-        displayActualPlayer.value = playerList[actualPlayerIndex].name;
     }
 
     function refreshDisplay(){
