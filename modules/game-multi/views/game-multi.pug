@@ -23,6 +23,9 @@ html(lang="en")
 		button.playBtn PLAY
 		button.refreshBtn Refresh
 		.bet-display
+			p Joueur actuel :
+			.bet-Player
+				input.bet-input.player(type='text' value='' readonly='')
 			p Pari actuel :
 			.bet-values
 				input.bet-input.bet-count(type='number' value='0' readonly='')
@@ -40,9 +43,9 @@ html(lang="en")
 				i.fa.fa-angle-up.arr-up(style='display: block;')
 				input.num-input(type='number' value='3' data-color='#21d99b')
 				i.fa.fa-angle-down.arr-down(style='display: block;')
-		button.pacoSwitchBtn paco&apos;s switch
-		button.betBtn BET
-		button.objectionBtn Contest
+		button.betBtn(id="betButton") BET
+		button.pacoSwitchBtn(id="pacoSwitchButton") paco&apos;s switch
+		button.objectionBtn(id="objectionButton") Contest
 		.game-info
 			.players
 		// HTML structure for displaying the list of connected users

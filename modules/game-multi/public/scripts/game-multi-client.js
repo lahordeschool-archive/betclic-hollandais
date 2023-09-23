@@ -15,14 +15,27 @@ window.addEventListener("load", async ()=>{
     var currentClass = [];
 
     const customNum = document.querySelectorAll('.custom-num');
+    const displayActualPlayer = document.querySelector('.bet-input.player');
     const betCount = document.querySelector('.bet-input.bet-count');
     const betValue = document.querySelector('.bet-input.bet-number');
-    const pacoSwitchBtn = document.querySelector('.pacoSwitchBtn');
-    const betBtn = document.querySelector('.betBtn');
     const playBtn = document.querySelector('.playBtn');
-    const objectionBtn = document.querySelector('.objectionBtn');
     const refreshBtn = document.querySelector('.refreshBtn');
-    
+    const betBtn = document.getElementById("betButton");
+    const pacoSwitchBtn = document.getElementById("pacoSwitchButton");
+    const objectionBtn = document.getElementById("objectionButton");
+    var canPlay = true;
+
+    // Mettez à jour la visibilité des boutons en fonction de la valeur de 'showButtons'
+    if (canPlay) {
+        betButton.style.display = "block";
+        pacoSwitchButton.style.display = "block";
+        objectionButton.style.display = "block";
+    } else {
+        betButton.style.display = "none";
+        pacoSwitchButton.style.display = "none";
+        objectionButton.style.display = "none";
+    }
+
     if(localStorage.getItem('UserFirstName') == null){
         $.get("/api/getUserInfos", function(data) {
             clientName = data.firstname;
@@ -61,6 +74,12 @@ window.addEventListener("load", async ()=>{
         socket.on('currentPlayer', (currentPlayer) => {
             actualPlayerIndex = currentPlayer;
             console.log("Players actuel =",actualPlayerIndex);
+            if(playerList[actualPlayerIndex].mail === localStorage.getItem('UserMail')){
+                canPlay = true;
+            }
+            else{
+                canPlay = false;
+            }
             refreshCompteur();
             refreshDisplay();
         });
@@ -199,6 +218,7 @@ window.addEventListener("load", async ()=>{
         console.log('actualBet before display =', actualBet);
         betCount.value = actualBet[0];
         betValue.value = actualBet[1];
+        displayActualPlayer.value = playerList[actualPlayerIndex].name;
     }
 
     function refreshDisplay(){
@@ -284,12 +304,10 @@ window.addEventListener("load", async ()=>{
     });
 
     objectionBtn.addEventListener('click', () =>{
-        if(playerList[actualPlayerIndex].name === clientName){
-            socket.emit( 'objection' );
-            console.log("Objection")
-            socket.emit('MajRequest');
-            console.log("MajRequest")
-        }
+        socket.emit( 'objection' );
+        console.log("Objection")
+        socket.emit('MajRequest');
+        console.log("MajRequest")
     });
 
     playBtn.addEventListener('click', () =>{
