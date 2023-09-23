@@ -52,45 +52,45 @@ window.addEventListener("load", async ()=>{
             console.log(message);
         });
 
-        socket.on(clientName, (dices) => {
+        socket.on('dices', (dices) => {
             playerDices = dices;
             console.log("Mes dés =",dices);
             GameUI.displayDices();
         }); 
 
-        socket.on(clientName+'currentPlayer', (currentPlayer) => {
+        socket.on('currentPlayer', (currentPlayer) => {
             actualPlayerIndex = currentPlayer;
             console.log("Players actuel =",actualPlayerIndex);
             refreshCompteur();
             refreshDisplay();
         });
     
-        socket.on(clientName+'playersList', (playersList) => {
+        socket.on('playersList', (playersList) => {
             playerList = playersList;
             console.log("list des joueur = ",playersList);
         });
     
-        socket.on(clientName+'currentBet', (currentBet) => {
+        socket.on('currentBet', (currentBet) => {
             actualBet = currentBet;
             console.log("bet actuel =",currentBet);
         });
     
-        socket.on(clientName+'currentManche', (currentManche) => {
+        socket.on('currentManche', (currentManche) => {
             actualManche = currentManche;
             console.log("manche actuel =",currentManche);
         });
     
-        socket.on(clientName+'currentRound', (currentRound) => {
+        socket.on('currentRound', (currentRound) => {
             actualRound = currentRound;
             console.log("round actuel =",currentRound);
         });
     
-        socket.on(clientName+'totalDices', (totalDices) => {
+        socket.on('totalDices', (totalDices) => {
             actualtotalDices = totalDices;
             console.log("total des dés =",totalDices);
         });
     
-        socket.on(clientName+'BetInvalid', () => {
+        socket.on('BetInvalid', () => {
             if(playerList[actualPlayerIndex].name === clientName){
                 alert("vous devait surencherir ou passer en paco");
             }

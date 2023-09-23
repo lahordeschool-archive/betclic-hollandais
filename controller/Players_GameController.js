@@ -34,8 +34,9 @@ class Players_GameController {
         this.turn();
     }
 
-    addPlayer(playerName, mail){
+    addPlayer(playerName, mail, socketId){
         this.playerList.push({
+            socketId: socketId,
             mail: mail,
             name: playerName,
             diceNb: 5,

@@ -49,7 +49,7 @@ module.exports = function(io) {
         }
       });
       if(!alreadyLogged){
-        gameController.addPlayer(user.name, user.mail);
+        gameController.addPlayer(user.name, user.mail, socket.id);
       }
     });
 
@@ -78,20 +78,18 @@ module.exports = function(io) {
 
         if(gameController.beginManche){
 
-          socket.emit('totalDices' , gameController.allDices.length);
+          player.socketId.emit('totalDices' , gameController.allDices.length);
 
           console.log('envoie a ', `${player.name}`);
           console.log('dés = ', player.dices);
-          socket.emit( player.name , player.dices);
-          
-          
+          player.socketId.emit( 'dices' , player.dices);
         }
         
-        socket.emit(player.name+'playersList' ,  gameController.getPlayerListWithoutDicesValue() );
-        socket.emit(player.name+'currentBet' , gameController.currentBet);
-        socket.emit(player.name+'currentManche' , gameController.currentManche);
-        socket.emit(player.name+'currentRound' , gameController.currentRound);
-        socket.emit(player.name+'currentPlayer' , gameController.currentPlayer);
+        player.socketId.emit('playersList' ,  gameController.getPlayerListWithoutDicesValue() );
+        player.socketId.emit('currentBet' , gameController.currentBet);
+        player.socketId.emit('currentManche' , gameController.currentManche);
+        player.socketId.emit('currentRound' , gameController.currentRound);
+        player.socketId.emit('currentPlayer' , gameController.currentPlayer);
 
       });
       gameController.beginManche = false;
