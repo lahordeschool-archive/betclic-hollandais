@@ -37,6 +37,9 @@ window.addEventListener("load", async ()=>{
 
     socket = await io.connect();
 
+    //clientName = localStorage.getItem('UserName');
+
+
     socket.on('connect', () => {
     console.log('Connected to the server from client');
         // You can perform actions here when the connection is established
