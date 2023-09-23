@@ -78,11 +78,11 @@ module.exports = function(io) {
 
         if(gameController.beginManche){
 
-          emitToAll(player.mail , gameController.allDices.length);
+          emitToAll('totalDices' , gameController.allDices.length);
 
           console.log('envoie a ', `${player.name}`);
           console.log('dés = ', player.dices);
-          emitToAll( 'dices' , player.dices);
+          emitToAll( player.mail , player.dices);
         }
       });
       emitToAll('playersList' ,  gameController.getPlayerListWithoutDicesValue() );
