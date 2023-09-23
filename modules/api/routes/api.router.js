@@ -78,20 +78,18 @@ module.exports = function(io) {
 
         if(gameController.beginManche){
 
-          player.socketId.emit('totalDices' , gameController.allDices.length);
+          emitToAll(player.mail , gameController.allDices.length);
 
           console.log('envoie a ', `${player.name}`);
           console.log('dés = ', player.dices);
-          player.socketId.emit( 'dices' , player.dices);
+          emitToAll( 'dices' , player.dices);
         }
-        
-        player.socketId.emit('playersList' ,  gameController.getPlayerListWithoutDicesValue() );
-        player.socketId.emit('currentBet' , gameController.currentBet);
-        player.socketId.emit('currentManche' , gameController.currentManche);
-        player.socketId.emit('currentRound' , gameController.currentRound);
-        player.socketId.emit('currentPlayer' , gameController.currentPlayer);
-
       });
+      emitToAll('playersList' ,  gameController.getPlayerListWithoutDicesValue() );
+      emitToAll('currentBet' , gameController.currentBet);
+      emitToAll('currentManche' , gameController.currentManche);
+      emitToAll('currentRound' , gameController.currentRound);
+      emitToAll('currentPlayer' , gameController.currentPlayer);
       gameController.beginManche = false;
     });
   });

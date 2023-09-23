@@ -52,7 +52,7 @@ window.addEventListener("load", async ()=>{
             console.log(message);
         });
 
-        socket.on('dices', (dices) => {
+        socket.on(localStorage.getItem('UserMail'), (dices) => {
             playerDices = dices;
             console.log("Mes dés =",dices);
             GameUI.displayDices();
