@@ -32,7 +32,7 @@ window.addEventListener("load", async ()=>{
     });
       
 
-    socket = await io.connect('http://localhost:4000');
+    socket = await io.connect('/socket.io');
 
     //clientName = localStorage.getItem('UserName');
 
