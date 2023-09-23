@@ -15,9 +15,9 @@ window.addEventListener("load", async ()=>{
     var currentClass = [];
 
     const customNum = document.querySelectorAll('.custom-num');
-    const displayActualPlayer = document.querySelector('.text-field.player');
+    const displayActualPlayer = document.querySelector('.player-name');
     if (displayActualPlayer) {
-        displayActualPlayer.value = "Nom du joueur";
+        displayActualPlayer.textContent = "Nom du joueur";
     } else {
         console.error("L'élément .text-field.player n'a pas été trouvé.");
     }
@@ -85,7 +85,7 @@ window.addEventListener("load", async ()=>{
             else{
                 canPlay = false;
             }
-            displayActualPlayer.value = playerList[actualPlayerIndex].name;
+            displayActualPlayer.textContent = playerList[actualPlayerIndex].name;
             refreshCompteur();
             refreshDisplay();
         });
