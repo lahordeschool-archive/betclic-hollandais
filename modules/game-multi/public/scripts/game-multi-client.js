@@ -35,7 +35,7 @@ window.addEventListener("load", async ()=>{
 
     clientName = localStorage.getItem('UserFirstName');
 
-    socket = await io.connect('wss://' + window.location.hostname + '/ws');
+    socket = await io.connect();
 
     //clientName = localStorage.getItem('UserName');
 
