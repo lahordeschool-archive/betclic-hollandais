@@ -15,7 +15,7 @@ window.addEventListener("load", async ()=>{
     var currentClass = [];
 
     const customNum = document.querySelectorAll('.custom-num');
-    const displayActualPlayer = document.querySelector('.bet-input.player');
+    const displayActualPlayer = document.querySelector(".bet-input.player");
     const betCount = document.querySelector('.bet-input.bet-count');
     const betValue = document.querySelector('.bet-input.bet-number');
     const playBtn = document.querySelector('.playBtn');
@@ -212,12 +212,12 @@ window.addEventListener("load", async ()=>{
                 arrUp.style.display = "block";
                 arrDown.style.display = "block";
             }
-
         });
         
         console.log('actualBet before display =', actualBet);
         betCount.value = actualBet[0];
         betValue.value = actualBet[1];
+        console.log('current player =', playerList[actualPlayerIndex].name);
         displayActualPlayer.value = playerList[actualPlayerIndex].name;
     }
 
