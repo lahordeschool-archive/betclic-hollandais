@@ -37,9 +37,6 @@ window.addEventListener("load", async ()=>{
 
     socket = await io.connect();
 
-    //clientName = localStorage.getItem('UserName');
-
-
     socket.on('connect', () => {
     console.log('Connected to the server from client');
         // You can perform actions here when the connection is established
@@ -276,7 +273,9 @@ window.addEventListener("load", async ()=>{
             let value = parseInt(customNum[1].querySelector('.num-input').value);
             
             socket.emit( 'newBet' , [count,value]);
+            console.log("New bet")
             socket.emit('MajRequest');
+            console.log("MajRequest")
         }
         
     });
@@ -284,18 +283,22 @@ window.addEventListener("load", async ()=>{
     objectionBtn.addEventListener('click', () =>{
         if(playerList[actualPlayerIndex].name === clientName){
             socket.emit( 'objection' );
+            console.log("Objection")
             socket.emit('MajRequest');
+            console.log("MajRequest")
         }
     });
 
     playBtn.addEventListener('click', () =>{
         socket.emit( 'launch' );
-        socket.emit('MajRequest');
         console.log("lancement")
+        socket.emit('MajRequest');
+        console.log("MajRequest")
     });
 
     refreshBtn.addEventListener('click', () =>{
         socket.emit('MajRequest');
+        console.log("MajRequest")
     });
 
     pacoSwitchBtn.addEventListener('click', () =>{
