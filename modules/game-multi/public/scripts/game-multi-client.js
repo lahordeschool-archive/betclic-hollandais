@@ -15,7 +15,7 @@ window.addEventListener("load", async ()=>{
     var currentClass = [];
 
     const customNum = document.querySelectorAll('.custom-num');
-    const displayActualPlayer = document.querySelector(".bet-input.player");
+    const displayActualPlayer = document.querySelector('.text-field.player');
     const betCount = document.querySelector('.bet-input.bet-count');
     const betValue = document.querySelector('.bet-input.bet-number');
     const playBtn = document.querySelector('.playBtn');
