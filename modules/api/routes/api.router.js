@@ -8,14 +8,37 @@ const gameController = new Players_GameController();
 
 gameController.address = "1111";
 
+const socketUsers = {};
+
+function emitToAll(event, data) {
+  Object.keys(socketUsers).forEach((socketId) => {
+    socketUsers[socketId].emit(event, data);
+  });
+}
+
 module.exports = function(io) {
   const router = express.Router();
 
   io.on('connection', (socket) => {
     console.log(`A client connected with ID: ${socket.id}`);
+    socketUsers[socket.id] = socket;
+
+    socket.on('disconnect', () => {
+      console.log(`Client with ID: ${socket.id} disconnected`);
+      delete socketUsers[socket.id];
+    });
+
     socket.on('connected', () => {
       console.log('Client connected and sent a "connected" message');
       // Handle the event here
+    });
+
+
+
+    socket.on('messageTest', () => {
+      console.log('Client sent a "messageTest" message');
+      // Handle the event here
+      emitToAll('messageTestReceived', 'Server received "messageTest" message');
     });
 
     socket.on('connectPlayer', (user) => {

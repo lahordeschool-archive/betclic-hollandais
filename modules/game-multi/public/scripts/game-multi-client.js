@@ -48,6 +48,10 @@ window.addEventListener("load", async ()=>{
 
         socket.emit('connectPlayer', {name: clientName, mail: localStorage.getItem('UserMail')});
 
+        socket.on("messageTestReceived", (message) => {
+            console.log(message);
+        });
+
         socket.on(clientName, (dices) => {
             playerDices = dices;
             console.log("Mes dés =",dices);
