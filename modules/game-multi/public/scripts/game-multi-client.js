@@ -16,6 +16,11 @@ window.addEventListener("load", async ()=>{
 
     const customNum = document.querySelectorAll('.custom-num');
     const displayActualPlayer = document.querySelector('.text-field.player');
+    if (displayActualPlayer) {
+        displayActualPlayer.value = "Nom du joueur";
+    } else {
+        console.error("L'élément .text-field.player n'a pas été trouvé.");
+    }
     const betCount = document.querySelector('.bet-input.bet-count');
     const betValue = document.querySelector('.bet-input.bet-number');
     const playBtn = document.querySelector('.playBtn');
