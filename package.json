@@ -9,7 +9,7 @@
   },
   "proxy": {
     "/socket.io": {
-      "target": "ws://localhost",
+      "target": "ws://localhost:8888",
       "ws": true
     }
   },
