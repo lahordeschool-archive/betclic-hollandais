@@ -21,6 +21,7 @@ html(lang="en")
 		font(color='white')
 		h2 PERUDO
 		button.playBtn PLAY
+		button.refreshBtn Refresh
 		.bet-display
 			p Pari actuel :
 			.bet-values
@@ -31,22 +32,23 @@ html(lang="en")
 		.estimation
 			p Quantity
 			.custom-num
-				i.fa.fa-angle-up.arr-up
+				i.fa.fa-angle-up.arr-up(style='display: block;')
 				input.num-input(type='number' value='3' data-color='#21d99b')
-				i.fa.fa-angle-down.arr-down
+				i.fa.fa-angle-down.arr-down(style='display: block;')
 			p Value
 			.custom-num
-				i.fa.fa-angle-up.arr-up
+				i.fa.fa-angle-up.arr-up(style='display: block;')
 				input.num-input(type='number' value='3' data-color='#21d99b')
-				i.fa.fa-angle-down.arr-down
+				i.fa.fa-angle-down.arr-down(style='display: block;')
 		button.pacoSwitchBtn paco&apos;s switch
 		button.betBtn BET
 		button.objectionBtn Contest
 		.game-info
-		.players
+			.players
 		// HTML structure for displaying the list of connected users
 		p#playerCount Players: 0
 		ul#userList
 
+link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
 link(rel='stylesheet', href='/stylesheets/game-multi.css', type="text/css")
 script(src='/scripts/game-multi-client.js')

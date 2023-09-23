@@ -17,53 +17,69 @@ module.exports = function(io) {
       console.log('Client connected and sent a "connected" message');
       // Handle the event here
     });
-  });
 
-  
-
-  //console.log(io)
-  // io.io event handling
-  io.on('launch', (io) => {
-    gameController.init();
-  });
-
-  io.on('newBet', (newBet) => {
-
-  io.on('objection', () => {
-    objection();
-  });
-
-  if(gameController.VerifyBet(newBet)){
-    gameController.bet(newBet[0], newBet[1]);
-  }else{
-    io.emit('BetInvalid');
-  }
-  
-  io.on('MajRequest', () => {
-    if(gameController.beginManche){
+    socket.on('connectPlayer', (user) => {
+      let alreadyLogged = false;
       gameController.playerList.forEach(player => {
-        io.emit( player.name , { dices: player.dices });
+        if(player.mail === user.mail){
+          alreadyLogged = true;
+        }
       });
-      io.emit('totalDices' , { totalDices: allDices.length });
-      gameController.beginManche = fase;
-    }
-    
-    io.emit('playersList' , { playersList: getPlayerListWithoutDicesValue() });
-    io.emit('currentBet' , { currentBet: getCurrentBet() });
-    io.emit('currentManche' , { currentManche: currentManche });
-    io.emit('currentRound' , { currentRound: currentRound });
-    io.emit('currentPlayerName' , { currentPlayerName: playerList[currentPlayer].name });
-  });
+      if(!alreadyLogged){
+        gameController.addPlayer(user.name, user.mail);
+      }
+    });
 
+    socket.on('launch', (io) => {
+      gameController.init();
+    });
   
+    socket.on('newBet', (newBet) => {
+      console.log("newBet = ", newBet);
+      if(gameController.VerifyBet(newBet)){
+        gameController.bet(newBet[0], newBet[1]);
+      }else{
+        socket.emit(gameController.playerList[gameController.currentPlayer].name+'BetInvalid');
+      }
+    });
 
-});
+    socket.on('objection', () => {
+      objection();
+    });
+
+    socket.on('MajRequest', () => {
+      console.log('********************  Maj request call ***********************');
+      gameController.playerList.forEach(player => {
+
+        console.log('********************  Player '+player.name+'  ***********************');
+
+        if(gameController.beginManche){
+
+          socket.emit('totalDices' , gameController.allDices.length);
+
+          console.log('envoie a ', `${player.name}`);
+          console.log('dés = ', player.dices);
+          socket.emit( player.name , player.dices);
+          
+          
+        }
+        
+        socket.emit(player.name+'playersList' ,  gameController.getPlayerListWithoutDicesValue() );
+        socket.emit(player.name+'currentBet' , gameController.currentBet);
+        socket.emit(player.name+'currentManche' , gameController.currentManche);
+        socket.emit(player.name+'currentRound' , gameController.currentRound);
+        socket.emit(player.name+'currentPlayer' , gameController.currentPlayer);
+
+      });
+      gameController.beginManche = false;
+    });
+  });
 
   /* GET user info */
   router.get("/getUserInfos", (req, res) => {
     if (req.isAuthenticated()) {
         res.send(req.user);
-        gameController.addPlayer(req.user);
+
     } else {
         res.redirect("/login");
     }
