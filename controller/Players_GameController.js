@@ -100,7 +100,33 @@ class Players_GameController {
         let count = this.allDices.filter(die => die === this.currentBet[1] || die === 1).length;
         this.mancheLoser = count >= this.currentBet[0] ? this.currentPlayer : this.lastPlayer;
         
-        // ... [reste du code identique]
+        playerList = PlayerManager.playerList;
+    
+        playerList[mancheLoser].diceNb--;
+    
+        if(playerList[mancheLoser].diceNb === 1){
+            currentBet = [0,1];
+        }else{
+            currentBet = [1,2];
+        }
+
+        if(playerList[mancheLoser].diceNb === 0){
+            if(mancheLoser == playerList.length-1)
+            {
+                PlayerManager.removePlayer(mancheLoser, 1);
+                mancheLoser = 0;
+            }else{
+                PlayerManager.removePlayer(mancheLoser, 1);
+            }
+        }
+
+        if(mancheLoser == 0){
+            currentPlayer = null;
+        }else{
+            currentPlayer = mancheLoser-1;
+        }
+        
+        GameConfig.currentRound++;
 
         if(this.playerList.length == 1){
             this.winner = this.playerList[0];
