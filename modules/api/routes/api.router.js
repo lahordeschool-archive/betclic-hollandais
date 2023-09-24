@@ -65,13 +65,13 @@ module.exports = function(io) {
         }else{
           socket.emit('BetInvalid');
         }
-      }else{
-        socket.emit('BetInvalid');
       }
     });
 
     socket.on('objection', () => {
-      objection();
+      if(socket.id === gameController.playerList[gameController.currentPlayer].socketId){
+        gameController.objection();
+      }
     });
 
     socket.on('MajRequest', () => {
