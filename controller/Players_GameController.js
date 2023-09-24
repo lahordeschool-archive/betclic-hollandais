@@ -32,11 +32,12 @@ class Players_GameController {
 
         this.rollDices();
         this.turn();
+        console.log("init de controller");
     }
 
-    addPlayer(playerName, mail, socketId){
+    addPlayer(playerName, mail, socket){
         this.playerList.push({
-            socketId: socketId,
+            socket: socket,
             mail: mail,
             name: playerName,
             diceNb: 5,
@@ -70,7 +71,6 @@ class Players_GameController {
         this.playerListWithoutDicesValue = [];
         this.playerList.forEach(player => {
             this.playerListWithoutDicesValue.push({
-                socketId: player.socketId,
                 mail: player.mail,
                 name: player.name,
                 diceNb: player.diceNb,
@@ -99,34 +99,32 @@ class Players_GameController {
     objection() {
         let count = this.allDices.filter(die => die === this.currentBet[1] || die === 1).length;
         this.mancheLoser = count >= this.currentBet[0] ? this.currentPlayer : this.lastPlayer;
-        
-        playerList = PlayerManager.playerList;
     
-        playerList[mancheLoser].diceNb--;
+        this.playerList[this.mancheLoser].diceNb--;
     
-        if(playerList[mancheLoser].diceNb === 1){
-            currentBet = [0,1];
+        if(this.playerList[this.mancheLoser].diceNb === 1){
+            this.currentBet = [0,1];
         }else{
-            currentBet = [1,2];
+            this.currentBet = [0,2];
         }
 
-        if(playerList[mancheLoser].diceNb === 0){
-            if(mancheLoser == playerList.length-1)
+        if(this.playerList[this.mancheLoser].diceNb === 0){
+            if(this.mancheLoser == this.playerList.length-1)
             {
-                PlayerManager.removePlayer(mancheLoser, 1);
-                mancheLoser = 0;
+                this.removePlayer(this.mancheLoser);
+                this.mancheLoser = 0;
             }else{
-                PlayerManager.removePlayer(mancheLoser, 1);
+                this.removePlayer(this.mancheLoser);
             }
         }
 
-        if(mancheLoser == 0){
-            currentPlayer = null;
+        if(this.mancheLoser == 0){
+            this.currentPlayer = null;
         }else{
-            currentPlayer = mancheLoser-1;
+            this.currentPlayer = this.mancheLoser-1;
         }
         
-        GameConfig.currentRound++;
+        this.currentRound++;
 
         if(this.playerList.length == 1){
             this.winner = this.playerList[0];
@@ -142,6 +140,7 @@ class Players_GameController {
 
     bet(count, value) {
         this.currentBet = [count, value];
+        console.log("set du bet",this.currentBet);
         this.setPlayerBet(this.currentBet);
         this.currentRound++;
         this.turn();
@@ -166,7 +165,7 @@ class Players_GameController {
     }
 
     VerifyBet(bet) {
-        if(JSON.stringify(this.currentBet) == JSON.stringify(this.newBet)) {
+        if(JSON.stringify(this.currentBet) == JSON.stringify(bet)) {
             return false;
         } else {
             return true;

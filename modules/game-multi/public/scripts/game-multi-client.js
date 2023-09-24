@@ -15,6 +15,7 @@ window.addEventListener("load", async ()=>{
     var currentClass = [];
 
     const customNum = document.querySelectorAll('.custom-num');
+    const displayClientName = document.querySelector('.user-name');
     const displayActualPlayer = document.querySelector('.player-name');
     if (displayActualPlayer) {
         displayActualPlayer.textContent = "Nom du joueur";
@@ -43,6 +44,7 @@ window.addEventListener("load", async ()=>{
     }
 
     clientName = localStorage.getItem('UserFirstName');
+    displayClientName.textContent = clientName;
 
     socket = await io.connect();
 
@@ -69,11 +71,11 @@ window.addEventListener("load", async ()=>{
 
         socket.on('currentPlayer', (currentPlayer) => {
             actualPlayerIndex = currentPlayer;
-            // console.log("Players actuel =",actualPlayerIndex);
-            // console.log("Players actuel name =",playerList[actualPlayerIndex].name);
-            // console.log("Players actuel mail =",playerList[actualPlayerIndex].mail);
-            // console.log("your mail =",localStorage.getItem('UserMail'));
-            // console.log("you can play =",playerList[actualPlayerIndex].mail === localStorage.getItem('UserMail'));
+            console.log("Players actuel =",actualPlayerIndex);
+            console.log("Players actuel name =",playerList[actualPlayerIndex].name);
+            console.log("Players actuel mail =",playerList[actualPlayerIndex].mail);
+            console.log("your mail =",localStorage.getItem('UserMail'));
+            console.log("you can play =",playerList[actualPlayerIndex].mail === localStorage.getItem('UserMail'));
             if(playerList[actualPlayerIndex].mail === localStorage.getItem('UserMail')){
                 // Mettez à jour la visibilité des boutons en fonction de la valeur de 'showButtons'
                 betButton.style.display = "block";
@@ -85,7 +87,14 @@ window.addEventListener("load", async ()=>{
                 pacoSwitchButton.style.display = "none";
                 objectionButton.style.display = "none";
             }
-            displayActualPlayer.textContent = playerList[actualPlayerIndex].name;
+
+            if(playerList[actualPlayerIndex].mail === localStorage.getItem('UserMail')){
+                displayActualPlayer.textContent = "Votre Tour";
+            }else{
+                displayActualPlayer.textContent = playerList[actualPlayerIndex].name;
+            }
+
+            
             refreshCompteur();
             refreshDisplay();
         });
@@ -112,6 +121,7 @@ window.addEventListener("load", async ()=>{
     
         socket.on('totalDices', (totalDices) => {
             actualtotalDices = totalDices;
+            numInputMax[0] = actualtotalDices;
             console.log("total des dés =",totalDices);
         });
     
@@ -139,10 +149,8 @@ window.addEventListener("load", async ()=>{
                 }
                 
             }
-            console.log('Avant initilisation des dés ',cubes);
             if(cubes == null){
                 let dicesScene = document.querySelector('.dices-scene');
-                console.log('initilisation des dés');
                 // Définissez le contenu de chaque cube
                 let cubeHTML = `
                     <div class = "scene">
@@ -160,7 +168,6 @@ window.addEventListener("load", async ()=>{
                 // Utilisez une boucle pour ajouter le cube n fois
                 for (let i = 0; i < playerDices.length; i++) {
                     dicesScene.innerHTML += cubeHTML;
-                    console.log("add cube");
                 }
                 cubes = document.querySelectorAll('.cube');
             }
@@ -220,10 +227,8 @@ window.addEventListener("load", async ()=>{
             }
         });
         
-        console.log('actualBet before display =', actualBet);
         betCount.value = actualBet[0];
         betValue.value = actualBet[1];
-        console.log('current player =', playerList[actualPlayerIndex].name);
     }
 
     function refreshDisplay(){
@@ -233,11 +238,7 @@ window.addEventListener("load", async ()=>{
             numInputMax[1] = 6;
         }
 
-        if(actualBet[1] === 1 && actualBet[0] === 0){
-            numInputMin[0] = 1;
-            
-        }
-        else if(actualBet[0] === 0){
+        if(actualBet[0] === 0){
             numInputMin[0] = 1;
         }else{
             numInputMin[0] = actualBet[0];
@@ -273,9 +274,8 @@ window.addEventListener("load", async ()=>{
             });
         }
         
-        console.log("state playerList before foreach = ",playerList)
         playerList.forEach(player => {
-            if(player != playerList[actualPlayerIndex]){
+            if(player.mail != localStorage.getItem('UserMail')){
                 let PlayerHTML = `
                     <div class="player">
                         <h3>`+ player.name +`</h3>
@@ -301,30 +301,32 @@ window.addEventListener("load", async ()=>{
             let value = parseInt(customNum[1].querySelector('.num-input').value);
             
             socket.emit( 'newBet' , [count,value]);
-            console.log("New bet")
+            console.log("New bet");
             socket.emit('MajRequest');
-            console.log("MajRequest")
+            console.log("MajRequest");
         }
         
     });
 
     objectionBtn.addEventListener('click', () =>{
         socket.emit( 'objection' );
-        console.log("Objection")
+        console.log("Objection");
         socket.emit('MajRequest');
-        console.log("MajRequest")
+        console.log("MajRequest");
     });
 
     playBtn.addEventListener('click', () =>{
         socket.emit( 'launch' );
-        console.log("lancement")
+        console.log("lancement");
         socket.emit('MajRequest');
-        console.log("MajRequest")
+        console.log("MajRequest");
+        cubes = null;
     });
 
     refreshBtn.addEventListener('click', () =>{
         socket.emit('MajRequest');
-        console.log("MajRequest")
+        console.log("MajRequest");
+        cubes = null;
     });
 
     pacoSwitchBtn.addEventListener('click', () =>{
@@ -349,7 +351,7 @@ window.addEventListener("load", async ()=>{
                 }else{
                     numInputMin[1] = 2;
                     numInputMin[0] = actualBet[0] * 2 + 1;
-                    numInputMax[1] = 9;
+                    numInputMax[1] = 6;
                     customNum[0].querySelector('.num-input').value = actualBet[0] * 2 + 1;
                     customNum[1].querySelector('.num-input').value = 2;
                 }

@@ -11,8 +11,8 @@ gameController.address = "1111";
 const socketUsers = {};
 
 function emitToAll(event, data) {
-  Object.keys(socketUsers).forEach((socketId) => {
-    socketUsers[socketId].emit(event, data);
+  gameController.playerList.forEach(player => {
+    player.socket.emit(event, data);
   });
 }
 
@@ -26,6 +26,11 @@ module.exports = function(io) {
     socket.on('disconnect', () => {
       console.log(`Client with ID: ${socket.id} disconnected`);
       delete socketUsers[socket.id];
+      gameController.playerList.forEach(player => {
+        if(player.socket.id === socket.id) {
+          gameController.removePlayerByName(player.name);
+        }
+      });
     });
 
     socket.on('connected', () => {
@@ -42,26 +47,32 @@ module.exports = function(io) {
     });
 
     socket.on('connectPlayer', (user) => {
+      console.log('connection de ', user);
       let alreadyLogged = false;
       gameController.playerList.forEach(player => {
         if(player.mail === user.mail){
           alreadyLogged = true;
+          player.socket = socket;
         }
       });
       if(!alreadyLogged){
-        gameController.addPlayer(user.name, user.mail, socket.id);
+        gameController.addPlayer(user.name, user.mail, socket);
       }
     });
 
     socket.on('launch', (io) => {
       gameController.init();
+      //console.log('list des joueurs =', gameController.playerList);
     });
   
     socket.on('newBet', (newBet) => {
       console.log("newBet = ", newBet);
-      if(socket.id === gameController.playerList[gameController.currentPlayer].socketId){
+      console.log("controle joueur bet =", socket.id === gameController.playerList[gameController.currentPlayer].socket.id);
+      if(socket.id === gameController.playerList[gameController.currentPlayer].socket.id){
+        console.log("test bet 1 ");
         if(gameController.VerifyBet(newBet)){
           gameController.bet(newBet[0], newBet[1]);
+          console.log("test bet 2 ");
         }else{
           socket.emit('BetInvalid');
         }
@@ -69,7 +80,7 @@ module.exports = function(io) {
     });
 
     socket.on('objection', () => {
-      if(socket.id === gameController.playerList[gameController.currentPlayer].socketId){
+      if(socket.id === gameController.playerList[gameController.currentPlayer].socket.id){
         gameController.objection();
       }
     });
