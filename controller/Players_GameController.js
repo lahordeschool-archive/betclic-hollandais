@@ -70,6 +70,8 @@ class Players_GameController {
         this.playerListWithoutDicesValue = [];
         this.playerList.forEach(player => {
             this.playerListWithoutDicesValue.push({
+                socketId: player.socketId,
+                mail: player.mail,
                 name: player.name,
                 diceNb: player.diceNb,
                 bet: player.bet
