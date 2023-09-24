@@ -65,6 +65,8 @@ module.exports = function(io) {
         }else{
           socket.emit('BetInvalid');
         }
+      }else{
+        socket.emit('BetInvalid');
       }
     });
 
