@@ -30,16 +30,7 @@ window.addEventListener("load", async ()=>{
     const objectionBtn = document.getElementById("objectionButton");
     var canPlay = true;
 
-    // Mettez à jour la visibilité des boutons en fonction de la valeur de 'showButtons'
-    if (canPlay) {
-        betButton.style.display = "block";
-        pacoSwitchButton.style.display = "block";
-        objectionButton.style.display = "block";
-    } else {
-        betButton.style.display = "none";
-        pacoSwitchButton.style.display = "none";
-        objectionButton.style.display = "none";
-    }
+    
 
     if(localStorage.getItem('UserFirstName') == null){
         $.get("/api/getUserInfos", function(data) {
@@ -80,10 +71,15 @@ window.addEventListener("load", async ()=>{
             actualPlayerIndex = currentPlayer;
             console.log("Players actuel =",actualPlayerIndex);
             if(playerList[actualPlayerIndex].mail === localStorage.getItem('UserMail')){
-                canPlay = true;
+                // Mettez à jour la visibilité des boutons en fonction de la valeur de 'showButtons'
+                betButton.style.display = "block";
+                pacoSwitchButton.style.display = "block";
+                objectionButton.style.display = "block";
             }
             else{
-                canPlay = false;
+                betButton.style.display = "none";
+                pacoSwitchButton.style.display = "none";
+                objectionButton.style.display = "none";
             }
             displayActualPlayer.textContent = playerList[actualPlayerIndex].name;
             refreshCompteur();

@@ -59,10 +59,12 @@ module.exports = function(io) {
   
     socket.on('newBet', (newBet) => {
       console.log("newBet = ", newBet);
-      if(gameController.VerifyBet(newBet)){
-        gameController.bet(newBet[0], newBet[1]);
-      }else{
-        socket.emit(gameController.playerList[gameController.currentPlayer].name+'BetInvalid');
+      if(socket.id === gameController.playerList[gameController.currentPlayer].socketId){
+        if(gameController.VerifyBet(newBet)){
+          gameController.bet(newBet[0], newBet[1]);
+        }else{
+          socket.emit('BetInvalid');
+        }
       }
     });
 
