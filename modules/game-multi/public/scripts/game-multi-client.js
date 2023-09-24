@@ -70,6 +70,10 @@ window.addEventListener("load", async ()=>{
         socket.on('currentPlayer', (currentPlayer) => {
             actualPlayerIndex = currentPlayer;
             console.log("Players actuel =",actualPlayerIndex);
+            console.log("Players actuel name =",playerList[actualPlayerIndex].name);
+            console.log("Players actuel mail =",playerList[actualPlayerIndex].mail);
+            console.log("your mail =",localStorage.getItem('UserMail'));
+            console.log("you can play =",playerList[actualPlayerIndex].mail === localStorage.getItem('UserMail'));
             if(playerList[actualPlayerIndex].mail === localStorage.getItem('UserMail')){
                 // Mettez à jour la visibilité des boutons en fonction de la valeur de 'showButtons'
                 betButton.style.display = "block";
