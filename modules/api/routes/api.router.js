@@ -81,7 +81,7 @@ module.exports = function(io) {
 
     socket.on('objection', () => {
       if(socket.id === gameController.playerList[gameController.currentPlayer].socket.id){
-        gameController.objection();
+        emitToAll('objectionPerdant' ,  gameController.objection() );
       }
     });
 
@@ -100,6 +100,11 @@ module.exports = function(io) {
           emitToAll( player.mail , player.dices);
         }
       });
+
+      if(gameController.winner != null){
+        emitToAll('Winner' ,  gameController.winner.name );
+      }
+
       emitToAll('playersList' ,  gameController.getPlayerListWithoutDicesValue() );
       emitToAll('currentBet' , gameController.currentBet);
       emitToAll('currentManche' , gameController.currentManche);

@@ -111,10 +111,9 @@ class Players_GameController {
         if(this.playerList[this.mancheLoser].diceNb === 0){
             if(this.mancheLoser == this.playerList.length-1)
             {
-                this.removePlayer(this.mancheLoser);
                 this.mancheLoser = 0;
             }else{
-                this.removePlayer(this.mancheLoser);
+                this.mancheLoser += 1;
             }
         }
 
@@ -135,6 +134,7 @@ class Players_GameController {
             this.currentRound = 0;
             this.rollDices();
             this.turn();
+            return this.playerList[this.mancheLoser].name;
         }
     }
 
@@ -148,12 +148,22 @@ class Players_GameController {
 
     turn() {
         if(this.currentPlayer != null) {
-            if(this.currentPlayer == this.playerList.length - 1) {
-                this.lastPlayer = this.currentPlayer;
-                this.currentPlayer = 0;
-            } else {
-                this.lastPlayer = this.currentPlayer;
-                this.currentPlayer++;
+            if(this.playerList[this.currentPlayer].diceNb > 0) {
+                if(this.currentPlayer == this.playerList.length - 1) {
+                    this.lastPlayer = this.currentPlayer;
+                    this.currentPlayer = 0;
+                } else {
+                    this.lastPlayer = this.currentPlayer;
+                    this.currentPlayer++;
+                }
+            }else{
+                if(this.currentPlayer == this.playerList.length-1)
+                {
+                    this.currentPlayer = 0;
+                }else{
+                    this.currentPlayer++;
+                }
+                this.turn();
             }
         } else {
             this.currentPlayer = 0;

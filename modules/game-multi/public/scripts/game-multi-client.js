@@ -63,6 +63,10 @@ window.addEventListener("load", async ()=>{
             console.log(message);
         });
 
+        socket.on("Winner", (playerName) => {
+            alert('Winner: ' + playerName);
+        });
+
         socket.on(localStorage.getItem('UserMail'), (dices) => {
             playerDices = dices;
             console.log("Mes dés =",dices);
@@ -98,15 +102,34 @@ window.addEventListener("load", async ()=>{
             refreshCompteur();
             refreshDisplay();
         });
-    
+
+        socket.on('objectionPerdant', (PlayerName) => {
+            alert(PlayerName+' a perdu un dés');
+        });
+
         socket.on('playersList', (playersList) => {
             playerList = playersList;
             console.log("list des joueur = ",playersList);
+            let winner = null;
+            let currentplayers = 0;
+            playersList.forEach(player =>{
+                if(player.diceNb != 0){
+                    winner = player.name;
+                    currentplayers++;
+                }
+            });
+            if(currentplayers === 1){
+                alert('Winner : ' + winner);
+                cubes = null;
+            }
         });
     
         socket.on('currentBet', (currentBet) => {
             actualBet = currentBet;
             console.log("bet actuel =",currentBet);
+            if(JSON.stringify(actualBet) == JSON.stringify([0,1])){
+                alert("Manche spéciale");
+            }
         });
     
         socket.on('currentManche', (currentManche) => {
@@ -275,21 +298,16 @@ window.addEventListener("load", async ()=>{
         }
         
         playerList.forEach(player => {
-            if(player.mail != localStorage.getItem('UserMail')){
-                let PlayerHTML = `
-                    <div class="player">
-                        <h3>`+ player.name +`</h3>
-                        <p class="bet">Bet: <span>`+ player.bet +`</span></p>
-                        <p class="dice-count">Dice Count: <span>`+ player.diceNb +`</span></p>
-                    </div>
-                `;
+            let PlayerHTML = `
+                <div class="player">
+                    <h3>`+ player.name +`</h3>
+                    <p class="bet">Bet: <span>`+ player.bet +`</span></p>
+                    <p class="dice-count">Dice Count: <span>`+ player.diceNb +`</span></p>
+                </div>
+            `;
 
-                playersScene.innerHTML += PlayerHTML;
-
-            }
+            playersScene.innerHTML += PlayerHTML;
         });
-        
-
 
         refreshCompteur();
 
