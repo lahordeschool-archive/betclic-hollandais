@@ -267,6 +267,10 @@ window.addEventListener("load", async ()=>{
             numInputMin[0] = actualBet[0];
         }
 
+        if(actualBet[0] === 0 && actualBet[1] === 1){
+            numInputMin[0] = actualBet[0];
+        }
+
         numInputMin[1] = actualBet[1];
         customNum[0].querySelector('.num-input').value = numInputMin[0];
         customNum[1].querySelector('.num-input').value = numInputMin[1];
