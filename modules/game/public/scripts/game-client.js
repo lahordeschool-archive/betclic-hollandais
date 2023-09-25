@@ -1,8 +1,8 @@
-import * as THREE from '../lib/three.module.js';
+import * as THREE from './three.module.js';
 import { OrbitControls } from './three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from './three/examples/jsm/loaders/GLTFLoader.js';
 import Stats from './three/examples/jsm/libs/stats.module.js';
-import * as CANNON from "../lib/cannon-es.js";
+import * as CANNON from "./cannon-es.js";
 
 const scene = new THREE.Scene();
 
@@ -202,7 +202,7 @@ scene.background = new THREE.Color(0x40E0D0);
 
 //permet de charger dans la scène le gltf de la maison
 
-loader.load( 'GLTF/sea_house/scene.gltf', function ( gltf ) {
+loader.load( 'scripts/GLTF/sea_house/scene.gltf', function ( gltf ) {
 	
 	house = gltf;
    	scene.add( house.scene );
@@ -212,7 +212,7 @@ loader.load( 'GLTF/sea_house/scene.gltf', function ( gltf ) {
 
 } );
 
-loader.load( 'GLTF/tonneau.gltf', function ( gltf ) {
+loader.load( 'scripts/GLTF/Tonneau.gltf', function ( gltf ) {
 
    	scene.add( gltf.scene );
 
@@ -227,7 +227,7 @@ loader.load( 'GLTF/tonneau.gltf', function ( gltf ) {
 
 //permet de charger un perroquet dans la scène que le joueur controlera
 function createParrot(){
-	loader.load( 'GLTF/parrot/scene.gltf', function ( gltf ) {
+	loader.load( 'scripts/GLTF/parrot/scene.gltf', function ( gltf ) {
 
 		parrot = gltf;
 		parrotS = parrot.scene;
