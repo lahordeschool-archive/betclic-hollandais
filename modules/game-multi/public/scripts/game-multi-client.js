@@ -1,92 +1,160 @@
-console.log("test 425");
-window.addEventListener("load", ()=>{
+var socket;
+var numInputMax = [9,6];
+var numInputMin = [0,0];
+var clientName = '';
+var playerList = [];
+var actualManche = 0;
+var actualRound = 0;
+var actualBet = [0,2];
+var actualtotalDices = 0;
+var actualPlayerIndex = 0;
+var playerDices = [];
+
+window.addEventListener("load", async ()=>{
     var cubes = null;
     var currentClass = [];
 
     const customNum = document.querySelectorAll('.custom-num');
+    const displayClientName = document.querySelector('.user-name');
+    const displayActualPlayer = document.querySelector('.player-name');
+    if (displayActualPlayer) {
+        displayActualPlayer.textContent = "Nom du joueur";
+    } else {
+        console.error("L'élément .text-field.player n'a pas été trouvé.");
+    }
     const betCount = document.querySelector('.bet-input.bet-count');
     const betValue = document.querySelector('.bet-input.bet-number');
-    const pacoSwitchBtn = document.querySelector('.pacoSwitchBtn');
-    const betBtn = document.querySelector('.betBtn');
     const playBtn = document.querySelector('.playBtn');
-    const objectionBtn = document.querySelector('.objectionBtn');
-    const numInputMax = [9,6];
-    const numInputMin = [0,0];
+    const refreshBtn = document.querySelector('.refreshBtn');
+    const betBtn = document.getElementById("betButton");
+    const pacoSwitchBtn = document.getElementById("pacoSwitchButton");
+    const objectionBtn = document.getElementById("objectionButton");
+    var canPlay = true;
 
-    let clientName = "";
-    let playerList = [];
-    let actualManche = 0;
-    let actualRound = 0;
-    let actualBet = [0,2];
-    let actualtotalDices = 0;
-    let actualPlayerName = "";
-    let playerDices = [];
-
-    const socket = io('http://localhost:4000');
-
-    clientName = localStorage.getItem('UserName');
-    
     
 
-    console.log("nom du client :", clientName);
+    if(localStorage.getItem('UserFirstName') == null){
+        $.get("/api/getUserInfos", function(data) {
+            clientName = data.firstname;
+            localStorage.setItem('UserFirstName', clientName);
+            localStorage.setItem('UserMail', data.id);
+        }).fail(function() {
+            console.error("Erreur lors de la récupération des informations de l'utilisateur.");
+        });
+    }
 
-    socket.emit('PartyUser', clientName);
+    clientName = localStorage.getItem('UserFirstName');
+    displayClientName.textContent = clientName;
 
-    socket.on('currentPlayerName', (currentPlayerName) => {
-        actualPlayerName = currentPlayerName;
-        refreshCompteur();
-        refreshDisplay();
-        console.log(currentPlayerName);
+    socket = await io.connect();
+
+    //clientName = localStorage.getItem('UserName');
+
+
+    socket.on('connect', () => {
+    console.log('Connected to the server from client');
+        // You can perform actions here when the connection is established
+        console.log(socket);
+        socket.emit('connected');
+
+        socket.emit('connectPlayer', {name: clientName, mail: localStorage.getItem('UserMail')});
+
+        socket.on("messageTestReceived", (message) => {
+            console.log(message);
+        });
+
+        socket.on("Winner", (playerName) => {
+            alert('Winner: ' + playerName);
+        });
+
+        socket.on(localStorage.getItem('UserMail'), (dices) => {
+            playerDices = dices;
+            console.log("Mes dés =",dices);
+            GameUI.displayDices();
+        }); 
+
+        socket.on('currentPlayer', (currentPlayer) => {
+            actualPlayerIndex = currentPlayer;
+            console.log("Players actuel =",actualPlayerIndex);
+            console.log("Players actuel name =",playerList[actualPlayerIndex].name);
+            console.log("Players actuel mail =",playerList[actualPlayerIndex].mail);
+            console.log("your mail =",localStorage.getItem('UserMail'));
+            console.log("you can play =",playerList[actualPlayerIndex].mail === localStorage.getItem('UserMail'));
+            if(playerList[actualPlayerIndex].mail === localStorage.getItem('UserMail')){
+                // Mettez à jour la visibilité des boutons en fonction de la valeur de 'showButtons'
+                betButton.style.display = "block";
+                pacoSwitchButton.style.display = "block";
+                objectionButton.style.display = "block";
+            }
+            else{
+                betButton.style.display = "none";
+                pacoSwitchButton.style.display = "none";
+                objectionButton.style.display = "none";
+            }
+
+            if(playerList[actualPlayerIndex].mail === localStorage.getItem('UserMail')){
+                displayActualPlayer.textContent = "Votre Tour";
+            }else{
+                displayActualPlayer.textContent = playerList[actualPlayerIndex].name;
+            }
+
+            
+            refreshCompteur();
+            refreshDisplay();
+        });
+
+        socket.on('objectionPerdant', (PlayerName) => {
+            alert(PlayerName+' a perdu un dés');
+        });
+
+        socket.on('playersList', (playersList) => {
+            playerList = playersList;
+            console.log("list des joueur = ",playersList);
+            let winner = null;
+            let currentplayers = 0;
+            playersList.forEach(player =>{
+                if(player.diceNb != 0){
+                    winner = player.name;
+                    currentplayers++;
+                }
+            });
+            if(currentplayers === 1){
+                alert('Winner : ' + winner);
+                cubes = null;
+            }
+        });
+    
+        socket.on('currentBet', (currentBet) => {
+            actualBet = currentBet;
+            console.log("bet actuel =",currentBet);
+            if(JSON.stringify(actualBet) == JSON.stringify([0,1])){
+                alert("Manche spéciale");
+            }
+        });
+    
+        socket.on('currentManche', (currentManche) => {
+            actualManche = currentManche;
+            console.log("manche actuel =",currentManche);
+        });
+    
+        socket.on('currentRound', (currentRound) => {
+            actualRound = currentRound;
+            console.log("round actuel =",currentRound);
+        });
+    
+        socket.on('totalDices', (totalDices) => {
+            actualtotalDices = totalDices;
+            numInputMax[0] = actualtotalDices;
+            console.log("total des dés =",totalDices);
+        });
+    
+        socket.on('BetInvalid', () => {
+            if(playerList[actualPlayerIndex].name === clientName){
+                alert("vous devait surencherir ou passer en paco");
+            }
+        });
+
     });
-
-    socket.on('playersList', (playersList) => {
-        playerList = playersList;
-        refreshCompteur();
-        refreshDisplay();
-        console.log(playersList);
-    });
-
-    socket.on('currentBet', (currentBet) => {
-        actualBet = currentBet;
-        refreshCompteur();
-        refreshDisplay();
-        console.log(currentBet);
-    });
-
-    socket.on('currentManche', (currentManche) => {
-        actualManche = currentManche;
-        refreshCompteur();
-        refreshDisplay();
-        console.log(currentManche);
-    });
-
-    socket.on('currentRound', (currentRound) => {
-        actualRound = currentRound;
-        refreshCompteur();
-        refreshDisplay();
-        console.log(currentRound);
-    });
-
-    socket.on('totalDices', (totalDices) => {
-        actualtotalDices = totalDices;
-        refreshCompteur();
-        refreshDisplay();
-        console.log(totalDices);
-    });
-
-    socket.on(clientName, (dices) => {
-        playerDices = dices;
-        refreshCompteur();
-        refreshDisplay();
-        console.log(dices);
-    });
-
-    socket.on('BetInvalid', () => {
-        if(actualPlayerName === clientName){
-            alert("vous devait surencherir ou passer en paco");
-        }
-    });
-
 
 
 // 5. Interface utilisateur
@@ -95,18 +163,7 @@ window.addEventListener("load", ()=>{
         
 
         function displayDices(){
-
-            let userPlayer = null;
-            playerList.forEach((player) => {
-                if(player.name == clientName){
-                    userPlayer = player; 
-                }
-            });
-
-            //console.log(" nb dices :", cubes.length);
-
-            if(userPlayer == null || (cubes != null  && cubes.length > userPlayer.diceNb)  ){
-                
+            if((cubes != null  && cubes.length > playerDices.length)  ){
                 if(cubes.length == 0){
                     cubes = 0;
                 }else if(cubes != 0){
@@ -115,10 +172,8 @@ window.addEventListener("load", ()=>{
                 }
                 
             }
-
             if(cubes == null){
                 let dicesScene = document.querySelector('.dices-scene');
-
                 // Définissez le contenu de chaque cube
                 let cubeHTML = `
                     <div class = "scene">
@@ -133,19 +188,15 @@ window.addEventListener("load", ()=>{
                     </div>
                 `;
 
-                // Définissez n (le nombre de fois que vous voulez répéter le bloc)
-                let n = userPlayer.diceNb; 
-
                 // Utilisez une boucle pour ajouter le cube n fois
-                for (let i = 0; i < n; i++) {
+                for (let i = 0; i < playerDices.length; i++) {
                     dicesScene.innerHTML += cubeHTML;
-                    console.log("add cube");
                 }
                 cubes = document.querySelectorAll('.cube');
             }
             if(cubes != 0){
                 cubes.forEach((cube, index) => {
-                    var showClass = 'show-' + userPlayer.dices[index];
+                    var showClass = 'show-' + playerDices[index];
                         
                     if ( currentClass[index] ) {
                         cube.classList.remove( currentClass[index] );
@@ -197,7 +248,6 @@ window.addEventListener("load", ()=>{
                 arrUp.style.display = "block";
                 arrDown.style.display = "block";
             }
-
         });
         
         betCount.value = actualBet[0];
@@ -211,11 +261,9 @@ window.addEventListener("load", ()=>{
             numInputMax[1] = 6;
         }
 
-        if(actualBet[1] === 1 && actualBet[0] === 0){
+        if(actualBet[0] === 0){
             numInputMin[0] = 1;
-            
-        }
-        else{
+        }else{
             numInputMin[0] = actualBet[0];
         }
 
@@ -234,8 +282,8 @@ window.addEventListener("load", ()=>{
         }
         let gameInfoHTML = `
             <div class="round-info">
-                <span>Manche: </span><span>`+ GameConfig.actualManche +`</span>
-                <span>Round: </span><span>`+ GameConfig.actualRound +`</span>
+                <span>Manche: </span><span>`+ actualManche +`</span>
+                <span>Round: </span><span>`+ actualRound +`</span>
             </div>
         `;
 
@@ -249,43 +297,54 @@ window.addEventListener("load", ()=>{
             });
         }
         
-
         playerList.forEach(player => {
-            if(player != playerList[currentPlayer]){
-                let PlayerHTML = `
-                    <div class="player">
-                        <h3>`+ player.name +`</h3>
-                        <p class="bet">Bet: <span>`+ player.bet +`</span></p>
-                        <p class="dice-count">Dice Count: <span>`+ player.diceNb +`</span></p>
-                    </div>
-                `;
+            let PlayerHTML = `
+                <div class="player">
+                    <h3>`+ player.name +`</h3>
+                    <p class="bet">Bet: <span>`+ player.bet +`</span></p>
+                    <p class="dice-count">Dice Count: <span>`+ player.diceNb +`</span></p>
+                </div>
+            `;
 
-                playersScene.innerHTML += PlayerHTML;
-
-            }
-            
+            playersScene.innerHTML += PlayerHTML;
         });
-        
-
 
         refreshCompteur();
 
     }
 
     betBtn.addEventListener('click', () =>{
-        let count = parseInt(customNum[0].querySelector('.num-input').value);
-        let value = parseInt(customNum[1].querySelector('.num-input').value);
+        if(playerList[actualPlayerIndex].name === clientName){
+            let count = parseInt(customNum[0].querySelector('.num-input').value);
+            let value = parseInt(customNum[1].querySelector('.num-input').value);
+            
+            socket.emit( 'newBet' , [count,value]);
+            console.log("New bet");
+            socket.emit('MajRequest');
+            console.log("MajRequest");
+        }
         
-        socket.emit( 'newBet' , { newBet: [count,value] });
     });
 
     objectionBtn.addEventListener('click', () =>{
         socket.emit( 'objection' );
+        console.log("Objection");
+        socket.emit('MajRequest');
+        console.log("MajRequest");
     });
 
     playBtn.addEventListener('click', () =>{
         socket.emit( 'launch' );
-        console.log("lancement")
+        console.log("lancement");
+        socket.emit('MajRequest');
+        console.log("MajRequest");
+        cubes = null;
+    });
+
+    refreshBtn.addEventListener('click', () =>{
+        socket.emit('MajRequest');
+        console.log("MajRequest");
+        cubes = null;
     });
 
     pacoSwitchBtn.addEventListener('click', () =>{
@@ -310,7 +369,7 @@ window.addEventListener("load", ()=>{
                 }else{
                     numInputMin[1] = 2;
                     numInputMin[0] = actualBet[0] * 2 + 1;
-                    numInputMax[1] = 9;
+                    numInputMax[1] = 6;
                     customNum[0].querySelector('.num-input').value = actualBet[0] * 2 + 1;
                     customNum[1].querySelector('.num-input').value = 2;
                 }

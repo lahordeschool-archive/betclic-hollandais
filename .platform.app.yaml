@@ -16,3 +16,6 @@ dependencies:
 web:
     commands:
         start: "npm start"
+    locations:
+        /ws:
+            passthru: true

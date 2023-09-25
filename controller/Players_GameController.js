@@ -1,177 +1,183 @@
 class Players_GameController {
 
     constructor() {
-        this.adress = '';
+        this.address = '';
         this.beginManche = true;
 
-        this.players = [];
-
         this.currentRound = 0;
-        this.currentManche = 0;
+        this.currentManche = 1;
 
         this.playerList = [];
         this.playerListWithoutDicesValue = [];
 
         this.allDices = [];
-        this.currentBet = [1,2];
+        this.currentBet = [0,2];
+        this.winner = null;
+        this.currentPlayer = null;
+        this.lastPlayer = 0;
+        this.mancheLoser = null;    
+    }
+
+    init() {
+        this.beginManche = true;
+        this.currentRound = 0;
+        this.currentManche = 0;
+        this.playerListWithoutDicesValue = [];
+        this.allDices = [];
+        this.currentBet = [0,2];
         this.winner = null;
         this.currentPlayer = null;
         this.lastPlayer = 0;
         this.mancheLoser = null;
+
+        this.rollDices();
+        this.turn();
+        console.log("init de controller");
     }
 
-    init() {
-        users.forEach(user => {
-            addPlayer({
-                name: user,
-                diceNb: 5,
-                dices: [],
-                bet: []
-            });
+    addPlayer(playerName, mail, socket){
+        this.playerList.push({
+            socket: socket,
+            mail: mail,
+            name: playerName,
+            diceNb: 5,
+            dices: [],
+            bet: []
         });
-
-        rollDices();
-        turn();
-    }
-
-    addPlayer(player){
-        playerList.push(player);
     }
 
     removePlayerByName(playerName) {
-        let filterList =  playerList.filter(player => player.name !== playerName);
-        playerList = filterList;
+        let filterList =  this.playerList.filter(player => player.name !== playerName);
+        this.playerList = filterList;
     }
 
     removePlayer(index){
-        playerList.splice(index, 1);
+        this.playerList.splice(index, 1);
     }
 
-    setPlayerBet(index, playerBet){
-        playerList[index].bet = playerBet;
+    setPlayerBet(playerBet){
+        console.log('set player bet = ',playerBet )
+        this.playerList[this.currentPlayer].bet = playerBet;
     }
 
     resetPlayersBets(){
-        playerList.forEach(player => {
+        this.playerList.forEach(player => {
             player.bet = [];
         });
         
     }
     
     getPlayerListWithoutDicesValue(){
-        playerList.forEach(player => {
-            playerListWithoutDicesValue.push({
+        this.playerListWithoutDicesValue = [];
+        this.playerList.forEach(player => {
+            this.playerListWithoutDicesValue.push({
+                mail: player.mail,
                 name: player.name,
                 diceNb: player.diceNb,
                 bet: player.bet
             });
         });
+        return this.playerListWithoutDicesValue;
     }
 
     getRandomInt(min, max) {
-        const randomBuffer = new Uint32Array(1);
-
-        window.crypto.getRandomValues(randomBuffer);
-
-        let randomNumber = randomBuffer[0] / (0xffffffff + 1);
-
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(randomNumber * (max - min + 1)) + min;
+        return Math.floor(Math.random() * (max - min + 1) + min);
     }
 
     rollDices() {
-        allDices = [];
-        playerList.forEach((player) => {
+        this.allDices = [];
+        this.playerList.forEach((player) => {
             player.dices = [];
             for (let index = 0; index < player.diceNb; index++) {
-                var randNum = getRandomInt(1, 6);
+                var randNum = this.getRandomInt(1, 6);
                 player.dices.push(randNum);
-                allDices.push(randNum);
+                this.allDices.push(randNum);
             }
-            numInputMax[0] = allDices.length;
         });
     }
 
-    objection(){
-        let count = allDices.filter(die => die === currentBet[1] || die === 1).length;
-        mancheLoser = count >= currentBet[0] ? currentPlayer : lastPlayer;
-        
-        playerList = playerList;
+    objection() {
+        let count = this.allDices.filter(die => die === this.currentBet[1] || die === 1).length;
+        this.mancheLoser = count >= this.currentBet[0] ? this.currentPlayer : this.lastPlayer;
     
-        playerList[mancheLoser].diceNb--;
+        this.playerList[this.mancheLoser].diceNb--;
     
-        if(playerList[mancheLoser].diceNb === 1){
-            currentBet = [0,1];
+        if(this.playerList[this.mancheLoser].diceNb === 1){
+            this.currentBet = [0,1];
         }else{
-            currentBet = [1,2];
+            this.currentBet = [0,2];
         }
 
-        if(playerList[mancheLoser].diceNb === 0){
-            if(mancheLoser == playerList.length-1)
+        if(this.playerList[this.mancheLoser].diceNb === 0){
+            if(this.mancheLoser == this.playerList.length-1)
             {
-                removePlayer(mancheLoser, 1);
-                mancheLoser = 0;
+                this.mancheLoser = 0;
             }else{
-                removePlayer(mancheLoser, 1);
+                this.mancheLoser += 1;
             }
         }
 
-        if(mancheLoser == 0){
-            currentPlayer = null;
+        if(this.mancheLoser == 0){
+            this.currentPlayer = null;
         }else{
-            currentPlayer = mancheLoser-1;
+            this.currentPlayer = this.mancheLoser-1;
         }
         
-        currentRound++;
+        this.currentRound++;
 
-        if(playerList.length == 1){
-            winner = playerList[0];
+        if(this.playerList.length == 1){
+            this.winner = this.playerList[0];
         }else{
-            resetPlayersBets();
-            currentManche++;
-            rollDices();
-            turn();
+            this.beginManche = true;
+            this.resetPlayersBets();
+            this.currentManche++;
+            this.currentRound = 0;
+            this.rollDices();
+            this.turn();
+            return this.playerList[this.mancheLoser].name;
         }
     }
 
-    bet(count, value){
-        currentBet = [count, value];
-        setPlayerBet(currentPlayer, currentBet);
-        currentRound++;
-        turn();
+    bet(count, value) {
+        this.currentBet = [count, value];
+        console.log("set du bet",this.currentBet);
+        this.setPlayerBet(this.currentBet);
+        this.currentRound++;
+        this.turn();
     }
 
-    turn(){
-
-        if(currentPlayer != null){
-            if(currentPlayer == playerList.length - 1)
-            {
-                lastPlayer = currentPlayer;
-                currentPlayer = 0;
+    turn() {
+        if(this.currentPlayer != null) {
+            if(this.playerList[this.currentPlayer].diceNb > 0) {
+                if(this.currentPlayer == this.playerList.length - 1) {
+                    this.lastPlayer = this.currentPlayer;
+                    this.currentPlayer = 0;
+                } else {
+                    this.lastPlayer = this.currentPlayer;
+                    this.currentPlayer++;
+                }
+            }else{
+                if(this.currentPlayer == this.playerList.length-1)
+                {
+                    this.currentPlayer = 0;
+                }else{
+                    this.currentPlayer++;
+                }
+                this.turn();
             }
-            else{
-                lastPlayer = currentPlayer;
-                currentPlayer++;
-            }
-            
+        } else {
+            this.currentPlayer = 0;
         }
-        else{
-            currentPlayer = 0;
-        }   
     }
 
     getCurrentBet() {
-        return currentBet;
+        return this.currentBet;
     }
 
-    //////////////////////////////    INFO    /////////////////////////////////
-    
     VerifyBet(bet) {
-        if(JSON.stringify(currentBet) == JSON.stringify(newBet))
-        {
+        if(JSON.stringify(this.currentBet) == JSON.stringify(bet)) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
