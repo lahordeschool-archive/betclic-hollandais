@@ -4,6 +4,7 @@ const disconnect = require("../../../lib/auth").disconnect;
 const passport = require("passport");
 const User = require("../../../models/user");
 const Players_GameController = require('("../../../controller/Players_GameController');
+const Hub_Controller = require("../../../controller/Hub_Controller");
 const gameController = new Players_GameController();
 
 gameController.address = "1111";
@@ -14,6 +15,14 @@ function emitToAll(event, data) {
   gameController.playerList.forEach(player => {
     player.socket.emit(event, data);
   });
+}
+
+const hubController = new Hub_Controller();
+function positionUpdateToAll(event, name, position){
+  hubController.HubParrotList.forEach(parrot => {
+    parrot.socket.emit(event, name, position);
+  });
+
 }
 
 module.exports = function(io) {
@@ -30,6 +39,15 @@ module.exports = function(io) {
         if(player.socket.id === socket.id) {
           gameController.removePlayerByName(player.name);
         }
+
+        
+      });
+      hubController.HubParrotList.forEach(player => {
+        if(player.socket.id === socket.id) {
+          //hubController.removePlayerByName(player.name);
+        }
+
+        
       });
     });
 
@@ -112,6 +130,20 @@ module.exports = function(io) {
       emitToAll('currentPlayer' , gameController.currentPlayer);
       gameController.beginManche = false;
     });
+
+    /////////////////////////////////////////////////////////////////
+
+    socket.on('parrotHasMoved', (data) => {
+      console.log(data.parrotId)
+      console.log("Pos:", data.pos);
+      console.log("Rot:", data.rot);
+      console.log("");
+      positionUpdateToAll('parrotUpdate', data);
+    });
+    
+  
+
+/////////////////////////////////////////////////////////////////
   });
 
   /* GET user info */
@@ -135,3 +167,7 @@ module.exports = function(io) {
 
   return router;
 };
+
+
+
+
