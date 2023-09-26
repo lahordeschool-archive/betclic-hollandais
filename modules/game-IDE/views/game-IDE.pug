@@ -1,0 +1,19 @@
+doctype html
+head
+  meta(charset='UTF-8')
+  title Codeboard Online IDE
+  link(rel='shortcut icon' href='#')
+.header  Codeboard Online IDE 
+.control-panel
+  | Select Language:
+  select#languages.languages(onchange='changeLanguage()')
+    option(value='node')  Node JS 
+#editor.editor
+.button-container
+  button.btn(onclick='executeCode()')  Run 
+.output
+script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js')
+script(src='/IDE-lib/ace.js')
+script(src='/IDE-lib/theme-monokai.js')
+script(src="/scripts/game-IDE-client.js")
+link(rel='stylesheet', href='/stylesheets/game-IDE.css', type="text/css")
