@@ -2,9 +2,6 @@ var socket;
 let editor;
 
 window.addEventListener("load", async ()=> {
-    editor = ace.edit("editor");
-    editor.setTheme("ace/theme/monokai");
-    editor.session.setMode("ace/mode/javascript");
 
     socket = await io.connect();
 
@@ -13,6 +10,8 @@ window.addEventListener("load", async ()=> {
             // You can perform actions here when the connection is established
         console.log(socket);
         socket.emit('connected');
+
+        socket.emit('connect_IA', {name: clientName, mail: localStorage.getItem('UserMail')});
 
         socket.on("messageTestReceived", (message) => {
             console.log(message);
@@ -23,32 +22,6 @@ window.addEventListener("load", async ()=> {
     });
 
 });
-
-function changeLanguage() {
-
-    let language = $("#languages").val();
-
-    if(language == 'node')editor.session.setMode("ace/mode/javascript");
-}
-
-function executeCode() {
-
-    // $.ajax({
-
-    //     url: "/ide/app/compiler.php",
-
-    //     method: "POST",
-
-    //     data: {
-    //         language: $("#languages").val(),
-    //         code: editor.getSession().getValue()
-    //     },
-
-    //     success: function(response) {
-    //         $(".output").text(response)
-    //     }
-    // })
-}
 
 function VerifyBet(currentBet, newBet){
     //check is a new bet

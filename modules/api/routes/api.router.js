@@ -4,6 +4,7 @@ const disconnect = require("../../../lib/auth").disconnect;
 const passport = require("passport");
 const User = require("../../../models/user");
 const Players_GameController = require('("../../../controller/Players_GameController');
+const IA_GameController = require('("../../../controller/IA_GameController');
 const gameController = new Players_GameController();
 const gameIAController = new IA_GameController();
 

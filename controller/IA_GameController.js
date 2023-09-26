@@ -18,7 +18,9 @@ class IA_GameController {
         this.lastPlayer = 0;
         this.mancheLoser = null;    
 
-        this.BetList = [];
+        this.betList = [];
+        this.minPaco ;
+        this.minNumber;
     }
 
     init() {
@@ -31,7 +33,7 @@ class IA_GameController {
         this.currentPlayer = 0;
         this.lastPlayer = 0;
         this.mancheLoser = null;
-        this.BetList = [];
+        this.betList = [];
 
         this.rollDices();
     }
@@ -107,7 +109,7 @@ class IA_GameController {
         }else{
             this.beginManche = true;
             this.currentManche++;
-            this.BetList = [];
+            this.betList = [];
             this.currentRound = 0;
             this.rollDices();
             return this.playerList[this.mancheLoser].name;
@@ -116,7 +118,7 @@ class IA_GameController {
 
     bet(count, value) {
         this.currentBet = [count, value];
-        this.BetList.push(currentBet);
+        this.betList.push(currentBet);
         this.currentRound++;
 
         this.lastPlayer = currentPlayer;
@@ -128,8 +130,27 @@ class IA_GameController {
         }
     }
 
+    
+
     turn() {
+
+        this.minNumber = this.currentBet[0];
+        this.minPaco = this.currentBet[0];
+
+        if(this.currentBet[1] >= 2){
+            this.minPaco = Math.ceil(this.currentBet[0] / 2);
+        }else if(this.currentBet[1] == 1){
+            this.minNumber = Math.ceil(this.currentBet[0] * 2 + 1);
+        }
+
+        //bloquer le passage en valeur numérique si c'est plus grand que le nombre de dés présent 
+        if(this.minNumber > this.allDices.length){
+            this.minNumber = null;
+        }
+
         let data = {
+            MinPaco : this.minPaco,
+            MinNumber : this.minNumber,
             CurrentBet : this.currentBet,
             BetList : this.BetList,
             YourDices : this.playerList[this.currentPlayer].dices,
