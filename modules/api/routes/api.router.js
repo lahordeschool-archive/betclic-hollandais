@@ -5,8 +5,10 @@ const passport = require("passport");
 const User = require("../../../models/user");
 const Players_GameController = require('("../../../controller/Players_GameController');
 const gameController = new Players_GameController();
+const gameIAController = new IA_GameController();
 
 gameController.address = "1111";
+gameIAController.address = "2222"
 
 const socketUsers = {};
 
@@ -24,13 +26,16 @@ module.exports = function(io) {
     socketUsers[socket.id] = socket;
 
     socket.on('disconnect', () => {
+
       console.log(`Client with ID: ${socket.id} disconnected`);
       delete socketUsers[socket.id];
+
       gameController.playerList.forEach(player => {
         if(player.socket.id === socket.id) {
           gameController.removePlayerByName(player.name);
         }
       });
+
     });
 
     socket.on('connected', () => {
@@ -45,6 +50,9 @@ module.exports = function(io) {
       // Handle the event here
       emitToAll('messageTestReceived', 'Server received "messageTest" message');
     });
+
+
+    //SocketMulti
 
     socket.on('connectPlayer', (user) => {
       console.log('connection de ', user);
@@ -112,8 +120,45 @@ module.exports = function(io) {
       emitToAll('currentPlayer' , gameController.currentPlayer);
       gameController.beginManche = false;
     });
+
+    //SocketIA
+
+    socket.on('connect_IA', (user) => {
+      console.log('connection IA de ', user);
+      let alreadyLogged = false;
+      gameController.playerList.forEach(player => {
+        if(player.mail === user.mail){
+          alreadyLogged = true;
+          player.socket = socket;
+        }
+      });
+      if(!alreadyLogged){
+        gameController.addPlayer(user.name, user.mail, socket);
+      }
+    });
+
+    socket.on('launch-AI-Battle', () =>{
+      gameIAController.init();
+      socket.to(gameIAController.playerList[gameIAController.currentPlayer].socket).emit('PlayerTurn', gameIAController.turn());
+    });
+    
+    
+    socket.on('IA_objection', () =>{
+      gameIAController.objection();
+      socket.to(gameIAController.playerList[gameIAController.currentPlayer].socket).emit('PlayerTurn', gameIAController.turn());
+    });
+
+    socket.on('IA_bet', (bet) =>{
+      gameIAController.bet(bet);
+      socket.to(gameIAController.playerList[gameIAController.currentPlayer].socket).emit('PlayerTurn', gameIAController.turn());
+    });
+
   });
 
+
+
+
+  
   /* GET user info */
   router.get("/getUserInfos", (req, res) => {
     if (req.isAuthenticated()) {
