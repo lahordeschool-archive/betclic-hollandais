@@ -1,3 +1,4 @@
+
 import * as THREE from './three.module.js';
 import { OrbitControls } from './three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from './three/examples/jsm/loaders/GLTFLoader.js';
@@ -128,7 +129,7 @@ function createWall(posX,posY,posZ,lengthX,lengthY,lengthZ,Rotation,debug){
 	plane.position.y = planeBody.position.y;
 	plane.position.z = planeBody.position.z;
 
-	console.log(plane.position,planeBody.position)
+	//console.log(plane.position,planeBody.position)
 
 	planeBody.quaternion.setFromAxisAngle(axisY, Rotation);
 	plane.rotation.y = Rotation;
@@ -166,7 +167,7 @@ function createBox(posX,posY,posZ,lengthX,lengthY,lengthZ,Rotation,debug){
 	box.position.y = boxBody.position.y;
 	box.position.z = boxBody.position.z;
 
-	console.log(box.position,boxBody.position)
+	//console.log(box.position,boxBody.position)
 
 	boxBody.quaternion.setFromAxisAngle(axisY, Rotation);
 	box.rotation.y = Rotation;
@@ -212,21 +213,21 @@ loader.load( 'scripts/GLTF/sea_house/scene.gltf', function ( gltf ) {
 
 } );
 
-loader.load( 'scripts/GLTF/Tonneau.gltf', function ( gltf ) {
+// loader.load( 'scripts/GLTF/Tonneau.gltf', function ( gltf ) {
 
-   	scene.add( gltf.scene );
+//    	scene.add( gltf.scene );
 
-	gltf.scene.position.x = 26;
-	gltf.scene.position.y = 31;
-	gltf.scene.position.z = -45;
-}, undefined, function ( error ) {
+// 	gltf.scene.position.x = 26;
+// 	gltf.scene.position.y = 31;
+// 	gltf.scene.position.z = -45;
+// }, undefined, function ( error ) {
 
-   	console.error( error );
+//    	console.error( error );
 
-} );
+// } );
 
 //permet de charger un perroquet dans la scène que le joueur controlera
-function createParrot(){
+function createParrot(playerName){
 	loader.load( 'scripts/GLTF/parrot/scene.gltf', function ( gltf ) {
 
 		parrot = gltf;
@@ -238,7 +239,7 @@ function createParrot(){
 		scene.add( parrotBHelper );
 	
 		box3.setFromObject(parrotBHelper);
-		console.log( box3 );
+		//console.log( box3 );
 	
 		parrotS.scale.set( 20,20,20 );
 		parrotS.position.x = 0;
@@ -254,7 +255,7 @@ function createParrot(){
 		parrotBox.position.z = parrotS.position.z;
 	
 		parrotSize = box3.getSize(vector);
-		console.log( parrotSize );
+		//console.log( parrotSize );
 	
 		parrotBox.scale.set(parrotSize);
 	
@@ -271,9 +272,9 @@ function createParrot(){
 		parrotBody.position.y = parrotS.position.y;
 		parrotBody.position.z = parrotS.position.z;
 	
-		console.log(parrotBox.userData.halfSize);
+		//console.log(parrotBox.userData.halfSize);
 	
-		console.log( "parrot position : ", parrotS.position , "\n parrot scale : " , parrotS.scale,"\nbox position : " , parrotBody.position , "\n box scale : " , parrotShape.halfExtents, "\n parrot Size", parrotSize);
+		//console.log( "parrot position : ", parrotS.position , "\n parrot scale : " , parrotS.scale,"\nbox position : " , parrotBody.position , "\n box scale : " , parrotShape.halfExtents, "\n parrot Size", parrotSize);
 	
 	}, undefined, function ( error ) {
 	
@@ -290,6 +291,29 @@ const controller = {
 	"d" 	: {pressed : false , func : rotateRight	}
 };
 
+var socket;
+
+socket = await io.connect();
+var parrotId;
+
+socket.on('connect', () => {
+	parrotId = socket.id;
+});
+
+var pos;
+var rot;
+function sendPlayerPos(parrotBody){
+	pos = parrotBody.position;
+	rot = parrotBody.quaternion;
+	//console.log("Pos : " + pos);
+	//console.log("Rot : " + rot);
+	socket.emit('parrotHasMoved', { parrotId, pos, rot });
+}
+
+socket.on('parrotUpdate', (data) => {
+	console.log(data.parrotId);
+});
+
 function moveForward(){
 	
 	forwardParrot.z = movementSpeed;
@@ -299,6 +323,8 @@ function moveForward(){
 
 	// console.log( "parrot position : ", parrotS.position, "parrot body position : ", parrotBody.position)
 
+	sendPlayerPos(parrotBody);
+	
 }
 
 function moveBackward(){
@@ -330,7 +356,7 @@ function rotateRight(){
 	parrotBody.quaternion = rotationQuat.mult(parrotBody.quaternion)
 
 	// console.log(parrotS.quaternion);
-	// console.log(parrotBody.quaternion);
+	 console.log(parrotBody.quaternion);
 
 }
 
@@ -449,3 +475,8 @@ function render(){
 createParrot();
 
 animate();
+
+
+
+
+
