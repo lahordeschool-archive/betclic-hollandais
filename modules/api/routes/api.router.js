@@ -19,6 +19,13 @@ function emitToAll(event, data) {
   });
 }
 
+function emitToAllInController(event, data, controller) {
+  controller.playerList.forEach(player => {
+    player.socket.emit(event, data);
+  });
+}
+
+
 module.exports = function(io) {
   const router = express.Router();
 
@@ -44,87 +51,13 @@ module.exports = function(io) {
       // Handle the event here
     });
 
-
-
     socket.on('messageTest', () => {
       console.log('Client sent a "messageTest" message');
       // Handle the event here
       emitToAll('messageTestReceived', 'Server received "messageTest" message');
     });
 
-
-    //SocketMulti
-
     socket.on('connectPlayer', (user) => {
-      console.log('connection de ', user);
-      let alreadyLogged = false;
-      gameController.playerList.forEach(player => {
-        if(player.mail === user.mail){
-          alreadyLogged = true;
-          player.socket = socket;
-        }
-      });
-      if(!alreadyLogged){
-        gameController.addPlayer(user.name, user.mail, socket);
-      }
-    });
-
-    socket.on('launch', (io) => {
-      gameController.init();
-      //console.log('list des joueurs =', gameController.playerList);
-    });
-  
-    socket.on('newBet', (newBet) => {
-      console.log("newBet = ", newBet);
-      console.log("controle joueur bet =", socket.id === gameController.playerList[gameController.currentPlayer].socket.id);
-      if(socket.id === gameController.playerList[gameController.currentPlayer].socket.id){
-        console.log("test bet 1 ");
-        if(gameController.VerifyBet(newBet)){
-          gameController.bet(newBet[0], newBet[1]);
-          console.log("test bet 2 ");
-        }else{
-          socket.emit('BetInvalid');
-        }
-      }
-    });
-
-    socket.on('objection', () => {
-      if(socket.id === gameController.playerList[gameController.currentPlayer].socket.id){
-        emitToAll('objectionPerdant' ,  gameController.objection() );
-      }
-    });
-
-    socket.on('MajRequest', () => {
-      console.log('********************  Maj request call ***********************');
-      gameController.playerList.forEach(player => {
-
-        console.log('********************  Player '+player.name+'  ***********************');
-
-        if(gameController.beginManche){
-
-          emitToAll('totalDices' , gameController.allDices.length);
-
-          console.log('envoie a ', `${player.name}`);
-          console.log('dés = ', player.dices);
-          emitToAll( player.mail , player.dices);
-        }
-      });
-
-      if(gameController.winner != null){
-        emitToAll('Winner' ,  gameController.winner.name );
-      }
-
-      emitToAll('playersList' ,  gameController.getPlayerListWithoutDicesValue() );
-      emitToAll('currentBet' , gameController.currentBet);
-      emitToAll('currentManche' , gameController.currentManche);
-      emitToAll('currentRound' , gameController.currentRound);
-      emitToAll('currentPlayer' , gameController.currentPlayer);
-      gameController.beginManche = false;
-    });
-
-    //SocketIA
-
-    socket.on('connect_IA', (user) => {
       console.log('connection IA de ', user);
       let alreadyLogged = false;
       gameIAController.playerList.forEach(player => {
@@ -138,20 +71,42 @@ module.exports = function(io) {
       }
     });
 
-    socket.on('launch-AI-Battle', () =>{
+    socket.on('launchBattle', () =>{
+      console.log('init');
       gameIAController.init();
-      socket.to(gameIAController.playerList[gameIAController.currentPlayer].socket).emit('PlayerTurn', gameIAController.turn());
+      gameIAController.dataSet();
+      console.log("Winner value :"+ gameIAController.winner);
+
+      gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
     });
     
     
-    socket.on('IA_objection', () =>{
+    socket.on('objection', () =>{
+      //Make verification is Current Player Action
+      console.log('objection');
       gameIAController.objection();
-      socket.to(gameIAController.playerList[gameIAController.currentPlayer].socket).emit('PlayerTurn', gameIAController.turn());
+      gameIAController.dataSet();
+      if(gameIAController.winner == null){
+        gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
+      }else{
+        emitToAllInController('finish', gameIAController.winner, gameIAController);
+      }   
     });
 
-    socket.on('IA_bet', (bet) =>{
+    socket.on('bet', (bet) =>{
+      //Make verification is Current Player Action
+      console.log('bet');
       gameIAController.bet(bet);
-      socket.to(gameIAController.playerList[gameIAController.currentPlayer].socket).emit('PlayerTurn', gameIAController.turn());
+      gameIAController.dataSet();
+      if(gameIAController.winner == null){
+        gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
+      }else{
+        emitToAllInController('finish', gameIAController.winner, gameIAController);
+      }   
+    });
+
+    socket.on('MajRequest', () => {
+      emitToAllInController('Maj', gameIAController.dataOtherPlayer, gameIAController);
     });
 
   });

@@ -3,13 +3,11 @@ class IA_GameController {
     constructor() {
         this.address = '';
 
-        this.beginManche = true;
-        this.playerCall = false;
-
         this.currentRound = 0;
         this.currentManche = 1;
 
         this.playerList = [];
+        this.playerListWithoutDicesValue = [];
 
         this.allDices = [];
         this.currentBet = [0,2];
@@ -21,10 +19,11 @@ class IA_GameController {
         this.betList = [];
         this.minPaco ;
         this.minNumber;
+        this.dataCurrentPlayer;
+        this.dataOtherPlayer;
     }
 
     init() {
-        this.beginManche = true;
         this.currentRound = 0;
         this.currentManche = 0;
         this.allDices = [];
@@ -57,6 +56,31 @@ class IA_GameController {
         this.playerList.splice(index, 1);
     }
 
+    setPlayerBet(playerBet){
+        console.log('set player bet = ',playerBet )
+        this.playerList[this.currentPlayer].bet = playerBet;
+    }
+
+    resetPlayersBets(){
+        this.playerList.forEach(player => {
+            player.bet = [];
+        });
+        
+    }
+    
+    getPlayerListWithoutDicesValue(){
+        this.playerListWithoutDicesValue = [];
+        this.playerList.forEach(player => {
+            this.playerListWithoutDicesValue.push({
+                mail: player.mail,
+                name: player.name,
+                diceNb: player.diceNb,
+                bet: player.bet
+            });
+        });
+        return this.playerListWithoutDicesValue;
+    }
+
     getRandomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1) + min);
     }
@@ -75,53 +99,80 @@ class IA_GameController {
 
     objection() {
         let count = this.allDices.filter(die => die === this.currentBet[1] || die === 1).length;
+        let finish = false;
 
         this.mancheLoser = count >= this.currentBet[0] ? this.currentPlayer : this.lastPlayer;
     
         this.playerList[this.mancheLoser].diceNb--;
+        console.log("le joueur :" + this.playerList[this.mancheLoser].name + " vient de perdre un des");
         
-        if(playerList[mancheLoser].diceNb === 1){
-            currentBet = [0,1];
+        if(this.playerList[this.mancheLoser].diceNb === 1){
+            this.currentBet = [0,1];
         }else{
-            currentBet = [0,2];
+            this.currentBet = [0,2];
         }
     
         if(this.playerList[this.mancheLoser].diceNb === 0){
             if(this.mancheLoser == this.playerList.length-1)
             {
-                this.removePlayer(this.mancheLoser, 1);
                 this.mancheLoser = 0;
             }else{
-                this.removePlayer(this.mancheLoser, 1);
+                this.mancheLoser++;
             }
         }
-        
-        if(mancheLoser == 0){
-            this.currentPlayer = 0;
-        }else{
-            this.currentPlayer = this.mancheLoser-1;
-        }
-        
-        this.currentRound++;
 
-        if(this.playerList.length == 1){
-            this.winner = this.playerList[0];
-        }else{
-            this.beginManche = true;
+        this.currentRound++;
+        
+        this.playerList.forEach(player => {
+            console.log("le joueur :" + player.name);
+            console.log("nb des :" + player.diceNb);
+            console.log("les des :" + player.dices);
+        });
+
+        let countPlayer = 0;
+        let win;
+        this.playerList.forEach(player => {
+            if(player.diceNb > 0){
+                countPlayer++;
+                win = player.name;
+            }
+        });
+
+        if(countPlayer === 1){
+            finish = true;
+        }
+
+        if(!finish){
+            if(this.mancheLoser == 0){
+                this.currentPlayer = 0;
+            }else{
+                this.currentPlayer = this.mancheLoser-1;
+            }
+    
+            while(this.playerList[this.currentPlayer].diceNb === 0){
+                if(this.mancheLoser == 0){
+                    this.currentPlayer = 0;
+                }else{
+                    this.currentPlayer = this.mancheLoser-1;
+                }
+            }
+
             this.currentManche++;
             this.betList = [];
             this.currentRound = 0;
             this.rollDices();
-            return this.playerList[this.mancheLoser].name;
+        }else{
+            console.log("le gagnant est :" + win);
+            this.winner = win;
         }
     }
 
     bet(count, value) {
         this.currentBet = [count, value];
-        this.betList.push(currentBet);
+        this.betList.push(this.currentBet);
         this.currentRound++;
 
-        this.lastPlayer = currentPlayer;
+        this.lastPlayer = this.currentPlayer;
 
         if(this.currentPlayer == this.playerList.length - 1) {
             this.currentPlayer = 0;
@@ -132,7 +183,7 @@ class IA_GameController {
 
     
 
-    turn() {
+    dataSet() {
 
         this.minNumber = this.currentBet[0];
         this.minPaco = this.currentBet[0];
@@ -148,15 +199,30 @@ class IA_GameController {
             this.minNumber = null;
         }
 
-        let data = {
+        this.dataCurrentPlayer = {
+            listPlayers : this.getPlayerListWithoutDicesValue(),
             MinPaco : this.minPaco,
             MinNumber : this.minNumber,
             CurrentBet : this.currentBet,
+            CurrentManche : this.currentManche,
+            CurrentRound : this.currentRound,
+            CurrentPlayer : this.CurrentPlayer,
             BetList : this.BetList,
             YourDices : this.playerList[this.currentPlayer].dices,
             TotaDices : this.allDices.length
         };
-        return data;
+
+        this.dataOtherPlayer = {
+            listPlayers : this.getPlayerListWithoutDicesValue(),
+            MinPaco : this.minPaco,
+            MinNumber : this.minNumber,
+            CurrentBet : this.currentBet,
+            CurrentManche : this.currentManche,
+            CurrentRound : this.currentRound,
+            CurrentPlayer : this.CurrentPlayer,
+            BetList : this.BetList,
+            TotaDices : this.allDices.length
+        };
     }
 
     
