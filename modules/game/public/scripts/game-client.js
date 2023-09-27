@@ -36,7 +36,7 @@ var rotationQuat = new CANNON.Quaternion();
 //var for axis
 var axisX =  new CANNON.Vec3( 1, 0, 0 );
 var axisY =  new CANNON.Vec3( 0, 1, 0 );
-var axisZ =  new CANNON.Vec3( 0, 0, 1 );
+//var axisZ =  new CANNON.Vec3( 0, 0, 1 );
 
 //camera following the parrot
 const followCamPivot = new THREE.Object3D();
