@@ -29,7 +29,7 @@ window.addEventListener("load", async ()=>{
     const betBtn = document.getElementById("betButton");
     const pacoSwitchBtn = document.getElementById("pacoSwitchButton");
     const objectionBtn = document.getElementById("objectionButton");
-    var canPlay = true;
+    var canPlay = false;
 
     
 
@@ -48,7 +48,7 @@ window.addEventListener("load", async ()=>{
 
     socket = await io.connect();
 
-    //clientName = localStorage.getItem('UserName');
+    clientName = localStorage.getItem('UserName');
 
 
     socket.on('connect', () => {
@@ -57,101 +57,45 @@ window.addEventListener("load", async ()=>{
         console.log(socket);
         socket.emit('connected');
 
-        socket.emit('connectPlayer', {name: clientName, mail: localStorage.getItem('UserMail')});
+        socket.emit('connectPlayer', {name: localStorage.getItem('UserFirstName'), mail: localStorage.getItem('UserMail')});
 
         socket.on("messageTestReceived", (message) => {
             console.log(message);
         });
 
-        socket.on("Winner", (playerName) => {
-            alert('Winner: ' + playerName);
-        });
+        socket.on("PlayerTurn", (gameInfo) => {
 
-        socket.on(localStorage.getItem('UserMail'), (dices) => {
-            playerDices = dices;
-            console.log("Mes dés =",dices);
+            playerList = gameInfo.listPlayers;
+            actualManche = gameInfo.CurrentManche;
+            actualRound = gameInfo.CurrentRound;
+            actualBet = gameInfo.CurrentBet;
+            actualtotalDices = gameInfo.TotaDices;
+            actualPlayerIndex = gameInfo.CurrentPlayer;
+            playerDices = gameInfo.YourDices;
             GameUI.displayDices();
-        }); 
-
-        socket.on('currentPlayer', (currentPlayer) => {
-            actualPlayerIndex = currentPlayer;
-            console.log("Players actuel =",actualPlayerIndex);
-            console.log("Players actuel name =",playerList[actualPlayerIndex].name);
-            console.log("Players actuel mail =",playerList[actualPlayerIndex].mail);
-            console.log("your mail =",localStorage.getItem('UserMail'));
-            console.log("you can play =",playerList[actualPlayerIndex].mail === localStorage.getItem('UserMail'));
-            if(playerList[actualPlayerIndex].mail === localStorage.getItem('UserMail')){
-                // Mettez à jour la visibilité des boutons en fonction de la valeur de 'showButtons'
-                betButton.style.display = "block";
-                pacoSwitchButton.style.display = "block";
-                objectionButton.style.display = "block";
-            }
-            else{
-                betButton.style.display = "none";
-                pacoSwitchButton.style.display = "none";
-                objectionButton.style.display = "none";
-            }
-
-            if(playerList[actualPlayerIndex].mail === localStorage.getItem('UserMail')){
-                displayActualPlayer.textContent = "Votre Tour";
-            }else{
-                displayActualPlayer.textContent = playerList[actualPlayerIndex].name;
-            }
-
-            
-            refreshCompteur();
-            refreshDisplay();
-        });
-
-        socket.on('objectionPerdant', (PlayerName) => {
-            alert(PlayerName+' a perdu un dés');
-        });
-
-        socket.on('playersList', (playersList) => {
-            playerList = playersList;
-            console.log("list des joueur = ",playersList);
-            let winner = null;
-            let currentplayers = 0;
-            playersList.forEach(player =>{
-                if(player.diceNb != 0){
-                    winner = player.name;
-                    currentplayers++;
-                }
-            });
-            if(currentplayers === 1){
-                alert('Winner : ' + winner);
-                cubes = null;
-            }
-        });
-    
-        socket.on('currentBet', (currentBet) => {
-            actualBet = currentBet;
-            console.log("bet actuel =",currentBet);
-            if(JSON.stringify(actualBet) == JSON.stringify([0,1])){
-                alert("Manche spéciale");
-            }
-        });
-    
-        socket.on('currentManche', (currentManche) => {
-            actualManche = currentManche;
-            console.log("manche actuel =",currentManche);
-        });
-    
-        socket.on('currentRound', (currentRound) => {
-            actualRound = currentRound;
-            console.log("round actuel =",currentRound);
-        });
-    
-        socket.on('totalDices', (totalDices) => {
-            actualtotalDices = totalDices;
+            canPlay = true;
             numInputMax[0] = actualtotalDices;
-            console.log("total des dés =",totalDices);
+            refreshDisplay();
+            console.log(actualBet);
         });
-    
-        socket.on('BetInvalid', () => {
-            if(playerList[actualPlayerIndex].name === clientName){
-                alert("vous devait surencherir ou passer en paco");
-            }
+
+        socket.on("finish", (playerName) => {
+            alert('Gagnant :'+ playerName);
+        });
+
+        socket.on("Maj", (gameInfo) => {
+            playerList = gameInfo.listPlayers;
+            actualManche = gameInfo.CurrentManche;
+            actualRound = gameInfo.CurrentRound;
+            actualBet = gameInfo.CurrentBet;
+            actualtotalDices = gameInfo.TotaDices;
+            actualPlayerIndex = gameInfo.CurrentPlayer;
+            playerDices = gameInfo.YourDices;
+            console.log(playerDices);
+            GameUI.displayDices();
+            numInputMax[0] = actualtotalDices;
+            refreshDisplay();
+            console.log(actualBet);
         });
 
     });
@@ -163,15 +107,15 @@ window.addEventListener("load", async ()=>{
         
 
         function displayDices(){
-            if((cubes != null  && cubes.length > playerDices.length)  ){
-                if(cubes.length == 0){
-                    cubes = 0;
-                }else if(cubes != 0){
-                    cubes[cubes.length-1].remove();
-                    cubes = document.querySelectorAll('.cube');
-                }
+            // if((cubes != null  && cubes.length > playerDices.length)  ){
+            //     if(cubes.length == 0){
+            //         cubes = 0;
+            //     }else if(cubes != 0){
+            //         cubes[cubes.length-1].remove();
+            //         cubes = document.querySelectorAll('.cube');
+            //     }
                 
-            }
+            // }
             if(cubes == null){
                 let dicesScene = document.querySelector('.dices-scene');
                 // Définissez le contenu de chaque cube
@@ -194,15 +138,22 @@ window.addEventListener("load", async ()=>{
                 }
                 cubes = document.querySelectorAll('.cube');
             }
+
             if(cubes != 0){
                 cubes.forEach((cube, index) => {
-                    var showClass = 'show-' + playerDices[index];
+                    if(index < playerDices.length){
+                        var showClass = 'show-' + playerDices[index];
                         
-                    if ( currentClass[index] ) {
-                        cube.classList.remove( currentClass[index] );
+                        if ( currentClass[index] ) {
+                            cube.classList.remove( currentClass[index] );
+                        }
+                        cube.classList.add( showClass );
+                        currentClass[index] = showClass;
+                        cube.style.display = "block"
+                    }else{
+                        cube.style.display = "none"
                     }
-                    cube.classList.add( showClass );
-                    currentClass[index] = showClass;
+                    
                 });
             }
         
@@ -313,32 +264,84 @@ window.addEventListener("load", async ()=>{
             playersScene.innerHTML += PlayerHTML;
         });
 
+        if(canPlay) {
+            // Mettez à jour la visibilité des boutons en fonction de la valeur de 'showButtons'
+            betButton.style.display = "block";
+            pacoSwitchButton.style.display = "block";
+            objectionButton.style.display = "block";
+        }
+        else{
+            betButton.style.display = "none";
+            pacoSwitchButton.style.display = "none";
+            objectionButton.style.display = "none";
+        }
+
         refreshCompteur();
 
     }
 
+    function VerifyBet(currentBet, newBet) {
+        // Check is a new bet
+        if (JSON.stringify(currentBet) == JSON.stringify(newBet)) {
+            return false;
+        }
+    
+        // Check is outbid
+        if (newBet[0] > currentBet[0] || (newBet[0] === currentBet[0] && newBet[1] > currentBet[1])) {
+            return true;
+        }
+    
+        // Check for paco switch to a numeric value
+        if (currentBet[1] === 1 && newBet[1] !== 1 && newBet[0] > currentBet[0]) {
+            return true;
+        }
+    
+        // If not outbid, check is a paco switch
+        if (newBet[1] === 1 && newBet[0] <= currentBet[0] / 2) {
+            return true;
+        }
+    
+        return false;
+    }
+    
     betBtn.addEventListener('click', () =>{
-        if(playerList[actualPlayerIndex].name === clientName){
-            let count = parseInt(customNum[0].querySelector('.num-input').value);
-            let value = parseInt(customNum[1].querySelector('.num-input').value);
-            
-            socket.emit( 'newBet' , [count,value]);
+        let count = parseInt(customNum[0].querySelector('.num-input').value);
+        let value = parseInt(customNum[1].querySelector('.num-input').value);
+
+        if(VerifyBet(actualBet, [count,value])){
+            socket.emit( 'bet' , [count,value]);
             console.log("New bet");
             socket.emit('MajRequest');
             console.log("MajRequest");
+            canPlay = false;
+        }else{
+            alert('Paris invalide');
         }
-        
     });
 
+    function VerifyObjection(bet){
+        //check is a new bet
+        if(JSON.stringify(bet) == JSON.stringify([0,1]) || JSON.stringify(bet) == JSON.stringify([0,2])) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     objectionBtn.addEventListener('click', () =>{
-        socket.emit( 'objection' );
-        console.log("Objection");
-        socket.emit('MajRequest');
-        console.log("MajRequest");
+        if(VerifyObjection(actualBet)){
+            socket.emit( 'objection' );
+            console.log("Objection");
+            socket.emit('MajRequest');
+            console.log("MajRequest");
+            canPlay = false;
+        }else{
+            alert('Vous ne pouvez pas contester en début de manche');
+        }
     });
 
     playBtn.addEventListener('click', () =>{
-        socket.emit( 'launch' );
+        socket.emit( 'launchBattle' );
         console.log("lancement");
         socket.emit('MajRequest');
         console.log("MajRequest");

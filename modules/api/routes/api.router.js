@@ -25,6 +25,13 @@ function emitToAllInController(event, data, controller) {
   });
 }
 
+function controllerMaj(controller) {
+  controller.playerList.forEach(player => {
+    player.socket.emit('Maj', controller.getDataOther(player));
+  });
+}
+
+
 
 module.exports = function(io) {
   const router = express.Router();
@@ -96,7 +103,7 @@ module.exports = function(io) {
     socket.on('bet', (bet) =>{
       //Make verification is Current Player Action
       console.log('bet');
-      gameIAController.bet(bet);
+      gameIAController.bet(bet[0], bet[1]);
       gameIAController.dataSet();
       if(gameIAController.winner == null){
         gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
@@ -106,7 +113,7 @@ module.exports = function(io) {
     });
 
     socket.on('MajRequest', () => {
-      emitToAllInController('Maj', gameIAController.dataOtherPlayer, gameIAController);
+      controllerMaj(gameIAController);
     });
 
   });

@@ -43,18 +43,28 @@ window.addEventListener("load", async ()=> {
 
 });
 
-function VerifyBet(currentBet, newBet){
-    //check is a new bet
-    if(JSON.stringify(currentBet) == JSON.stringify(newBet)) {
+function VerifyBet(currentBet, newBet) {
+    // Check is a new bet
+    if (JSON.stringify(currentBet) == JSON.stringify(newBet)) {
         return false;
-    } else {
+    }
+
+    // Check is outbid
+    if (newBet[0] > currentBet[0] || (newBet[0] === currentBet[0] && newBet[1] > currentBet[1])) {
         return true;
     }
 
-    //check is outbid
+    // Check for paco switch to a numeric value
+    if (currentBet[1] === 1 && newBet[1] !== 1 && newBet[0] > currentBet[0]) {
+        return true;
+    }
 
+    // If not outbid, check is a paco switch
+    if (newBet[1] === 1 && newBet[0] <= currentBet[0] / 2) {
+        return true;
+    }
 
-    //if not outbid check is an paco switch
+    return false;
 }
 
 function VerifyObjection(bet){
@@ -64,11 +74,6 @@ function VerifyObjection(bet){
     } else {
         return true;
     }
-
-    //check is outbid
-
-
-    //if not outbid check is an paco switch
 }
 
 function objection(){

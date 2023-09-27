@@ -20,7 +20,6 @@ class IA_GameController {
         this.minPaco ;
         this.minNumber;
         this.dataCurrentPlayer;
-        this.dataOtherPlayer;
     }
 
     init() {
@@ -34,6 +33,7 @@ class IA_GameController {
         this.mancheLoser = null;
         this.betList = [];
 
+        this.resetPlayersNbDices();
         this.rollDices();
     }
 
@@ -68,6 +68,13 @@ class IA_GameController {
         
     }
     
+    resetPlayersNbDices(){
+        this.playerList.forEach(player => {
+            player.diceNb = 5;
+        });
+        
+    }
+
     getPlayerListWithoutDicesValue(){
         this.playerListWithoutDicesValue = [];
         this.playerList.forEach(player => {
@@ -181,7 +188,11 @@ class IA_GameController {
         }
     }
 
-    
+    getDataOther(player){
+        let dataOtherPlayer = this.dataCurrentPlayer;
+        dataOtherPlayer.YourDices = player.dices;
+        return dataOtherPlayer;
+    }
 
     dataSet() {
 
@@ -209,18 +220,6 @@ class IA_GameController {
             CurrentPlayer : this.CurrentPlayer,
             BetList : this.BetList,
             YourDices : this.playerList[this.currentPlayer].dices,
-            TotaDices : this.allDices.length
-        };
-
-        this.dataOtherPlayer = {
-            listPlayers : this.getPlayerListWithoutDicesValue(),
-            MinPaco : this.minPaco,
-            MinNumber : this.minNumber,
-            CurrentBet : this.currentBet,
-            CurrentManche : this.currentManche,
-            CurrentRound : this.currentRound,
-            CurrentPlayer : this.CurrentPlayer,
-            BetList : this.BetList,
             TotaDices : this.allDices.length
         };
     }
