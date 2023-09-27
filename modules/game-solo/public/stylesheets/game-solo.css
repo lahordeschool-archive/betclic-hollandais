@@ -264,3 +264,9 @@ h3 {
     height: 620px;
   }
 }
+
+@media (max-width : 574px){
+  .dices-scene{
+    height: 1060px;
+  }
+}
