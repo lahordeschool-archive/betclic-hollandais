@@ -1,26 +1,27 @@
 * { box-sizing: border-box; }
 
 body { 
-  background: #1b1c23;
-  margin: 0;
+  background: lightgrey;
+  margin: 10px 50px;
   min-height: 100vh;
   justify-content: center;
   align-items: center;
 }
 
 .dices-scene {
-    width: 200px;
-    height: 200px;
-    margin: 20px;
-    perspective:600px;
-    display: flex;
+  width: auto;
+  height: 200px;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .scene {
   width: 200px;
   height: 200px;
-  margin: 20px;
-  perspective:600px;
+  margin: 10px 20px;
+  perspective: 600px;
 }
 
 .rollBtn{
@@ -85,6 +86,7 @@ label { margin-right: 10px; }
   background-color: #fff;
   text-align: center;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  font-size: 20px;
 }
 
 .bet-values {
@@ -150,6 +152,9 @@ label { margin-right: 10px; }
 
 .estimation{
     display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 144px;
 }
 
 .game-info {
@@ -191,4 +196,71 @@ h3 {
 .bet, .dice-count {
   font-size: 1em;
   margin: 5px 0;
+}
+
+.game-button {
+  text-align: center;
+}
+
+.game-button button{
+  background-color: #ffffff;
+  margin : 0 25px;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+.game-button button:hover{
+  background-color: #dddddd;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+.game-button button:active{
+  background-color: #a4a4a4;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+.playBtn{
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+  box-shadow: 0px 0px 5px lightgrey;
+  background: lightgrey;
+  border: solid 2px grey;
+  font-size: 30px;
+  border-radius: 5px;
+  padding: 5px 15px;
+}
+
+.playBtn:hover{
+  box-shadow: 0px 0px 5px grey;
+  background: rgb(188, 188, 188);
+  border-radius: 5px;
+  font-weight: bold;
+}
+/* 
+.playBtn:active{
+
+} */
+
+@media (max-width : 1354px){
+
+  .dices-scene{
+    height: 400px;
+  }
+
+}
+
+@media (max-width : 874px){
+  
+  body{
+    margin: 10px 20px;
+  }
+}
+
+@media (max-width : 814px){
+  .dices-scene{
+    height: 620px;
+  }
 }

@@ -194,7 +194,7 @@ createWall( 30, 26, -25, 75, 30, 0.2, 0, false);
 //caisse porche
 createBox( 56, 33, -35, 6, 6, 6, -Math.PI/32, false);
 //tonneau
-createBox( 26, 31, -45, 2.5, 4.5, 2.5, 0, false);
+createBox( 26, 31, -45, 2.5, 4.5, 2.5, 0, true);
 
 
 //background color
