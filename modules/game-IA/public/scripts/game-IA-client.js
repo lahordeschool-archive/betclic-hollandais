@@ -2,7 +2,7 @@ var socket;
 let editor;
 
 window.addEventListener("load", async ()=> {
-
+    updateFunction();
     socket = await io.connect();
 
     socket.on('connect', () => {
@@ -11,13 +11,15 @@ window.addEventListener("load", async ()=> {
         console.log(socket);
         socket.emit('connected');
 
-        socket.emit('connect_IA', {name: clientName, mail: localStorage.getItem('UserMail')});
+        //socket.emit('connect_IA', {name: clientName, mail: localStorage.getItem('UserMail')});
 
         socket.on("messageTestReceived", (message) => {
             console.log(message);
         });
         
-
+        function yourTurn(){
+            console.log('non update');
+        }
 
     });
 
@@ -49,4 +51,26 @@ function VerifyObjection(bet){
 
 
     //if not outbid check is an paco switch
+}
+
+function IAObjection(){
+    
+}
+
+function IABet(bet){
+    
+}
+
+
+function updateFunction(){
+    const code = localStorage.getItem("My_AI");
+    try {
+        const newFunction = new Function('data', code);
+        window.yourTurn = newFunction;
+        alert('Function updated successfully!');
+        yourTurn();
+    } catch (error) {
+        console.log(error.message);
+        alert('Error in your code: ' + error.message);
+    }
 }

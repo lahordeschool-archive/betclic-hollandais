@@ -127,14 +127,14 @@ module.exports = function(io) {
     socket.on('connect_IA', (user) => {
       console.log('connection IA de ', user);
       let alreadyLogged = false;
-      gameController.playerList.forEach(player => {
+      gameIAController.playerList.forEach(player => {
         if(player.mail === user.mail){
           alreadyLogged = true;
           player.socket = socket;
         }
       });
       if(!alreadyLogged){
-        gameController.addPlayer(user.name, user.mail, socket);
+        gameIAController.addPlayer(user.name, user.mail, socket);
       }
     });
 

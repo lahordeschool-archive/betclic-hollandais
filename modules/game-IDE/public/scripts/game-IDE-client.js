@@ -1,25 +1,13 @@
-var socket;
 let editor;
 
 window.addEventListener("load", async ()=> {
     editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/javascript");
+    const saveBtn = document.getElementById("saveBtn")
 
-    socket = await io.connect();
-
-    socket.on('connect', () => {
-        console.log('Connected to the server from client');
-            // You can perform actions here when the connection is established
-        console.log(socket);
-        socket.emit('connected');
-
-        socket.on("messageTestReceived", (message) => {
-            console.log(message);
-        });
-        
-
-
+    saveBtn.addEventListener('click', () =>{
+        saveCode();
     });
 
 });
@@ -31,49 +19,15 @@ function changeLanguage() {
     if(language == 'node')editor.session.setMode("ace/mode/javascript");
 }
 
-function executeCode() {
+function saveCode() {
 
-    // $.ajax({
+    let data = editor.getSession().getValue();
+    localStorage.setItem("My_AI", data);
 
-    //     url: "/ide/app/compiler.php",
-
-    //     method: "POST",
-
-    //     data: {
-    //         language: $("#languages").val(),
-    //         code: editor.getSession().getValue()
-    //     },
-
-    //     success: function(response) {
-    //         $(".output").text(response)
-    //     }
-    // })
+    redirectTo('/game-IA');
 }
 
-function VerifyBet(currentBet, newBet){
-    //check is a new bet
-    if(JSON.stringify(currentBet) == JSON.stringify(newBet)) {
-        return false;
-    } else {
-        return true;
-    }
-
-    //check is outbid
-
-
-    //if not outbid check is an paco switch
+function redirectTo(newPath) {
+    window.location.href = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + newPath;
 }
 
-function VerifyObjection(bet){
-    //check is a new bet
-    if(JSON.stringify(bet) == JSON.stringify([0,1]) || JSON.stringify(bet) == JSON.stringify([0,2])) {
-        return false;
-    } else {
-        return true;
-    }
-
-    //check is outbid
-
-
-    //if not outbid check is an paco switch
-}
