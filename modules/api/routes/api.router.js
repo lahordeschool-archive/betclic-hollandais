@@ -18,11 +18,18 @@ function emitToAll(event, data) {
 }
 
 const hubController = new Hub_Controller();
-function positionUpdateToAll(event, name, position){
-  hubController.HubParrotList.forEach(parrot => {
-    parrot.socket.emit(event, name, position);
-  });
 
+
+// Broadcast positions and rotations to all connected clients
+function broadcastParrotPositions() {
+
+  hubController.HubParrotList.forEach((parrot) => {
+      if (parrot.socket && typeof parrot.socket.emit === "function") {
+          parrot.socket.emit('parrotUpdate', positions);
+      } else {
+          console.error("Invalid socket:", parrot.socket);
+      }
+  });
 }
 
 module.exports = function(io) {
@@ -39,16 +46,8 @@ module.exports = function(io) {
         if(player.socket.id === socket.id) {
           gameController.removePlayerByName(player.name);
         }
-
-        
       });
-      hubController.HubParrotList.forEach(player => {
-        if(player.socket.id === socket.id) {
-          //hubController.removePlayerByName(player.name);
-        }
-
-        
-      });
+     
     });
 
     socket.on('connected', () => {
@@ -67,6 +66,7 @@ module.exports = function(io) {
     socket.on('connectPlayer', (user) => {
       console.log('connection de ', user);
       let alreadyLogged = false;
+
       gameController.playerList.forEach(player => {
         if(player.mail === user.mail){
           alreadyLogged = true;
@@ -76,7 +76,41 @@ module.exports = function(io) {
       if(!alreadyLogged){
         gameController.addPlayer(user.name, user.mail, socket);
       }
+
     });
+///////////////////////////////////////////////////////////////////
+socket.on('newParrot', () => {
+  console.log("A new parrot is here");
+  // hubController.HubParrotList.forEach(parrot => {
+  //     if (parrot.socket.id === socket.id) {
+  //         created = true;
+  //         console.log("Parrot already exist");
+  //     }
+  // });
+  
+  hubController.addParrot(socket);
+
+});
+
+
+ socket.on('parrotHasMoved', (transform) => {
+    hubController.setParrotPosition(socket.id, transform);
+    //console.log(socket.id);
+  });
+
+  socket.on('MajPositionsRequest', () => {
+  for (const socketId in hubController.HubParrotList) {
+    if (hubController.HubParrotList.hasOwnProperty(socketId)) {
+
+        io.to(socketId).emit('parrotUpdate', hubController.HubParrotList);
+
+    }
+  }
+
+});
+
+    
+    ///////////////////////////////////////////////////////////////////
 
     socket.on('launch', (io) => {
       gameController.init();
@@ -131,19 +165,10 @@ module.exports = function(io) {
       gameController.beginManche = false;
     });
 
-    /////////////////////////////////////////////////////////////////
-
-    socket.on('parrotHasMoved', (data) => {
-      console.log(data.parrotId)
-      console.log("Pos:", data.pos);
-      console.log("Rot:", data.rot);
-      console.log("");
-      positionUpdateToAll('parrotUpdate', data);
-    });
-    
+  
   
 
-/////////////////////////////////////////////////////////////////
+
   });
 
   /* GET user info */

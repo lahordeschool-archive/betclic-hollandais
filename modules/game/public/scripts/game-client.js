@@ -12,6 +12,13 @@ world.gravity.set(0, -9.82 * 5, 0);
 
 var delta;
 
+const socket = await io.connect();
+console.log(socket);
+var parrotId;
+var parrots = [];
+var pos;
+var rot;
+
 //parrot variables
 var parrot; // gltf
 var parrotS; // scene
@@ -36,7 +43,7 @@ var rotationQuat = new CANNON.Quaternion();
 //var for axis
 var axisX =  new CANNON.Vec3( 1, 0, 0 );
 var axisY =  new CANNON.Vec3( 0, 1, 0 );
-//var axisZ =  new CANNON.Vec3( 0, 0, 1 );
+var axisZ =  new CANNON.Vec3( 0, 0, 1 );
 
 //camera following the parrot
 const followCamPivot = new THREE.Object3D();
@@ -195,7 +202,7 @@ createWall( 30, 26, -25, 75, 30, 0.2, 0, false);
 //caisse porche
 createBox( 56, 33, -35, 6, 6, 6, -Math.PI/32, false);
 //tonneau
-createBox( 26, 31, -45, 2.5, 4.5, 2.5, 0, true);
+createBox( 26, 31, -45, 2.5, 4.5, 2.5, 0, false);
 
 
 //background color
@@ -226,11 +233,15 @@ loader.load( 'scripts/GLTF/sea_house/scene.gltf', function ( gltf ) {
 
 // } );
 
+
+
+
 //permet de charger un perroquet dans la scène que le joueur controlera
-function createParrot(playerName){
+function createParrot(id){
 	loader.load( 'scripts/GLTF/parrot/scene.gltf', function ( gltf ) {
 
 		parrot = gltf;
+
 		parrotS = parrot.scene;
 	
 		scene.add( parrotS );
@@ -271,11 +282,16 @@ function createParrot(playerName){
 		parrotBody.position.x = parrotS.position.x;
 		parrotBody.position.y = parrotS.position.y;
 		parrotBody.position.z = parrotS.position.z;
-	
+		
 		//console.log(parrotBox.userData.halfSize);
 	
 		//console.log( "parrot position : ", parrotS.position , "\n parrot scale : " , parrotS.scale,"\nbox position : " , parrotBody.position , "\n box scale : " , parrotShape.halfExtents, "\n parrot Size", parrotSize);
-	
+		
+		let parrotId = id;
+
+		addParrot(parrotId, parrotS);
+
+		return parrotS;
 	}, undefined, function ( error ) {
 	
 		console.error( error );
@@ -283,36 +299,147 @@ function createParrot(playerName){
 	} );
 }
 
+function addParrot(id, scene){
+	parrots.push([id, scene]);
+	console.log("id " + id + " scene " + scene);
+}
+
 //les inputs que le joueur peut utiliser pour se déplacer
 const controller = {
 	"z" 	: {pressed : false , func : moveForward	},
 	"s" 	: {pressed : false , func : moveBackward},
 	"q" 	: {pressed : false , func : rotateLeft	},
-	"d" 	: {pressed : false , func : rotateRight	}
+	"d" 	: {pressed : false , func : rotateRight	},
+	//"a" 	: {pressed : false , func : MajRequest }
+
 };
 
-var socket;
+function MajRequest(){
+	socket.emit('MajPositionsRequest');
 
-socket = await io.connect();
-var parrotId;
+}
+
+function createParrotForClient(clientId) {
+	const parrotName = `parrot_${clientId}`;
+	const newParrot = createParrot();
+	parrots[parrotName] = newParrot;
+	newParrot.name = parrotName;
+	scene.add(newParrot);
+	return newParrot;
+  }
 
 socket.on('connect', () => {
-	parrotId = socket.id;
+    parrotId = socket.id;
+    socket.emit('newParrot');
+	createParrot(socket.id);
+
 });
 
-var pos;
-var rot;
+
+
+
 function sendPlayerPos(parrotBody){
 	pos = parrotBody.position;
 	rot = parrotBody.quaternion;
-	//console.log("Pos : " + pos);
-	//console.log("Rot : " + rot);
-	socket.emit('parrotHasMoved', { parrotId, pos, rot });
+	socket.emit('parrotHasMoved', {pos, rot});
+	MajRequest();
 }
+function removeAllParrotsFromScene() {
+	const objectsToRemove = [];
+	
+	scene.traverse((object) => {
+	  if (object.userData.isParrot) {
+		objectsToRemove.push(object);
+	  }
+	});
+  
+	for (const object of objectsToRemove) {
+	  scene.remove(object);
+	  world.removeBody(object.body);
+	}
+  }
 
 socket.on('parrotUpdate', (data) => {
-	console.log(data.parrotId);
+   
+
+	// for (const socketId in data) {
+	// 	if (data.hasOwnProperty(socketId)) {
+	// 		let existingParrot = scene.getObjectByName(socketId);
+	// 		if (existingParrot) {
+	// 			// If the parrot exists, update its position and rotation
+	// 			existingParrot.position.set(data[socketId].position.x, data[socketId].position.y, data[socketId].position.z);
+	// 			existingParrot.rotation.set(data[socketId].rotation.x, data[socketId].rotation.y, data[socketId].rotation.z);
+	// 			console.log("is existing");
+	// 		} else {
+	// 			// If the parrot doesn't exist, create a new parrot with the received data
+	// 			//removeAllParrotsFromScene();
+	// 			createParrotAtPosition(data[socketId].position, data[socketId].rotation, socketId);
+	// 			console.log("is created");
+	// 		}
+	// 	}
+	//   }
+
+	//   for(var socketId in data){
+	// 	for(var listedParrot in parrots){
+	// 		if(parrot[0] == listedParrot){
+	// 			existingParrot.position.set(data[socketId].position.x, data[socketId].position.y, data[socketId].position.z);
+	// 			existingParrot.rotation.set(data[socketId].rotation.x, data[socketId].rotation.y, data[socketId].rotation.z);
+	// 			console.log("is existing");
+	// 		}
+	// 		else{
+	// 			createParrotAtPosition(data[socketId].position, data[socketId].rotation, socketId);
+	// 			console.log("is created");
+	// 			console.log(data);
+
+	// 		}
+	// 	}
+	//   }
+
+
+	for(var id in data)
+	{
+		console.log(id + " " + socket.id);
+		//createParrotAtPosition(data[id].position, data[id].rotation, parrot);
+		if(!parrots.includes(id)){
+			
+		}
+
+		if(id != socket.id)
+		{
+			SetParrotAtPosition(data[id].position, data[id].rotation, parrot);
+
+		}
+	 }
+
+
 });
+
+function createParrotAtPosition(position, rotation, socketId) {
+	loader.load( 'scripts/GLTF/parrot/scene.gltf', function ( gltf ) {
+		let exist = false;
+		parrots.forEach(parrot =>{
+			if(parrot[0] == socketId && parrot[0] != socket.id){
+
+
+				parrot[1].position.copy(position);
+				parrot[1].quaternion.copy(rotation);
+
+				//position : { x: 0, y: 20, z: -115 },
+                //rotation : { x: 0, y: 0, z: 0, w: 1 }
+			}
+		} )	
+		
+	}, undefined, function ( error ) {
+	
+		console.error( error );
+	
+	} );
+
+
+}		
+
+  
+  
 
 function moveForward(){
 	
@@ -320,8 +447,6 @@ function moveForward(){
 	forwardParrot = parrotBody.quaternion.vmult( forwardParrot );
 	forwardParrot.normalize();
 	parrotBody.velocity.set( forwardParrot.x * 20, parrotBody.velocity.y, forwardParrot.z * 20 );
-
-	// console.log( "parrot position : ", parrotS.position, "parrot body position : ", parrotBody.position)
 
 	sendPlayerPos(parrotBody);
 	
@@ -342,10 +467,6 @@ function rotateLeft(){
 	
 	rotationQuat.setFromAxisAngle(axisY, rotationSpeed);
 	parrotBody.quaternion = rotationQuat.mult(parrotBody.quaternion)
-
-	// console.log(parrotS.quaternion);
-	// console.log(parrotBody.quaternion);
-
 }
 
 function rotateRight(){
@@ -354,10 +475,6 @@ function rotateRight(){
 
 	rotationQuat.setFromAxisAngle(axisY, -rotationSpeed);
 	parrotBody.quaternion = rotationQuat.mult(parrotBody.quaternion)
-
-	// console.log(parrotS.quaternion);
-	 console.log(parrotBody.quaternion);
-
 }
 
 
@@ -472,7 +589,6 @@ function render(){
 	renderer.render( scene, camera );
 }
 
-createParrot();
 
 animate();
 
