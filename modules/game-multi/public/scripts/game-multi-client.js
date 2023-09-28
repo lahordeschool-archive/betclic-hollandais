@@ -22,6 +22,7 @@ window.addEventListener("load", async ()=>{
     const betValue = document.querySelector('.bet-input.bet-number');
     const playBtn = document.querySelector('.playBtn');
     const refreshBtn = document.querySelector('.refreshBtn');
+    const gameButton = document.querySelector('.game-button');
     const betBtn = document.getElementById("betButton");
     const pacoSwitchBtn = document.getElementById("pacoSwitchButton");
     const objectionBtn = document.getElementById("objectionButton");
@@ -262,14 +263,10 @@ window.addEventListener("load", async ()=>{
 
         if(canPlay) {
             // Mettez à jour la visibilité des boutons en fonction de la valeur de 'showButtons'
-            betButton.style.display = "block";
-            pacoSwitchButton.style.display = "block";
-            objectionButton.style.display = "block";
+            gameButton.style.display = "block";
         }
         else{
-            betButton.style.display = "none";
-            pacoSwitchButton.style.display = "none";
-            objectionButton.style.display = "none";
+            gameButton.style.display = "none";
         }
 
         if (displayActualPlayer) {

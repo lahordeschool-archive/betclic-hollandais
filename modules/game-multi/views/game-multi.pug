@@ -21,7 +21,7 @@ html(lang="en")
 		
 	body
 		font(color='white')
-		h2 PERUDO
+		h2(style='text-align: center;font-size: 40px;') HOLLANDAIS VIOLENT
 		button.playBtn PLAY NEW GAME
 		button.refreshBtn Refresh
 		.bet-display
@@ -38,17 +38,18 @@ html(lang="en")
 		.estimation
 			p Quantity
 			.custom-num
-				i.fa.fa-angle-up.arr-up(style='display: block;')
-				input.num-input(type='number' value='3' data-color='#21d99b')
-				i.fa.fa-angle-down.arr-down(style='display: block;')
+				i.fa.fa-angle-up.arr-up(style='display: block;color: black;font-size: 24px;padding: 5px;')
+				input.num-input(type='number' value='3' data-color='#000000')
+				i.fa.fa-angle-down.arr-down(style='display: block;color: black;font-size: 24px;padding: 5px;')
 			p Value
 			.custom-num
-				i.fa.fa-angle-up.arr-up(style='display: block;')
-				input.num-input(type='number' value='3' data-color='#21d99b')
-				i.fa.fa-angle-down.arr-down(style='display: block;')
-		button.betBtn(id="betButton") BET
-		button.pacoSwitchBtn(id="pacoSwitchButton") paco&apos;s switch
-		button.objectionBtn(id="objectionButton") Contest
+				i.fa.fa-angle-up.arr-up(style='display: block;color: black;font-size: 24px;padding: 5px;')
+				input.num-input(type='number' value='3' data-color='#000000')
+				i.fa.fa-angle-down.arr-down(style='display: block;color: black;font-size: 24px;padding: 5px;')
+		.game-button 
+			button.betBtn(id="betButton") BET
+			button.pacoSwitchBtn(id="pacoSwitchButton") paco&apos;s switch
+			button.objectionBtn(id="objectionButton") Contest
 		.game-info
 			.players
 		// HTML structure for displaying the list of connected users
