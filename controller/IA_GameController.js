@@ -175,6 +175,7 @@ class IA_GameController {
     }
 
     bet(count, value) {
+        this.setPlayerBet([count, value]);
         this.currentBet = [count, value];
         this.betList.push(this.currentBet);
         this.currentRound++;
@@ -217,7 +218,7 @@ class IA_GameController {
             CurrentBet : this.currentBet,
             CurrentManche : this.currentManche,
             CurrentRound : this.currentRound,
-            CurrentPlayer : this.CurrentPlayer,
+            CurrentPlayer : this.currentPlayer,
             BetList : this.BetList,
             YourDices : this.playerList[this.currentPlayer].dices,
             TotaDices : this.allDices.length

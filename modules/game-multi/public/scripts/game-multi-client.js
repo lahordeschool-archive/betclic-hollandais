@@ -17,11 +17,7 @@ window.addEventListener("load", async ()=>{
     const customNum = document.querySelectorAll('.custom-num');
     const displayClientName = document.querySelector('.user-name');
     const displayActualPlayer = document.querySelector('.player-name');
-    if (displayActualPlayer) {
-        displayActualPlayer.textContent = "Nom du joueur";
-    } else {
-        console.error("L'élément .text-field.player n'a pas été trouvé.");
-    }
+   
     const betCount = document.querySelector('.bet-input.bet-count');
     const betValue = document.querySelector('.bet-input.bet-number');
     const playBtn = document.querySelector('.playBtn');
@@ -274,6 +270,14 @@ window.addEventListener("load", async ()=>{
             betButton.style.display = "none";
             pacoSwitchButton.style.display = "none";
             objectionButton.style.display = "none";
+        }
+
+        if (displayActualPlayer) {
+            console.log(playerList);
+            console.log(actualPlayerIndex);
+            displayActualPlayer.textContent = playerList[actualPlayerIndex].name;
+        } else {
+            console.error("L'élément .text-field.player n'a pas été trouvé.");
         }
 
         refreshCompteur();
