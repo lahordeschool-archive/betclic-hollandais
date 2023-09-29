@@ -225,21 +225,18 @@ loader.load( 'scripts/GLTF/sea_house/scene.gltf', function ( gltf ) {
 
 } );
 
-// loader.load( 'scripts/GLTF/Tonneau.gltf', function ( gltf ) {
+loader.load( 'scripts/GLTF/Tonneau.gltf', function ( gltf ) {
 
-//    	scene.add( gltf.scene );
+   	scene.add( gltf.scene );
 
-// 	gltf.scene.position.x = 26;
-// 	gltf.scene.position.y = 31;
-// 	gltf.scene.position.z = -45;
-// }, undefined, function ( error ) {
+	gltf.scene.position.x = 26;
+	gltf.scene.position.y = 31;
+	gltf.scene.position.z = -45;
+}, undefined, function ( error ) {
 
-//    	console.error( error );
+   	console.error( error );
 
-// } );
-
-
-
+} );
 
 // permet de charger un perroquet dans la scène que le joueur controlera
 function createParrot(id){
@@ -583,9 +580,7 @@ function animate() {
 		if(parrotS.position.distanceTo(startGamePos) < 10){
 			console.log("test")
 		}
-	
 	}
-
 
 	executeMoves();
 	requestAnimationFrame( animate );

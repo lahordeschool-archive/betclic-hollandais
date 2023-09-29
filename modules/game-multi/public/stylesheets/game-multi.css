@@ -161,7 +161,7 @@ label { margin-right: 10px; }
 .game-info {
   font-family: Arial, sans-serif;
   background-color: cadetblue;
-  margin: 20px;
+  margin: 20px 0px;
   padding: 10px;
   border: 1px solid #ccc;
 }
