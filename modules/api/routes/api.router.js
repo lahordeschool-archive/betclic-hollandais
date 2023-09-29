@@ -4,12 +4,10 @@ const disconnect = require("../../../lib/auth").disconnect;
 const passport = require("passport");
 const User = require("../../../models/user");
 const Players_GameController = require('("../../../controller/Players_GameController');
-const IA_GameController = require('("../../../controller/IA_GameController');
+const Hub_Controller = require("../../../controller/Hub_Controller");
 const gameController = new Players_GameController();
-const gameIAController = new IA_GameController();
 
 gameController.address = "1111";
-gameIAController.address = "2222"
 
 const socketUsers = {};
 
@@ -19,19 +17,20 @@ function emitToAll(event, data) {
   });
 }
 
-function emitToAllInController(event, data, controller) {
-  controller.playerList.forEach(player => {
-    player.socket.emit(event, data);
+const hubController = new Hub_Controller();
+
+
+// Broadcast positions and rotations to all connected clients
+function broadcastParrotPositions() {
+
+  hubController.HubParrotList.forEach((parrot) => {
+      if (parrot.socket && typeof parrot.socket.emit === "function") {
+          parrot.socket.emit('parrotUpdate', positions);
+      } else {
+          console.error("Invalid socket:", parrot.socket);
+      }
   });
 }
-
-function controllerMaj(controller) {
-  controller.playerList.forEach(player => {
-    player.socket.emit('Maj', controller.getDataOther(player));
-  });
-}
-
-
 
 module.exports = function(io) {
   const router = express.Router();
@@ -41,22 +40,22 @@ module.exports = function(io) {
     socketUsers[socket.id] = socket;
 
     socket.on('disconnect', () => {
-
       console.log(`Client with ID: ${socket.id} disconnected`);
       delete socketUsers[socket.id];
-
       gameController.playerList.forEach(player => {
         if(player.socket.id === socket.id) {
           gameController.removePlayerByName(player.name);
         }
       });
-
+     
     });
 
     socket.on('connected', () => {
       console.log('Client connected and sent a "connected" message');
       // Handle the event here
     });
+
+
 
     socket.on('messageTest', () => {
       console.log('Client sent a "messageTest" message');
@@ -65,63 +64,113 @@ module.exports = function(io) {
     });
 
     socket.on('connectPlayer', (user) => {
-      console.log('connection IA de ', user);
+      console.log('connection de ', user);
       let alreadyLogged = false;
-      gameIAController.playerList.forEach(player => {
+
+      gameController.playerList.forEach(player => {
         if(player.mail === user.mail){
           alreadyLogged = true;
           player.socket = socket;
         }
       });
       if(!alreadyLogged){
-        gameIAController.addPlayer(user.name, user.mail, socket);
+        gameController.addPlayer(user.name, user.mail, socket);
+      }
+
+    });
+///////////////////////////////////////////////////////////////////
+socket.on('newParrot', () => {
+  console.log("A new parrot is here");
+  // hubController.HubParrotList.forEach(parrot => {
+  //     if (parrot.socket.id === socket.id) {
+  //         created = true;
+  //         console.log("Parrot already exist");
+  //     }
+  // });
+  
+  hubController.addParrot(socket);
+
+});
+
+
+ socket.on('parrotHasMoved', (transform) => {
+    hubController.setParrotPosition(socket.id, transform);
+    //console.log(socket.id);
+  });
+
+  socket.on('MajPositionsRequest', () => {
+  for (const socketId in hubController.HubParrotList) {
+    if (hubController.HubParrotList.hasOwnProperty(socketId)) {
+
+        io.to(socketId).emit('parrotUpdate', hubController.HubParrotList);
+
+    }
+  }
+
+});
+
+    
+    ///////////////////////////////////////////////////////////////////
+
+    socket.on('launch', (io) => {
+      gameController.init();
+      //console.log('list des joueurs =', gameController.playerList);
+    });
+  
+    socket.on('newBet', (newBet) => {
+      console.log("newBet = ", newBet);
+      console.log("controle joueur bet =", socket.id === gameController.playerList[gameController.currentPlayer].socket.id);
+      if(socket.id === gameController.playerList[gameController.currentPlayer].socket.id){
+        console.log("test bet 1 ");
+        if(gameController.VerifyBet(newBet)){
+          gameController.bet(newBet[0], newBet[1]);
+          console.log("test bet 2 ");
+        }else{
+          socket.emit('BetInvalid');
+        }
       }
     });
 
-    socket.on('launchBattle', () =>{
-      console.log('init');
-      gameIAController.init();
-      gameIAController.dataSet();
-      console.log("Winner value :"+ gameIAController.winner);
-
-      gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
-    });
-    
-    
-    socket.on('objection', () =>{
-      //Make verification is Current Player Action
-      console.log('objection');
-      gameIAController.objection();
-      gameIAController.dataSet();
-      if(gameIAController.winner == null){
-        gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
-      }else{
-        emitToAllInController('finish', gameIAController.winner, gameIAController);
-      }   
-    });
-
-    socket.on('bet', (bet) =>{
-      //Make verification is Current Player Action
-      console.log('bet');
-      gameIAController.bet(bet[0], bet[1]);
-      gameIAController.dataSet();
-      if(gameIAController.winner == null){
-        gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
-      }else{
-        emitToAllInController('finish', gameIAController.winner, gameIAController);
-      }   
+    socket.on('objection', () => {
+      if(socket.id === gameController.playerList[gameController.currentPlayer].socket.id){
+        emitToAll('objectionPerdant' ,  gameController.objection() );
+      }
     });
 
     socket.on('MajRequest', () => {
-      controllerMaj(gameIAController);
+      console.log('********************  Maj request call ***********************');
+      gameController.playerList.forEach(player => {
+
+        console.log('********************  Player '+player.name+'  ***********************');
+
+        if(gameController.beginManche){
+
+          emitToAll('totalDices' , gameController.allDices.length);
+
+          console.log('envoie a ', `${player.name}`);
+          console.log('dés = ', player.dices);
+          emitToAll( player.mail , player.dices);
+        }
+      });
+
+      if(gameController.winner != null){
+        emitToAll('Winner' ,  gameController.winner.name );
+      }
+
+      emitToAll('playersList' ,  gameController.getPlayerListWithoutDicesValue() );
+      emitToAll('currentBet' , gameController.currentBet);
+      emitToAll('currentManche' , gameController.currentManche);
+      emitToAll('currentRound' , gameController.currentRound);
+      emitToAll('currentPlayer' , gameController.currentPlayer);
+      gameController.beginManche = false;
     });
+
+  
+  
+
 
   });
 
-
-
-
-  
   /* GET user info */
   router.get("/getUserInfos", (req, res) => {
     if (req.isAuthenticated()) {
@@ -143,3 +192,7 @@ module.exports = function(io) {
 
   return router;
 };
+
+
+
+
