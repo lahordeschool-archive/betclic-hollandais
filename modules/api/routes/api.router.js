@@ -82,7 +82,6 @@ module.exports = function(io) {
       console.log('init');
       gameIAController.init();
       gameIAController.dataSet();
-      console.log("Winner value :"+ gameIAController.winner);
 
       try {
         gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
@@ -108,6 +107,7 @@ module.exports = function(io) {
         }
       }else{
         emitToAllInController('finish', gameIAController.winner, gameIAController);
+        gameIAController.removeAllPlayer();
       }   
     });
 
@@ -125,6 +125,7 @@ module.exports = function(io) {
         }
       }else{
         emitToAllInController('finish', gameIAController.winner, gameIAController);
+        gameIAController.removeAllPlayer();
       }   
     });
 

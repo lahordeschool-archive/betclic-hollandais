@@ -122,15 +122,6 @@ class IA_GameController {
         }else{
             this.currentBet = [0,2];
         }
-    
-        if(this.playerList[this.mancheLoser].diceNb === 0){
-            if(this.mancheLoser == this.playerList.length-1)
-            {
-                this.mancheLoser = 0;
-            }else{
-                this.mancheLoser++;
-            }
-        }
 
         this.currentRound++;
         
@@ -154,17 +145,15 @@ class IA_GameController {
         }
 
         if(!finish){
-            if(this.mancheLoser == 0){
-                this.currentPlayer = 0;
-            }else{
-                this.currentPlayer = this.mancheLoser-1;
-            }
-    
+
+            this.currentPlayer = this.mancheLoser;
+
             while(this.playerList[this.currentPlayer].diceNb === 0){
-                if(this.mancheLoser == 0){
+                if(this.currentPlayer == this.playerList.length-1)
+                {
                     this.currentPlayer = 0;
                 }else{
-                    this.currentPlayer = this.mancheLoser-1;
+                    this.currentPlayer++;
                 }
             }
 
@@ -173,7 +162,6 @@ class IA_GameController {
             this.currentRound = 0;
             this.rollDices();
         }else{
-            this.removeAllPlayer();
             console.log("le gagnant est :" + win);
             this.winner = win;
         }
@@ -215,6 +203,9 @@ class IA_GameController {
         if(this.minNumber > this.allDices.length){
             this.minNumber = null;
         }
+        console.log('******************************************************\n******************************************************\n******************************************************\n******************************************************\n');
+        console.log('index Player '+ this.currentPlayer);
+        console.log('Player '+ this.playerList[this.currentPlayer]);
 
         this.dataCurrentPlayer = {
             listPlayers : this.getPlayerListWithoutDicesValue(),
