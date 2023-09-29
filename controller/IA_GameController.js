@@ -134,8 +134,6 @@ class IA_GameController {
         }else{
             this.currentBet = [0,2];
         }
-
-        this.currentRound++;
         
         this.playerList.forEach(player => {
             console.log("le joueur :" + player.name);
@@ -161,12 +159,7 @@ class IA_GameController {
             this.currentPlayer = this.mancheLoser;
 
             while(this.playerList[this.currentPlayer].diceNb === 0){
-                if(this.currentPlayer == this.playerList.length-1)
-                {
-                    this.currentPlayer = 0;
-                }else{
-                    this.currentPlayer++;
-                }
+                this.currentPlayer = (this.currentPlayer+1)% this.playerList.length;
             }
 
             this.currentManche++;
@@ -187,10 +180,10 @@ class IA_GameController {
 
         this.lastPlayer = this.currentPlayer;
 
-        if(this.currentPlayer == this.playerList.length - 1) {
-            this.currentPlayer = 0;
-        } else {
-            this.currentPlayer++;
+        this.currentPlayer = (this.currentPlayer+1)% this.playerList.length;
+
+        while(this.playerList[this.currentPlayer].diceNb === 0){
+            this.currentPlayer = (this.currentPlayer+1)% this.playerList.length;
         }
     }
 
