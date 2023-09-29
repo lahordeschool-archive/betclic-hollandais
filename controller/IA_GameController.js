@@ -56,6 +56,10 @@ class IA_GameController {
         this.playerList.splice(index, 1);
     }
 
+    removeAllPlayer(){
+        this.playerList = [];
+    }
+
     setPlayerBet(playerBet){
         console.log('set player bet = ',playerBet )
         this.playerList[this.currentPlayer].bet = playerBet;
@@ -169,6 +173,7 @@ class IA_GameController {
             this.currentRound = 0;
             this.rollDices();
         }else{
+            this.removeAllPlayer();
             console.log("le gagnant est :" + win);
             this.winner = win;
         }

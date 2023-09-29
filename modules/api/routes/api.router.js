@@ -84,7 +84,13 @@ module.exports = function(io) {
       gameIAController.dataSet();
       console.log("Winner value :"+ gameIAController.winner);
 
-      gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
+      try {
+        gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
+      } catch (error) {
+        
+      }
+
+
     });
     
     
@@ -94,7 +100,12 @@ module.exports = function(io) {
       gameIAController.objection();
       gameIAController.dataSet();
       if(gameIAController.winner == null){
-        gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
+        
+        try {
+          gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
+        } catch (error) {
+          
+        }
       }else{
         emitToAllInController('finish', gameIAController.winner, gameIAController);
       }   
@@ -106,7 +117,12 @@ module.exports = function(io) {
       gameIAController.bet(bet[0], bet[1]);
       gameIAController.dataSet();
       if(gameIAController.winner == null){
-        gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
+        
+        try {
+          gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
+        } catch (error) {
+          
+        }
       }else{
         emitToAllInController('finish', gameIAController.winner, gameIAController);
       }   
