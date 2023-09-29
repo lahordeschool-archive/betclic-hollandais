@@ -8,7 +8,7 @@ import * as CANNON from "./cannon-es.js";
 const scene = new THREE.Scene();
 
 const world = new CANNON.World();
-world.gravity.set(0, -9.82 * 5, 0);
+world.gravity.set(0, -9.82 * 2.5, 0);
 
 var delta;
 
@@ -36,8 +36,13 @@ var clock = new THREE.Clock();
 //house variables
 var house; 
 
+//initializers 
 const box3 = new THREE.Box3();
 const vector = new THREE.Vector3( 1, 1, 1);
+
+//Position pour accèder au hollandais violent
+const startGamePos = new THREE.Vector3(26, 31, -45);
+
 var rotationQuat = new CANNON.Quaternion();
 
 //var for axis
@@ -202,7 +207,7 @@ createWall( 30, 26, -25, 75, 30, 0.2, 0, false);
 //caisse porche
 createBox( 56, 33, -35, 6, 6, 6, -Math.PI/32, false);
 //tonneau
-createBox( 26, 31, -45, 2.5, 4.5, 2.5, 0, false);
+// createBox( 26, 31, -45, 2.5, 4.5, 2.5, 0, false);
 
 
 //background color
@@ -236,7 +241,7 @@ loader.load( 'scripts/GLTF/sea_house/scene.gltf', function ( gltf ) {
 
 
 
-//permet de charger un perroquet dans la scène que le joueur controlera
+// permet de charger un perroquet dans la scène que le joueur controlera
 function createParrot(id){
 	loader.load( 'scripts/GLTF/parrot/scene.gltf', function ( gltf ) {
 
@@ -573,6 +578,10 @@ function animate() {
 			parrotBox.position.x = parrotS.position.x;
 			parrotBox.position.y = parrotS.position.y;
 			parrotBox.position.z = parrotS.position.z;
+		}
+
+		if(parrotS.position.distanceTo(startGamePos) < 10){
+			console.log("test")
 		}
 	
 	}
