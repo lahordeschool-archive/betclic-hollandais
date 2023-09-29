@@ -8,6 +8,7 @@ class IA_GameController {
 
         this.playerList = [];
         this.playerListWithoutDicesValue = [];
+        this.specialManche = false;
 
         this.allDices = [];
         this.currentBet = [0,2];
@@ -25,6 +26,7 @@ class IA_GameController {
     init() {
         this.currentRound = 0;
         this.currentManche = 0;
+        this.specialManche = false;
         this.allDices = [];
         this.currentBet = [0,2];
         this.winner = null;
@@ -109,7 +111,16 @@ class IA_GameController {
     }
 
     objection() {
-        let count = this.allDices.filter(die => die === this.currentBet[1] || die === 1).length;
+        let count;
+        
+        if(this.specialManche){
+            count = this.allDices.filter(die => die === this.currentBet[1]).length;
+            this.specialManche = false;
+        }else{
+            count = this.allDices.filter(die => die === this.currentBet[1] || die === 1).length;
+        }
+
+
         let finish = false;
 
         this.mancheLoser = count >= this.currentBet[0] ? this.currentPlayer : this.lastPlayer;
@@ -119,6 +130,7 @@ class IA_GameController {
         
         if(this.playerList[this.mancheLoser].diceNb === 1){
             this.currentBet = [0,1];
+            this.specialManche = true;
         }else{
             this.currentBet = [0,2];
         }
@@ -217,7 +229,8 @@ class IA_GameController {
             CurrentPlayer : this.currentPlayer,
             BetList : this.BetList,
             YourDices : this.playerList[this.currentPlayer].dices,
-            TotaDices : this.allDices.length
+            TotaDices : this.allDices.length,
+            IsSpecialManche : this.specialManche
         };
     }
 
