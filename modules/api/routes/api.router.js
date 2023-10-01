@@ -5,11 +5,16 @@ const passport = require("passport");
 const User = require("../../../models/user");
 const Players_GameController = require('("../../../controller/Players_GameController');
 const IA_GameController = require('("../../../controller/IA_GameController');
+const PoolsController = require('("../../../controller/PoolsController');
+const poolsController = new PoolsController();
 const gameController = new Players_GameController();
 const gameIAController = new IA_GameController();
 
 gameController.address = "1111";
 gameIAController.address = "2222"
+
+poolsController.addPool("3333");
+poolsController.addPool("4444");
 
 const socketUsers = {};
 
@@ -45,18 +50,31 @@ module.exports = function(io) {
       console.log(`Client with ID: ${socket.id} disconnected`);
       delete socketUsers[socket.id];
 
-      gameController.playerList.forEach(player => {
-        if(player.socket.id === socket.id) {
-          gameController.removePlayerByName(player.name);
-        }
-      });
-
     });
 
     socket.on('connected', () => {
       console.log('Client connected and sent a "connected" message');
       // Handle the event here
     });
+
+    socket.on('getServer', (data) => {
+      if (poolsController.PoolList.has(data.serveurAdress)) {
+        let alreadyLogged = false;
+        poolsController.PoolList[data.serveurAdress].playerList.forEach(player => {
+          if(player.mail === data.mail){
+            alreadyLogged = true;
+          }
+        });
+        if(!alreadyLogged){
+          gameIAController.addPlayer(user.name, user.mail, socket);
+        }
+          socket.emit('ServerExist', );
+
+      } else {
+        socket.emit('ServerExist', false);
+      }
+  });
+  
 
     socket.on('messageTest', () => {
       console.log('Client sent a "messageTest" message');
@@ -93,44 +111,47 @@ module.exports = function(io) {
     });
     
     
-    socket.on('objection', () =>{
+    socket.on('objection', (adress) =>{
+      let controller = poolsController.PoolList.hasPool(adress);
       //Make verification is Current Player Action
       console.log('objection');
-      gameIAController.objection();
-      gameIAController.dataSet();
-      if(gameIAController.winner == null){
+      controller.objection();
+      controller.dataSet();
+      if(controller.winner == null){
         
         try {
-          gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
+          controller.playerList[controller.currentPlayer].socket.emit('PlayerTurn', controller.dataCurrentPlayer);
         } catch (error) {
           
         }
       }else{
-        emitToAllInController('finish', gameIAController.winner, gameIAController);
-        gameIAController.removeAllPlayer();
+        emitToAllInController('finish', controller.winner, controller);
+        controller.removeAllPlayer();
       }   
     });
 
-    socket.on('bet', (bet) =>{
+    socket.on('bet', (bet, adress) =>{
+      let controller = poolsController.PoolList.hasPool(adress);
       //Make verification is Current Player Action
       console.log('bet');
-      gameIAController.bet(bet[0], bet[1]);
-      gameIAController.dataSet();
-      if(gameIAController.winner == null){
+      controller.bet(bet[0], bet[1]);
+      controller.dataSet();
+      if(controller.winner == null){
         
         try {
-          gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
+          controller.playerList[controller.currentPlayer].socket.emit('PlayerTurn', controller.dataCurrentPlayer);
         } catch (error) {
           
         }
       }else{
-        emitToAllInController('finish', gameIAController.winner, gameIAController);
-        gameIAController.removeAllPlayer();
+        emitToAllInController('finish', controller.winner, controller);
+        controller.removeAllPlayer();
       }   
     });
 
-    socket.on('MajRequest', () => {
-      controllerMaj(gameIAController);
+    socket.on('MajRequest', (adress) => {
+      let controller = poolsController.PoolList.hasPool(adress);
+      controllerMaj(controller);
     });
 
   });

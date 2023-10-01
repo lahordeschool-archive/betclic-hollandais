@@ -3,6 +3,8 @@ class IA_GameController {
     constructor() {
         this.address = '';
 
+        this.gameInProgress = false;
+
         this.currentRound = 0;
         this.currentManche = 1;
 
@@ -24,6 +26,7 @@ class IA_GameController {
     }
 
     init() {
+        this.gameInProgress = true;
         this.currentRound = 0;
         this.currentManche = 0;
         this.specialManche = false;
@@ -169,6 +172,7 @@ class IA_GameController {
         }else{
             console.log("le gagnant est :" + win);
             this.winner = win;
+            this.gameInProgress = false;
         }
     }
 

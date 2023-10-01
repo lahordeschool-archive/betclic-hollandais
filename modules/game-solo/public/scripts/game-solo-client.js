@@ -20,7 +20,7 @@ window.addEventListener("load", ()=>{
 
     
 
-    console.log("test 425");
+
 /////////////////////////////////////////////////////////////////
 
 // 1. Initialisation et configuration

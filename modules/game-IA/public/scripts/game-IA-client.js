@@ -1,7 +1,39 @@
 var socket;
 let editor;
 
+
 window.addEventListener("load", async ()=> {
+    const serveurAdress = getServeurSession();
+
+    function SetServeurSession(){
+        let storedData = JSON.parse(localStorage.getItem('SessionServerAdress'));
+        const data = {
+            value: storedData.value,
+            timestamp: new Date().getTime()
+        };
+        
+        localStorage.setItem('SessionServerAdress', JSON.stringify(data));
+    }
+
+    function getServeurSession(){
+        if(localStorage.getItem('SessionServerAdress')){
+            let storedData = JSON.parse(localStorage.getItem('SessionServerAdress'));
+            if (storedData) {
+                const timeNow = new Date().getTime();
+                const timeLimit =  5 * 60 * 1000;
+            }
+            if (timeNow - storedData.timestamp > timeLimit) {
+                localStorage.removeItem('SessionServerAdress');
+                return false;
+            } else {
+                // Utilisez vos données comme vous le souhaitez
+                return storedData.value;
+            }
+        }
+    }
+    
+    
+
     //updateFunction();
     socket = await io.connect();
 
@@ -19,7 +51,19 @@ window.addEventListener("load", async ()=> {
 
         console.log(socket);
         socket.emit('connected');
-    
+        
+
+        if(serveurAdress === false){
+            //redirection hub
+        }else{
+            socket.emit('getServer', {serveurAdress: serveurAdress, mail: localStorage.getItem('UserMail')});
+        }
+
+        socket.on("ServerNotConnect", () => {
+            localStorage.removeItem('SessionServerAdress');
+            //redirection hub
+        });
+
         socket.emit('connectPlayer', {name: localStorage.getItem('UserFirstName'), mail: localStorage.getItem('UserMail')});
 
         socket.on("messageTestReceived", (message) => {
@@ -28,10 +72,12 @@ window.addEventListener("load", async ()=> {
         
         socket.on("PlayerTurn", (gameInfo) => {
             yourTurn(gameInfo);
+            SetServeurSession();
         });
 
         socket.on("finish", (playerName) => {
             alert('Gagnant :'+ playerName);
+            localStorage.removeItem('SessionServerAdress');
         });
 
         function yourTurn(data){
