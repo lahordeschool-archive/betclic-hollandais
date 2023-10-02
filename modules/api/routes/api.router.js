@@ -15,12 +15,15 @@ gameIAController.address = "2222"
 
 poolsController.addPool("3333");
 poolsController.addPool("4444");
+poolsController.addPool("3334");
+poolsController.addPool("3335");
+poolsController.addPool("3336");
 
 const socketUsers = {};
 
 function emitToAll(event, data) {
-  gameController.playerList.forEach(player => {
-    player.socket.emit(event, data);
+  Object.keys(socketUsers).forEach((socketId) => {
+    socketUsers[socketId].emit(event, data);
   });
 }
 
@@ -58,15 +61,18 @@ module.exports = function(io) {
     });
 
     socket.on('getServer', (data) => {
+      let controller;
       if (poolsController.PoolList.has(data.serveurAdress)) {
         let alreadyLogged = false;
-        poolsController.PoolList[data.serveurAdress].playerList.forEach(player => {
+        controller = poolsController.PoolList.get(data.serveurAdress);
+        controller.playerList.forEach(player => {
           if(player.mail === data.mail){
             alreadyLogged = true;
+            player.socket = socket;
           }
         });
         if(!alreadyLogged){
-          gameIAController.addPlayer(user.name, user.mail, socket);
+          
         }
           socket.emit('ServerExist', );
 
@@ -83,36 +89,48 @@ module.exports = function(io) {
     });
 
     socket.on('connectPlayer', (user) => {
-      console.log('connection IA de ', user);
+      let controller = poolsController.PoolList.get(user.adress);
+      console.log('connection IA de '+ user + ' on '+ user.adress);
       let alreadyLogged = false;
-      gameIAController.playerList.forEach(player => {
+      controller.playerList.forEach(player => {
         if(player.mail === user.mail){
           alreadyLogged = true;
           player.socket = socket;
         }
       });
       if(!alreadyLogged){
-        gameIAController.addPlayer(user.name, user.mail, socket);
+        controller.addPlayer(user.name, user.mail, socket);
       }
+      const mapArray = [...poolsController.getServerList()];
+      emitToAll('HubMaj', mapArray);
     });
 
-    socket.on('launchBattle', () =>{
-      console.log('init');
-      gameIAController.init();
-      gameIAController.dataSet();
+    socket.on('launchBattle', (adress) =>{
+      let controller = poolsController.PoolList.get(adress);
+      console.log('init ' + adress +' controller = '+ controller);
+      if(controller.playerList.length >= 2){
+        controller.init();
+        controller.dataSet();
+        const mapArray = [...poolsController.getServerList()];
+        emitToAll('HubMaj', mapArray);
 
-      try {
-        gameIAController.playerList[gameIAController.currentPlayer].socket.emit('PlayerTurn', gameIAController.dataCurrentPlayer);
-      } catch (error) {
-        
+        try {
+          controller.playerList[controller.currentPlayer].socket.emit('PlayerTurn', controller.dataCurrentPlayer);
+          controllerMaj(controller);
+        } catch (error) {
+          console.log('Failed init of '+ adress);
+        }
+      }else{
+        console.log('Not enough players for init server '+ adress);
       }
+      
 
 
     });
     
     
     socket.on('objection', (adress) =>{
-      let controller = poolsController.PoolList.hasPool(adress);
+      let controller = poolsController.PoolList.get(adress);
       //Make verification is Current Player Action
       console.log('objection');
       controller.objection();
@@ -121,37 +139,42 @@ module.exports = function(io) {
         
         try {
           controller.playerList[controller.currentPlayer].socket.emit('PlayerTurn', controller.dataCurrentPlayer);
+          controllerMaj(controller);
         } catch (error) {
           
         }
       }else{
         emitToAllInController('finish', controller.winner, controller);
         controller.removeAllPlayer();
+        const mapArray = [...poolsController.getServerList()];
+        emitToAll('HubMaj', mapArray);
       }   
     });
 
-    socket.on('bet', (bet, adress) =>{
-      let controller = poolsController.PoolList.hasPool(adress);
+    socket.on('bet', (data) =>{
+      let controller = poolsController.PoolList.get(data.adress);
       //Make verification is Current Player Action
       console.log('bet');
-      controller.bet(bet[0], bet[1]);
+      controller.bet(data.bet[0], data.bet[1]);
       controller.dataSet();
-      if(controller.winner == null){
         
-        try {
-          controller.playerList[controller.currentPlayer].socket.emit('PlayerTurn', controller.dataCurrentPlayer);
-        } catch (error) {
-          
-        }
-      }else{
-        emitToAllInController('finish', controller.winner, controller);
-        controller.removeAllPlayer();
-      }   
+      try {
+        controller.playerList[controller.currentPlayer].socket.emit('PlayerTurn', controller.dataCurrentPlayer);
+        controllerMaj(controller);
+      } catch (error) {
+        
+      }
+      
     });
 
     socket.on('MajRequest', (adress) => {
-      let controller = poolsController.PoolList.hasPool(adress);
+      let controller = poolsController.PoolList.get(adress);
       controllerMaj(controller);
+    });
+
+    socket.on('HubMajRequest', () =>{
+      const mapArray = [...poolsController.getServerList()];
+      emitToAll('HubMaj', mapArray)
     });
 
   });

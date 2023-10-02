@@ -48,7 +48,8 @@ class IA_GameController {
             mail: mail,
             name: playerName,
             diceNb: 5,
-            dices: []
+            dices: [],
+            bet: []
         });
     }
 

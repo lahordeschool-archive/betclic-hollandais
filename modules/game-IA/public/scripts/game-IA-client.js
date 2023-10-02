@@ -21,18 +21,20 @@ window.addEventListener("load", async ()=> {
             if (storedData) {
                 const timeNow = new Date().getTime();
                 const timeLimit =  5 * 60 * 1000;
+                if (timeNow - storedData.timestamp > timeLimit) {
+                    localStorage.removeItem('SessionServerAdress');
+                } else {
+                    // Utilisez vos données comme vous le souhaitez
+                    return storedData.value;
+                }
             }
-            if (timeNow - storedData.timestamp > timeLimit) {
-                localStorage.removeItem('SessionServerAdress');
-                return false;
-            } else {
-                // Utilisez vos données comme vous le souhaitez
-                return storedData.value;
-            }
+            return false;
         }
     }
     
-    
+    function redirectTo(newPath) {
+        window.location.href = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + newPath;
+    }
 
     //updateFunction();
     socket = await io.connect();
@@ -54,14 +56,14 @@ window.addEventListener("load", async ()=> {
         
 
         if(serveurAdress === false){
-            //redirection hub
+            redirectTo('/game-IDE');
         }else{
             socket.emit('getServer', {serveurAdress: serveurAdress, mail: localStorage.getItem('UserMail')});
         }
 
         socket.on("ServerNotConnect", () => {
             localStorage.removeItem('SessionServerAdress');
-            //redirection hub
+            redirectTo('/game-IDE');
         });
 
         socket.emit('connectPlayer', {name: localStorage.getItem('UserFirstName'), mail: localStorage.getItem('UserMail')});

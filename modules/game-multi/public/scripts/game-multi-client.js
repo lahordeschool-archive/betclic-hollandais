@@ -27,7 +27,40 @@ window.addEventListener("load", async ()=>{
     const objectionBtn = document.getElementById("objectionButton");
     var canPlay = false;
 
-    
+    var serveurAdress;
+
+    function SetServeurSession(){
+        let storedData = JSON.parse(localStorage.getItem('SessionServerAdress'));
+        const data = {
+            value: storedData.value,
+            timestamp: new Date().getTime()
+        };
+        
+        localStorage.setItem('SessionServerAdress', JSON.stringify(data));
+    }
+
+    function getServeurSession(){
+        if(localStorage.getItem('SessionServerAdress')){
+            let storedData = JSON.parse(localStorage.getItem('SessionServerAdress'));
+            if (storedData) {
+                const timeNow = new Date().getTime();
+                const timeLimit =  5 * 60 * 1000;
+                if (timeNow - storedData.timestamp > timeLimit) {
+                    localStorage.removeItem('SessionServerAdress');
+                } else {
+                    // Utilisez vos données comme vous le souhaitez
+                    console.log(storedData.value);
+                    socket.emit('connectPlayer', ({name: localStorage.getItem('UserFirstName'), mail: localStorage.getItem('UserMail'), adress: storedData.value}));
+                    return storedData.value;
+                }
+            }
+            return false;
+        }
+    }
+
+    function redirectTo(newPath) {
+        window.location.href = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + newPath;
+    }
 
     if(localStorage.getItem('UserFirstName') == null){
         $.get("/api/getUserInfos", function(data) {
@@ -48,12 +81,26 @@ window.addEventListener("load", async ()=>{
 
 
     socket.on('connect', () => {
-    console.log('Connected to the server from client');
+
+        serveurAdress = getServeurSession();
+
+        console.log('Connected to the server from client');
         // You can perform actions here when the connection is established
         console.log(socket);
         socket.emit('connected');
 
-        socket.emit('connectPlayer', {name: localStorage.getItem('UserFirstName'), mail: localStorage.getItem('UserMail')});
+        if(serveurAdress === false){
+            redirectTo('/hub');
+        }else{
+            socket.emit('getServer', {serveurAdress: serveurAdress, mail: localStorage.getItem('UserMail')});
+        }
+
+        socket.on("ServerNotConnect", () => {
+            localStorage.removeItem('SessionServerAdress');
+            redirectTo('/hub');
+        });
+
+        
 
         socket.on("messageTestReceived", (message) => {
             console.log(message);
@@ -77,6 +124,7 @@ window.addEventListener("load", async ()=>{
 
         socket.on("finish", (playerName) => {
             alert('Gagnant :'+ playerName);
+            redirectTo('/hub');
         });
 
         socket.on("Maj", (gameInfo) => {
@@ -92,6 +140,8 @@ window.addEventListener("load", async ()=>{
             numInputMax[0] = actualtotalDices;
             refreshDisplay();
             console.log(actualBet);
+
+            SetServeurSession();
         });
 
     });
@@ -313,10 +363,9 @@ window.addEventListener("load", async ()=>{
         let value = parseInt(customNum[1].querySelector('.num-input').value);
 
         if(VerifyBet(actualBet, [count,value])){
-            socket.emit( 'bet' , [count,value]);
+            socket.emit( 'bet' , {bet: [count,value], adress: serveurAdress});
             console.log("New bet");
-            socket.emit('MajRequest');
-            console.log("MajRequest");
+            
             canPlay = false;
         }else{
             alert('Paris invalide');
@@ -334,10 +383,9 @@ window.addEventListener("load", async ()=>{
 
     objectionBtn.addEventListener('click', () =>{
         if(VerifyObjection(actualBet)){
-            socket.emit( 'objection' );
+            socket.emit( 'objection', serveurAdress );
             console.log("Objection");
-            socket.emit('MajRequest');
-            console.log("MajRequest");
+            
             canPlay = false;
         }else{
             alert('Vous ne pouvez pas contester en début de manche');
@@ -345,16 +393,13 @@ window.addEventListener("load", async ()=>{
     });
 
     playBtn.addEventListener('click', () =>{
-        socket.emit( 'launchBattle' );
+        socket.emit( 'launchBattle', serveurAdress );
         console.log("lancement");
-        socket.emit('MajRequest');
-        console.log("MajRequest");
+
         cubes = null;
     });
 
     refreshBtn.addEventListener('click', () =>{
-        socket.emit('MajRequest');
-        console.log("MajRequest");
         cubes = null;
     });
 
