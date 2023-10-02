@@ -36,7 +36,7 @@ window.addEventListener("load", async ()=> {
         window.location.href = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + newPath;
     }
 
-    //updateFunction();
+    updateFunction();
     socket = await io.connect();
 
     socket.on('connect', () => {
@@ -84,7 +84,7 @@ window.addEventListener("load", async ()=> {
 
         function yourTurn(data){
             console.log(data);
-            PerudoAI.makeDecision(data.CurrentBet, data.YourDices, data.TotaDices);
+            //PerudoAI.makeDecision(data.CurrentBet, data.YourDices, data.TotaDices);
         }
 
     });
