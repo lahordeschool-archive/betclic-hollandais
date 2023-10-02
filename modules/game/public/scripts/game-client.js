@@ -337,79 +337,43 @@ socket.on('connect', () => {
 
 
 
-
 function sendPlayerPos(parrotBody){
 	pos = parrotBody.position;
 	rot = parrotBody.quaternion;
 	socket.emit('parrotHasMoved', {pos, rot});
 	MajRequest();
 }
-function removeAllParrotsFromScene() {
-	const objectsToRemove = [];
-	
-	scene.traverse((object) => {
-	  if (object.userData.isParrot) {
-		objectsToRemove.push(object);
-	  }
-	});
-  
-	for (const object of objectsToRemove) {
-	  scene.remove(object);
-	  world.removeBody(object.body);
-	}
-  }
+
 
 socket.on('parrotUpdate', (data) => {
    
 
-	// for (const socketId in data) {
-	// 	if (data.hasOwnProperty(socketId)) {
-	// 		let existingParrot = scene.getObjectByName(socketId);
-	// 		if (existingParrot) {
-	// 			// If the parrot exists, update its position and rotation
-	// 			existingParrot.position.set(data[socketId].position.x, data[socketId].position.y, data[socketId].position.z);
-	// 			existingParrot.rotation.set(data[socketId].rotation.x, data[socketId].rotation.y, data[socketId].rotation.z);
-	// 			console.log("is existing");
-	// 		} else {
-	// 			// If the parrot doesn't exist, create a new parrot with the received data
-	// 			//removeAllParrotsFromScene();
-	// 			createParrotAtPosition(data[socketId].position, data[socketId].rotation, socketId);
-	// 			console.log("is created");
-	// 		}
-	// 	}
-	//   }
+	for (var id in data) {
+		if (id !== socket.id) {
+			const parrotExists = parrots.includes(id);
+			const parrotData = data[id];
+	
+			if (parrotExists) {
+				console.log("1");
 
-	//   for(var socketId in data){
-	// 	for(var listedParrot in parrots){
-	// 		if(parrot[0] == listedParrot){
-	// 			existingParrot.position.set(data[socketId].position.x, data[socketId].position.y, data[socketId].position.z);
-	// 			existingParrot.rotation.set(data[socketId].rotation.x, data[socketId].rotation.y, data[socketId].rotation.z);
-	// 			console.log("is existing");
-	// 		}
-	// 		else{
-	// 			createParrotAtPosition(data[socketId].position, data[socketId].rotation, socketId);
-	// 			console.log("is created");
-	// 			console.log(data);
+				// Update the position and rotation of the existing parrot
+				const existingParrot = scene.getObjectByName(id);
+				if (existingParrot) {
+					console.log("exist");
 
-	// 		}
-	// 	}
-	//   }
+					existingParrot.position.set(parrotData.position.x, parrotData.position.y, parrotData.position.z);
+					existingParrot.rotation.set(parrotData.rotation.x, parrotData.rotation.y, parrotData.rotation.z);
+				}
+			} else {
+				console.log("2");
 
-
-	for(var id in data)
-	{
-		console.log(id + " " + socket.id);
-		//createParrotAtPosition(data[id].position, data[id].rotation, parrot);
-		if(!parrots.includes(id)){
-			
+				// Create a new parrot at the position
+				createParrotAtPosition(parrotData.position, parrotData.rotation, id);
+				parrots.push(id); // Add the new parrot's ID to the parrots list
+			}
 		}
-
-		if(id != socket.id)
-		{
-			SetParrotAtPosition(data[id].position, data[id].rotation, parrot);
-
-		}
-	 }
+	}
+	
 
 
 });
@@ -430,11 +394,8 @@ function createParrotAtPosition(position, rotation, socketId) {
 		} )	
 		
 	}, undefined, function ( error ) {
-	
 		console.error( error );
-	
 	} );
-
 
 }		
 
