@@ -62,12 +62,17 @@ body {
   text-align: center;
 }
 
-.cube__face--1  { background: black;  opacity: 0.75;}
-.cube__face--3  { background: black;   opacity: 0.75; }
-.cube__face--2  {  background: black;   opacity: 0.75; }
-.cube__face--4  {  background: black;   opacity: 0.75; }
-.cube__face--5   {  background: black;   opacity: 0.75; }
-.cube__face--6 {  background: black;  opacity: 0.75; }
+.cube__face img{
+  width: 100px;
+  margin-top: 48px;
+}
+
+.cube__face--1  { background: rgb(0, 0, 0); opacity: 1;}
+.cube__face--3  { background: black;   opacity: 1; }
+.cube__face--2  {  background: black;   opacity: 1; }
+.cube__face--4  {  background: black;   opacity: 1; }
+.cube__face--5   {  background: black;   opacity: 1; }
+.cube__face--6 {  background: black;  opacity: 1; }
 
 .cube__face--1  { transform: rotateY(  0deg) translateZ(100px); }
 .cube__face--2   { transform: rotateY(180deg) translateZ(100px); }

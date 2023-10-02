@@ -367,12 +367,12 @@ const GameUI = (() => {
             let cubeHTML = `
                 <div class = "scene">
                     <div class="cube">
-                        <div class="cube__face cube__face--1">1</div>
-                        <div class="cube__face cube__face--2">2</div>
-                        <div class="cube__face cube__face--3">3</div>
-                        <div class="cube__face cube__face--4">4</div>
-                        <div class="cube__face cube__face--5">5</div>
-                        <div class="cube__face cube__face--6">6</div>
+                        <div class="cube__face cube__face--1"><img src='../img/1.png'></div>
+                        <div class="cube__face cube__face--2"><img src='../img/2.png'></div>
+                        <div class="cube__face cube__face--3"><img src='../img/3.png'></div>
+                        <div class="cube__face cube__face--4"><img src='../img/4.png'></div>
+                        <div class="cube__face cube__face--5"><img src='../img/5.png'></div>
+                        <div class="cube__face cube__face--6"><img src='../img/6.png'></div>
                     </div>
                 </div>
             `;
