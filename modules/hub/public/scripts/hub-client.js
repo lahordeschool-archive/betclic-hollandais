@@ -44,23 +44,7 @@ window.addEventListener("load", async ()=>{
 
     function redirectTo(newPath) {
         window.location.href = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + newPath;
-    }
-
-
-    document.addEventListener("DOMContentLoaded", function() {
-        const buttons = document.querySelectorAll(".connect-button");
-        buttons.forEach((button, index) => {
-            button.addEventListener('click', function() {
-                // Example logic: Connect to the server
-                connectToServer(index); 
-            });
-        });
-    });
-    
-    function connectToServer(serverIndex) {
-        // Your logic to connect to the server
-        console.log(`Connecting to server at index ${serverIndex}`);
-    }    
+    }  
 
     if(localStorage.getItem('UserFirstName') == null){
         $.get("/api/getUserInfos", function(data) {
@@ -84,15 +68,13 @@ window.addEventListener("load", async ()=>{
         // You can perform actions here when the connection is established
         socket.emit('connected');
 
-        socket.emit('HubMajRequest');
+        
 
         socket.on("messageTestReceived", (message) => {
             console.log(message);
         });
 
-        // socket.on("HubMaj", (message) => {
-        //     console.log(message);
-        // });
+        socket.emit('HubMajRequest');
 
         socket.on('HubMaj', (updatedServers) => {
             const myMap = new Map(updatedServers);
@@ -106,7 +88,6 @@ window.addEventListener("load", async ()=>{
         serverListContainer.innerHTML = ''; // Videz le contenu actuel
         console.log(servers);
         servers.forEach((server, key) => {
-            console.log('test' + key);
             // Créez un élément pour chaque serveur
             const serverDiv = document.createElement('div');
             serverDiv.classList.add('server');
@@ -143,7 +124,6 @@ window.addEventListener("load", async ()=>{
             console.log(`L'utilisateur a cliqué sur le bouton de connexion pour le serveur: ${key}`);
             SetServeurSession(key);
             redirectTo('/game-multi');
-            // Ici, vous pouvez ajouter la logique supplémentaire pour gérer la connexion au serveur
         }
     }
     
