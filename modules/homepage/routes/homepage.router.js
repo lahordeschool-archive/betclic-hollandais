@@ -11,7 +11,7 @@ module.exports = function (io) {
   /* GET home page. */
   router.get("/", (req, res) => {
     if (req.isAuthenticated()) {
-      res.redirect("/game");
+      res.redirect("/hub");
     } else {
       res.redirect("/login");
     }

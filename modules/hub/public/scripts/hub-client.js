@@ -1,6 +1,9 @@
 var socket;
 
-window.addEventListener("load", async ()=>{
+
+$(document).ready(async function(){
+
+
     var clientName = "";
 
     const serveurAdress = getServeurSession();
@@ -123,10 +126,8 @@ window.addEventListener("load", async ()=>{
         function handleServerConnect(key) {
             console.log(`L'utilisateur a cliqué sur le bouton de connexion pour le serveur: ${key}`);
             SetServeurSession(key);
-            redirectTo('/game-multi');
+            redirectTo('/game-ide');
         }
     }
     
-
 });
-
