@@ -63,8 +63,15 @@ body {
 }
 
 .cube__face img{
-  width: 100px;
-  margin-top: 48px;
+  width: 192px;
+}
+
+.cube__face a {
+  position: absolute;
+  left: 83.5px;
+  top: -4px;
+  font-size: 50px;
+  color: #777777;
 }
 
 .cube__face--1  { background: rgb(0, 0, 0); opacity: 1;}
