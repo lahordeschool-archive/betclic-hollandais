@@ -37,7 +37,7 @@ class IA_GameController {
         this.lastPlayer = 0;
         this.mancheLoser = null;
         this.betList = [];
-        this.dataSet();
+
 
         this.resetPlayersNbDices();
         this.rollDices();
@@ -195,9 +195,22 @@ class IA_GameController {
 
     getDataOther(player){
         //console.log(this.dataCurrentPlayer);
-        let dataOtherPlayer = this.dataCurrentPlayer;
-        //console.log(dataOtherPlayer);
-        dataOtherPlayer.YourDices = player.dices;
+        let dataOtherPlayer = {
+            listPlayers : this.getPlayerListWithoutDicesValue(),
+            MinPaco : this.dataCurrentPlayer.MinPaco,
+            MinNumber : this.dataCurrentPlayer.MinNumber,
+            CurrentBet : this.currentBet,
+            CurrentManche : this.currentManche,
+            CurrentRound : this.currentRound,
+            CurrentPlayer : this.currentPlayer,
+            BetList : this.BetList,
+            YourDices : player.dices,
+            TotaDices : this.allDices.length,
+            IsSpecialManche : this.specialManche
+        };
+        // console.log('Pre set other player dices '+player.name+' dices '+player.dices);
+        // dataOtherPlayer.YourDices = player.dices;
+        // console.log('Set other player dices '+player.name+' dices '+dataOtherPlayer.YourDices);
         return dataOtherPlayer;
     }
 
@@ -220,7 +233,7 @@ class IA_GameController {
         // console.log('******************************************************\n******************************************************\n******************************************************\n******************************************************\n');
         // console.log('index Player '+ this.currentPlayer);
         // console.log('Player '+ this.playerList[this.currentPlayer]);
-
+        console.log('Dices in dataCurrentPlayer set :'+this.playerList[this.currentPlayer].dices);
         this.dataCurrentPlayer = {
             listPlayers : this.getPlayerListWithoutDicesValue(),
             MinPaco : this.minPaco,
