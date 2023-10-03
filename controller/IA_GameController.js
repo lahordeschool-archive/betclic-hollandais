@@ -37,6 +37,7 @@ class IA_GameController {
         this.lastPlayer = 0;
         this.mancheLoser = null;
         this.betList = [];
+        this.dataSet();
 
         this.resetPlayersNbDices();
         this.rollDices();
@@ -193,7 +194,9 @@ class IA_GameController {
     }
 
     getDataOther(player){
+        //console.log(this.dataCurrentPlayer);
         let dataOtherPlayer = this.dataCurrentPlayer;
+        //console.log(dataOtherPlayer);
         dataOtherPlayer.YourDices = player.dices;
         return dataOtherPlayer;
     }
@@ -213,9 +216,10 @@ class IA_GameController {
         if(this.minNumber > this.allDices.length){
             this.minNumber = null;
         }
-        console.log('******************************************************\n******************************************************\n******************************************************\n******************************************************\n');
-        console.log('index Player '+ this.currentPlayer);
-        console.log('Player '+ this.playerList[this.currentPlayer]);
+
+        // console.log('******************************************************\n******************************************************\n******************************************************\n******************************************************\n');
+        // console.log('index Player '+ this.currentPlayer);
+        // console.log('Player '+ this.playerList[this.currentPlayer]);
 
         this.dataCurrentPlayer = {
             listPlayers : this.getPlayerListWithoutDicesValue(),

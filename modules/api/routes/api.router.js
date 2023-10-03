@@ -69,7 +69,6 @@ module.exports = function(io) {
           if(player.mail === data.mail){
             alreadyLogged = true;
             player.socket = socket;
-            controllerMaj(controller);
           }
         });
         if(!alreadyLogged){
@@ -102,7 +101,6 @@ module.exports = function(io) {
       }
       const mapArray = [...poolsController.getServerList()];
       emitToAll('HubMaj', mapArray);
-      controllerMaj(controller);
     });
 
     socket.on('launchBattle', (adress) =>{
@@ -154,8 +152,9 @@ module.exports = function(io) {
 
     socket.on('bet', (data) =>{
       let controller = poolsController.PoolList.get(data.adress);
+      console.log('controller '+ data.adress +' list Players' + controller.playerList);
       if(socket === controller.playerList[controller.currentPlayer].socket){
-        console.log('bet');
+        console.log('you can bet');
         controller.bet(data.bet[0], data.bet[1]);
         controller.dataSet();
           

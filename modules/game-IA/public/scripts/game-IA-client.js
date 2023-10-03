@@ -1,9 +1,9 @@
 var socket;
 let editor;
-
+var serveurAdress;
 
 window.addEventListener("load", async ()=> {
-    const serveurAdress = getServeurSession();
+
 
     function SetServeurSession(){
         let storedData = JSON.parse(localStorage.getItem('SessionServerAdress'));
@@ -25,6 +25,8 @@ window.addEventListener("load", async ()=> {
                     localStorage.removeItem('SessionServerAdress');
                 } else {
                     // Utilisez vos données comme vous le souhaitez
+                    console.log(storedData.value);
+                    socket.emit('connectPlayer', ({name: localStorage.getItem('UserFirstName'), mail: localStorage.getItem('UserMail'), adress: storedData.value}));
                     return storedData.value;
                 }
             }
@@ -36,10 +38,13 @@ window.addEventListener("load", async ()=> {
         window.location.href = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + newPath;
     }
 
-    updateFunction();
+    //updateFunction();
     socket = await io.connect();
 
     socket.on('connect', () => {
+
+        serveurAdress = getServeurSession();
+
         console.log('Connected to the server from client');
         
         if(localStorage.getItem('UserFirstName') == null){
@@ -66,8 +71,6 @@ window.addEventListener("load", async ()=> {
             redirectTo('/game-IDE');
         });
 
-        socket.emit('connectPlayer', {name: localStorage.getItem('UserFirstName'), mail: localStorage.getItem('UserMail')});
-
         socket.on("messageTestReceived", (message) => {
             console.log(message);
         });
@@ -84,7 +87,69 @@ window.addEventListener("load", async ()=> {
 
         function yourTurn(data){
             console.log(data);
-            //PerudoAI.makeDecision(data.CurrentBet, data.YourDices, data.TotaDices);
+            
+            function analyzeSituation(dices, value, totalDiceCount){
+                const matchingDice = dices.filter(die => die === value).length;
+                const estimatedTotalDice =  Math.ceil(matchingDice + (totalDiceCount - dices.length) * (1 / 6));
+                return estimatedTotalDice;
+            }
+
+            function makeDecision(currentBet, dices, totalDiceCount) {
+
+                const estimations = [];
+                
+                // Estimer le count pour chaque valeur possible
+                for (let value = 1; value <= 6; value++) {
+                    estimations[value] = analyzeSituation(dices, value, totalDiceCount);
+                }
+        
+                if (currentBet[1] === 1) { // Si nous sommes déjà sur Paco
+                    const nextCount = currentBet[0] * 2 + 1;
+        
+                    // Trouver la meilleure value pour surenchérir
+                    let bestValue = 2;
+                    for (let value = 3; value <= 6; value++) {
+                        if (estimations[value] > estimations[bestValue]) {
+                            bestValue = value;
+                        }
+                    }
+        
+                    if (estimations[bestValue] >= nextCount && estimations[bestValue] > estimations[1]) {
+                        console.log('test 1');
+                        bet([nextCount, bestValue]);
+                    }
+                    else if(estimations[1] > currentBet[0]){
+                        console.log('test 2');
+                        bet([estimations[1], 1]);
+                    }
+                    else {
+                        console.log('test 3');
+                        objection();
+                    }
+                    return;
+        
+                } else { // Si nous ne sommes pas sur Paco
+                    let bestValue = currentBet[1];
+                    for (let value = currentBet[1] + 1; value <= 6; value++) {
+                        if (estimations[value] > estimations[bestValue]) {
+                            bestValue = value;
+                        }
+                    }
+                    if (estimations[bestValue] > currentBet[0]) {
+                        console.log('test 4');
+                        bet([estimations[bestValue], bestValue]);
+                    } else if (estimations[1] >= Math.ceil(currentBet[0] / 2)) {
+                        console.log('test 5');
+                        bet([estimations[1], 1]);
+                    } else {
+                        console.log('test 6');
+                        objection();
+                    }
+                    return;
+                }
+            }
+
+            makeDecision(data.CurrentBet, data.YourDices, data.TotaDices);
         }
 
     });
@@ -126,12 +191,15 @@ function VerifyObjection(bet){
 
 function objection(){
     alert('Objection');
-    socket.emit('objection');
+    socket.emit('objection', serveurAdress);
 }
 
-function bet(bet){
-    alert('bet :'+ bet);
-    socket.emit('bet', bet);
+function bet(newBet){
+    if(VerifyBet(newBet[0], newBet[1])){
+
+    }
+    alert('bet :'+ newBet);
+    socket.emit( 'bet' , {bet: newBet, adress: serveurAdress});socket.emit('bet', bet);
 }
 
 
@@ -149,65 +217,65 @@ function updateFunction(){
 }
 
 
-const PerudoAI = (() => {
+// const PerudoAI = (() => {
 
-    function analyzeSituation(dices, value, totalDiceCount){
-        const matchingDice = dices.filter(die => die === value).length;
-        const estimatedTotalDice =  Math.ceil(matchingDice + (totalDiceCount - dices.length) * (1 / 6));
-        return estimatedTotalDice;
-    }
+//     function analyzeSituation(dices, value, totalDiceCount){
+//         const matchingDice = dices.filter(die => die === value).length;
+//         const estimatedTotalDice =  Math.ceil(matchingDice + (totalDiceCount - dices.length) * (1 / 6));
+//         return estimatedTotalDice;
+//     }
 
-    function makeDecision(currentBet, dices, totalDiceCount) {
+//     function makeDecision(currentBet, dices, totalDiceCount) {
 
-        const estimations = [];
+//         const estimations = [];
         
-        // Estimer le count pour chaque valeur possible
-        for (let value = 1; value <= 6; value++) {
-            estimations[value] = this.analyzeSituation(dices, value, totalDiceCount);
-        }
+//         // Estimer le count pour chaque valeur possible
+//         for (let value = 1; value <= 6; value++) {
+//             estimations[value] = this.analyzeSituation(dices, value, totalDiceCount);
+//         }
 
-        if (currentBet[1] === 1) { // Si nous sommes déjà sur Paco
-            const nextCount = currentBet[0] * 2 + 1;
+//         if (currentBet[1] === 1) { // Si nous sommes déjà sur Paco
+//             const nextCount = currentBet[0] * 2 + 1;
 
-            // Trouver la meilleure value pour surenchérir
-            let bestValue = 2;
-            for (let value = 3; value <= 6; value++) {
-                if (estimations[value] > estimations[bestValue]) {
-                    bestValue = value;
-                }
-            }
+//             // Trouver la meilleure value pour surenchérir
+//             let bestValue = 2;
+//             for (let value = 3; value <= 6; value++) {
+//                 if (estimations[value] > estimations[bestValue]) {
+//                     bestValue = value;
+//                 }
+//             }
 
-            if (estimations[bestValue] >= nextCount && estimations[bestValue] > estimations[1]) {
-                bet([nextCount, bestValue]);
-            }
-            else if(estimations[1] > currentBet[0]){
-                bet([estimations[1], 1]);
-            }
-            else {
-                objection();
-            }
-            return;
+//             if (estimations[bestValue] >= nextCount && estimations[bestValue] > estimations[1]) {
+//                 bet([nextCount, bestValue]);
+//             }
+//             else if(estimations[1] > currentBet[0]){
+//                 bet([estimations[1], 1]);
+//             }
+//             else {
+//                 objection();
+//             }
+//             return;
 
-        } else { // Si nous ne sommes pas sur Paco
-            let bestValue = currentBet[1];
-            for (let value = currentBet[1] + 1; value <= 6; value++) {
-                if (estimations[value] > estimations[bestValue]) {
-                    bestValue = value;
-                }
-            }
-            if (estimations[bestValue] > currentBet[0]) {
-                bet([estimations[bestValue], bestValue]);
-            } else if (estimations[1] >= Math.ceil(currentBet[0] / 2)) {
-                bet([estimations[1], 1]);
-            } else {
-                objection();
-            }
-            return;
-        }
-    }
+//         } else { // Si nous ne sommes pas sur Paco
+//             let bestValue = currentBet[1];
+//             for (let value = currentBet[1] + 1; value <= 6; value++) {
+//                 if (estimations[value] > estimations[bestValue]) {
+//                     bestValue = value;
+//                 }
+//             }
+//             if (estimations[bestValue] > currentBet[0]) {
+//                 bet([estimations[bestValue], bestValue]);
+//             } else if (estimations[1] >= Math.ceil(currentBet[0] / 2)) {
+//                 bet([estimations[1], 1]);
+//             } else {
+//                 objection();
+//             }
+//             return;
+//         }
+//     }
 
-    return {
-        analyzeSituation: analyzeSituation,
-        makeDecision: makeDecision
-    };
-})();
+//     return {
+//         analyzeSituation: analyzeSituation,
+//         makeDecision: makeDecision
+//     };
+// })();

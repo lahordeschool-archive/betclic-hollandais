@@ -18,6 +18,28 @@ html(lang="en")
 			}
 		
 	body
+		font(color='white')
+			h2 PERUDO
+			.bet-display
+				p Votre nom :
+				.user-name
+				p Joueur actuel :
+				.player-name
+				p Pari actuel :
+				.bet-values
+					input.bet-input.bet-count(type='number' value='0' readonly='')
+					|  ×
+					input.bet-input.bet-number(type='number' value='2' readonly='')
+			.dices-scene
+			.estimation
+				p Quantity
+				.custom-num
+					i.fa.fa-angle-up.arr-up(style='display: block;')
+					input.num-input(type='number' value='3' data-color='#21d99b')
+					i.fa.fa-angle-down.arr-down(style='display: block;')
+				p Value
+			.game-info
+				.players
 		
 
 link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")

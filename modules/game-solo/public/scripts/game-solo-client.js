@@ -72,8 +72,8 @@ window.addEventListener("load", ()=>{
                 dices: [],
                 bet: []
                 };
-            }
-            addPlayer(player);
+                addPlayer(player);
+            } 
             rollDices();
             turn();
             

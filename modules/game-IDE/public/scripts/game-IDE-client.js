@@ -140,6 +140,7 @@ function changeLanguage() {
 function saveCode() {
     let data = editor.getSession().getValue();
     localStorage.setItem("My_AI", data);
+    alert('save code');
 }
 
 function redirectTo(newPath) {
