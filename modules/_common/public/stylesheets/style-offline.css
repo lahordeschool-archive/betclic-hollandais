@@ -13,6 +13,9 @@ html,
 body {
   width: 100%;
   color: #000;
+  font-family: 'Treasure Map Dead Hand', sans-serif;
+  
+  
 }
 .navbar-brand {
   color: #000 !important;
@@ -53,3 +56,8 @@ body {
   90%{color: DodgerBlue;}
   100%{color: #fe4655;}
  }
+
+ @font-face {
+  font-family: 'Treasure Map Dead Hand';
+  src: url('stylesheets/fonts/Treamd.ttf') format('ttf'), /* Add other formats as needed */
+}
