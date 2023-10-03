@@ -50,11 +50,11 @@ window.addEventListener("load", async ()=> {
         window.location.href = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + newPath;
     }
 
-    //updateFunction();
+    
     socket = await io.connect();
 
     socket.on('connect', () => {
-
+        updateFunction();
         serveurAdress = getServeurSession();
 
         console.log('Connected to the server from client');
@@ -100,8 +100,9 @@ window.addEventListener("load", async ()=> {
 
             UI.displayDices();
             UI.refreshDisplay();
-
-            yourTurn(gameInfo);
+            console.log('YOUR TURN');
+            console.log(window.yourTurn);
+            window.yourTurn(gameInfo);
             //setTimeout(yourTurn(gameInfo), 5000);
 
             
@@ -132,74 +133,11 @@ window.addEventListener("load", async ()=> {
 
         function yourTurn(data){
             console.log(data);
-            
-            function proba(dices, value, totalDiceCount){
-                const matchingDice = dices.filter(die => die === value).length;
-                const estimatedTotalDice =  Math.ceil(matchingDice + (totalDiceCount - dices.length) * (1 / 6));
-                return estimatedTotalDice;
-            }
-
-            function play(currentBet, dices, totalDiceCount) {
-
-                const estimations = [];
-                
-                // Estimer le count pour chaque valeur possible
-                for (let value = 1; value <= 6; value++) {
-                    estimations[value] = proba(dices, value, totalDiceCount);
-                }
-        
-                if (currentBet[1] === 1) { // Si nous sommes déjà sur Paco
-                    const nextCount = currentBet[0] * 2 + 1;
-        
-                    // Trouver la meilleure value pour surenchérir
-                    let bestValue = 2;
-                    for (let value = 3; value <= 6; value++) {
-                        if (estimations[value] > estimations[bestValue]) {
-                            bestValue = value;
-                        }
-                    }
-        
-                    if (estimations[bestValue] >= nextCount && estimations[bestValue] > estimations[1]) {
-                        console.log('test 1');
-                        bet([nextCount, bestValue]);
-                    }
-                    else if(estimations[1] > currentBet[0]){
-                        console.log('test 2');
-                        bet([estimations[1], 1]);
-                    }
-                    else {
-                        console.log('test 3');
-                        objection();
-                    }
-                    return;
-        
-                } else { // Si nous ne sommes pas sur Paco
-                    let bestValue = currentBet[1];
-                    for (let value = currentBet[1] + 1; value <= 6; value++) {
-                        if (estimations[value] > estimations[bestValue]) {
-                            bestValue = value;
-                        }
-                    }
-                    if (estimations[bestValue] > currentBet[0]) {
-                        console.log('test 4');
-                        bet([estimations[bestValue], bestValue]);
-                    } else if (estimations[1] >= Math.ceil(currentBet[0] / 2)) {
-                        console.log('test 5');
-                        bet([estimations[1], 1]);
-                    } else {
-                        console.log('test 6');
-                        objection();
-                    }
-                    return;
-                }
-            }
-
-            play(actualBet, playerDices, actualtotalDices);
         }
 
     });
 
-    function objection(){
+    window.objection = function (){
         console.log('ia object');
         if(VerifyObjection()){
             alert('Objection');
@@ -219,7 +157,7 @@ window.addEventListener("load", async ()=> {
         
     }
     
-    function bet(newBet){
+    window.bet = function (newBet){
         console.log('ia bet '+ newBet);
         console.log('Verif ia bet = '+VerifyBet(newBet));
         if(VerifyBet(newBet)){
@@ -390,7 +328,6 @@ function updateFunction(){
         const newFunction = new Function('data', code);
         window.yourTurn = newFunction;
         alert('Function updated successfully!');
-        yourTurn();
     } catch (error) {
         console.log(error.message);
         alert('Error in your code: ' + error.message);
