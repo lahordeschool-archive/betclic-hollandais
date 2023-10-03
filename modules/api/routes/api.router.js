@@ -71,7 +71,9 @@ module.exports = function(io) {
             player.socket = socket;
           }
         });
-        if(!alreadyLogged){
+        if(!alreadyLogged &&  controller.gameInProgress){
+          console.log("can't connect user "+ data.mail)
+          console.log("Party in progress "+ controller.gameInProgress)
           socket.emit('ServerNotConnect');
         }
       } else {
@@ -96,28 +98,33 @@ module.exports = function(io) {
           player.socket = socket;
         }
       });
-      if(!alreadyLogged){
+      if(!alreadyLogged && controller.playerList.length <= 5 && !controller.gameInProgress){
         controller.addPlayer(user.name, user.mail, socket);
+        console.log('New Player '+user.name+' on server '+ user.adress)
       }
       const mapArray = [...poolsController.getServerList()];
       emitToAll('HubMaj', mapArray);
     });
 
+    function nextTurn(controller){
+      try {
+        controller.playerList[controller.currentPlayer].socket.emit('PlayerTurn', controller.dataCurrentPlayer);
+      } catch (error) {
+        defaultAction(controller);
+      }
+    }
+
     socket.on('launchBattle', (adress) =>{
       let controller = poolsController.PoolList.get(adress);
-      console.log('init ' + adress +' controller = '+ controller);
+      console.log('init ' + adress +' controller = '+ controller+ ' playerList = '+ controller.playerList[0].name);
       if(controller.playerList.length >= 2){
         controller.init();
         controller.dataSet();
         const mapArray = [...poolsController.getServerList()];
         emitToAll('HubMaj', mapArray);
+        controllerMaj(controller);
+        setTimeout(() => nextTurn(controller), 5000);  // Attendre 5 secondes
 
-        try {
-          controller.playerList[controller.currentPlayer].socket.emit('PlayerTurn', controller.dataCurrentPlayer);
-          controllerMaj(controller);
-        } catch (error) {
-          defaultAction(controller);
-        }
       }else{
         console.log('Not enough players for init server '+ adress);
       }
@@ -134,13 +141,8 @@ module.exports = function(io) {
         controller.objection();
         controller.dataSet();
         if(controller.winner == null){
-          
-          try {
-            controller.playerList[controller.currentPlayer].socket.emit('PlayerTurn', controller.dataCurrentPlayer);
-            controllerMaj(controller);
-          } catch (error) {
-            defaultAction(controller);
-          }
+          setTimeout(() => nextTurn(controller), 5000);  // Attendre 5 secondes
+          controllerMaj(controller);
         }else{
           emitToAllInController('finish', controller.winner, controller);
           controller.removeAllPlayer();
@@ -158,12 +160,8 @@ module.exports = function(io) {
         controller.bet(data.bet[0], data.bet[1]);
         controller.dataSet();
           
-        try {
-          controller.playerList[controller.currentPlayer].socket.emit('PlayerTurn', controller.dataCurrentPlayer);
-          controllerMaj(controller);
-        } catch (error) {
-          defaultAction(controller);
-        }
+        setTimeout(() => nextTurn(controller), 5000);  // Attendre 5 secondes
+        controllerMaj(controller);
       }
     });
 
