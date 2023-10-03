@@ -6,23 +6,22 @@ block content
 
         .col-3.text-center.text-lg-start
             h1.display-4.fw-bold.lh-1.text-body-emphasis.mb-3 Login
-            p.col-lg-10.fs-4 Hey oh matelos. Merci de t'identifier avant de rejoindre le jeu.
+            p.col-lg-10.fs-4 Hey oh matelot. Merci de t'identifier avant de rejoindre le jeu.
             p.col-lg-10.fs-4 Good luck out there.
         .col-3.mx-auto
             form.p-4.p-md-5.border.rounded-3.bg-body-tertiary(action="/login", method="post")
                 .form-floating.mb-3
-                    .row
-                        .col-6
+                    .form-row
+                        .col-md-6.mb-3
                             label(for="floatingInput") Email
-                            br
                             input#floatingInput(type="email", placeholder="email", name="email", required)
-                        .col-6
-                            label(for="floatingInput") Mot de passe
-                            br
-                            input#floatingInput(type="password", placeholder="password", name="password", required)
+                        .col-md-6.mb-3
+                            label(for="floatingPassword") Mot de passe
+                            input#floatingPassword(type="password", placeholder="password", name="password", required)
                     .row 
                         .col-12
                             button.btn.btn-primary(type="submit") Login
                             a(href="/login/register") Créer un compte
+
         .col-2
 

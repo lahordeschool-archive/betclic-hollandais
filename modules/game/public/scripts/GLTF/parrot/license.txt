@@ -1,0 +1,11 @@
+Model Information:
+* title:	Parrot
+* source:	https://sketchfab.com/3d-models/parrot-61470f0d554b4d70a119ceb7a32f0813
+* author:	AdrianXY (https://sketchfab.com/adrianxy)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Parrot" (https://sketchfab.com/3d-models/parrot-61470f0d554b4d70a119ceb7a32f0813) by AdrianXY (https://sketchfab.com/adrianxy) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
