@@ -106,11 +106,19 @@ module.exports = function(io) {
       emitToAll('HubMaj', mapArray);
     });
 
+    function VerifPlayerPlayInTime(controller, manche, round){
+      if(manche === controller.currentManche, round === controller.currentRound){
+        poolsController.defaultAction(controller);
+      }
+       
+    }
+
     function nextTurn(controller){
       try {
         controller.playerList[controller.currentPlayer].socket.emit('PlayerTurn', controller.dataCurrentPlayer);
+        setTimeout(() => VerifPlayerPlayInTime(controller, controller.currentManche, controller.currentRound), 60000);
       } catch (error) {
-        defaultAction(controller);
+        poolsController.defaultAction(controller);
       }
     }
 

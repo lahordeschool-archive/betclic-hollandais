@@ -44,7 +44,7 @@ class PoolsController {
     
     defaultAction(controller){
         let data = controller.dataCurrentPlayer;
-        PerudoAI.makeDecision(data.CurrentBet, data.YourDices, data.TotaDices);
+        PerudoAI.makeDecision(controller, data.CurrentBet, data.YourDices, data.TotaDices);
     }
 
     
@@ -59,13 +59,13 @@ const PerudoAI = (() => {
         return estimatedTotalDice;
     }
 
-    function makeDecision(currentBet, dices, totalDiceCount) {
+    function makeDecision(controller, currentBet, dices, totalDiceCount) {
 
         const estimations = [];
         
         // Estimer le count pour chaque valeur possible
         for (let value = 1; value <= 6; value++) {
-            estimations[value] = this.analyzeSituation(dices, value, totalDiceCount);
+            estimations[value] = analyzeSituation(dices, value, totalDiceCount);
         }
 
         if (currentBet[1] === 1) { // Si nous sommes déjà sur Paco
@@ -80,13 +80,13 @@ const PerudoAI = (() => {
             }
 
             if (estimations[bestValue] >= nextCount && estimations[bestValue] > estimations[1]) {
-                bet([nextCount, bestValue]);
+                controller.bet([nextCount, bestValue]);
             }
             else if(estimations[1] > currentBet[0]){
-                bet([estimations[1], 1]);
+                controller.bet([estimations[1], 1]);
             }
             else {
-                objection();
+                controller.objection();
             }
             return;
 
@@ -98,11 +98,11 @@ const PerudoAI = (() => {
                 }
             }
             if (estimations[bestValue] > currentBet[0]) {
-                bet([estimations[bestValue], bestValue]);
+                controller.bet([estimations[bestValue], bestValue]);
             } else if (estimations[1] >= Math.ceil(currentBet[0] / 2)) {
-                bet([estimations[1], 1]);
+                controller.bet([estimations[1], 1]);
             } else {
-                objection();
+                controller.objection();
             }
             return;
         }

@@ -5,7 +5,7 @@ class IA_GameController {
 
         this.gameInProgress = false;
 
-        this.currentRound = 0;
+        this.currentRound = 1;
         this.currentManche = 1;
 
         this.playerList = [];
@@ -27,8 +27,8 @@ class IA_GameController {
 
     init() {
         this.gameInProgress = true;
-        this.currentRound = 0;
-        this.currentManche = 0;
+        this.currentRound = 1;
+        this.currentManche = 1;
         this.specialManche = false;
         this.allDices = [];
         this.currentBet = [0,2];
@@ -50,7 +50,7 @@ class IA_GameController {
             name: playerName,
             diceNb: 5,
             dices: [],
-            bet: []
+            bet: [],
         });
     }
 
@@ -169,7 +169,7 @@ class IA_GameController {
 
             this.currentManche++;
             this.betList = [];
-            this.currentRound = 0;
+            this.currentRound = 1;
             this.rollDices();
         }else{
             console.log("le gagnant est :" + win);
@@ -214,8 +214,10 @@ class IA_GameController {
         return dataOtherPlayer;
     }
 
-    dataSet() {
+    
 
+    dataSet() {
+        
         this.minNumber = this.currentBet[0];
         this.minPaco = this.currentBet[0];
 
@@ -247,6 +249,8 @@ class IA_GameController {
             TotaDices : this.allDices.length,
             IsSpecialManche : this.specialManche
         };
+
+        
     }
 
     
