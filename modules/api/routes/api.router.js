@@ -109,6 +109,7 @@ module.exports = function(io) {
     function VerifPlayerPlayInTime(controller, manche, round){
       if(manche === controller.currentManche, round === controller.currentRound){
         poolsController.defaultAction(controller);
+        controller.playerList[controller.currentPlayer].socket.emit('PlayerTurn', controller.dataCurrentPlayer);
       }
        
     }
