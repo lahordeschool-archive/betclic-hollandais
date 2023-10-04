@@ -19,4 +19,54 @@ head
   button.btn(id="saveBtn")  SAVE 
 .output
 .server-list
+.container.box-infos
+  .row
+    h1 R&egrave;gles du jeu de Perudo
+  .row.regle
+    p
+      | Le Perudo est un jeu de d&eacute;s, de bluff et de strat&eacute;gie o&ugrave; chaque joueur doit soit surench&eacute;rir sur le pari pr&eacute;c&eacute;dent soit contester ce pari.
+  .row
+    h2 Fonctions disponibles pour l&apos;IA :
+    ul
+      li
+        | window.bet(newbet) : Cette fonction permet &agrave; l&apos;IA de placer un pari. &grave;newbet&grave; est un tableau constitu&eacute; de deux &eacute;l&eacute;ments: &grave;[nombre de d&eacute;s, valeur du d&eacute;]&grave;. La fonction retourne &grave;true&grave; si le pari est valide et envoy&eacute;, sinon elle renvoie &grave;false&grave;.
+      li
+        | window.objection() : Cette fonction permet &agrave; l&apos;IA de contester un pari pr&eacute;c&eacute;dent. Elle renvoie &grave;true&grave; si la contestation est valide et envoy&eacute;e, sinon elle renvoie &grave;false&grave;.
+    p
+      | Si l&apos;une de ces fonctions renvoie &grave;false&grave;, cela signifie que l&apos;action tent&eacute;e par l&apos;IA n&apos;&eacute;tait pas valide. Apr&egrave;s 5 tentatives invalides, une action par d&eacute;faut sera ex&eacute;cut&eacute;e pour l&apos;IA.
+  .row
+    h2 Donn&eacute;es disponibles pour l&apos;IA :
+    ul
+      li  playerList : Liste des joueurs. 
+      li  actualManche : Num&eacute;ro de la manche actuelle. 
+      li  actualRound : Num&eacute;ro du round actuel.
+      li  actualBet : Pari actuel.
+      li  actualtotalDices : Nombre total de d&eacute;s en jeu.
+      li  actualPlayerIndex : Index du joueur actuel.
+      li  playerDices : D&eacute;s du joueur.
+      li  isSpecialManche : Un bool&eacute;en indiquant si la manche est sp&eacute;ciale.
+  .row
+    h2
+      | R&egrave;gles du jeu :
+    ol
+      li
+        | En d&eacute;but de partie, un joueur ne peut pas contester. Cela se produit lorsque &grave;actualBet&grave; est &grave;[0,1]&grave; ou &grave;[0,2]&grave;.
+      li Un joueur ne peut pas commencer une manche avec un pari au paco.
+      li
+        | Un joueur doit soit surench&eacute;rir sur le pari pr&eacute;c&eacute;dent, soit passer ou quitter les pacos, soit contester le pari pr&eacute;c&eacute;dent.
+      li
+        | Si un pari est contest&eacute;, le joueur qui a contest&eacute; perd un d&eacute; si le pari est valid&eacute;. Sinon, le joueur pr&eacute;c&eacute;dent perd un d&eacute;.
+      li
+        | Le joueur qui a perdu un d&eacute; lors de la manche pr&eacute;c&eacute;dente d&eacute;bute la nouvelle manche, sauf s&apos;il n&apos;a plus de d&eacute;s.
+      li
+        | Le passage au paco demande de prendre l&apos;entier sup&eacute;rieur de la division par 2 au nombre de d&eacute;s parier pr&eacute;c&eacute;demment comme minimum au nombre de pacos qui peut &ecirc;tre pari&eacute;.
+      li
+        | La sortie du paco demande de prendre la multiplication par 2 puis l&apos;ajout de 1 au nombre de d&eacute;s pari&eacute; pr&eacute;c&eacute;demment comme minimum au nombre de d&eacute;s qui peut &ecirc;tre pari&eacute; dans la valeur choisi en dehors du paco.
+      li Les pacos sont consid&eacute;r&eacute;s comme des bonus lors de la v&eacute;rification des paris.
+      li
+        | Les manches sp&eacute;ciales d&eacute;butent lorsqu&apos;un joueur tombe &agrave; un seul d&eacute;. Durant ces manches, les pacos ne sont pas compt&eacute;s comme bonus et un joueur peut commencer son pari avec des pacos.
+      li Le dernier joueur ayant encore des d&eacute;s est le gagnant.
+      li &Agrave; chaque nouvelle manche, tous les d&eacute;s sont relanc&eacute;s.
+    p
+      | Le jeu n&eacute;cessite une combinaison de strat&eacute;gie, d&apos;observation et de bluff. L&apos;IA doit d&eacute;cider quand surench&eacute;rir ou quand contester tout en essayant d&apos;anticiper les mouvements de ses adversaires.
 
