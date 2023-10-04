@@ -2,13 +2,11 @@ extends ../../_common/views/layout-offline
 
 block content
     .row.align-items-center.g-lg-5.py-5(style="min-height: 65vh;")
-        .col-3
-
-        .col-3.text-center.text-lg-start
+        .col-sm-6.col-12.text-center.text-lg-start
             h1.display-4.fw-bold.lh-1.text-body-emphasis.mb-3 Login
             p.col-lg-10.fs-4 Hey oh matelot. Merci de t'identifier avant de rejoindre le jeu.
             p.col-lg-10.fs-4 Good luck out there.
-        .col-3.mx-auto
+        .col-sm-6.col-12.mx-auto
             form.p-4.p-md-5.border.rounded-3.bg-body-tertiary(action="/login", method="post")
                 .form-floating.mb-3
                     .form-row
@@ -23,5 +21,4 @@ block content
                             button.btn.btn-primary(type="submit") Login
                             a(href="/login/register") Créer un compte
 
-        .col-2
 

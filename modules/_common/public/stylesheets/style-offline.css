@@ -21,7 +21,10 @@ body {
   color: #000 !important;
 }
 .bg-dark {
-  background-color: var(--background-box-color) !important;
+  background-image: url('../images/flying_dutch.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center!important;
 }
 .bg-white{
   background: #000 !important;
@@ -35,6 +38,19 @@ body {
   background: var(--background-box-color) !important;
 
 }
+
+body.bg-image {
+  background-image: url('../images/flying_dutch.jpg');
+  background-size: auto;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+.row{
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
 .btn-primary{
   background-color: #5F2EEA !important;
   border-color: #5F2EEA !important;

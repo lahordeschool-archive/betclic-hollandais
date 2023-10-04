@@ -13,26 +13,23 @@ html(data-bs-theme="dark")
    
     link(rel="icon", type="image/png", href="/images/favicon.png")
     meta(name="viewport")
-  body(class="bg-dark ")
-    div
-      nav(class="navbar navbar-expand-lg navbar-dark bg-dark-custom sticky-top")
-        .container-fluid.margin-auto(style="max-width: 71.25rem;")
-          a.navbar-brand(href="/") 
-            img(src="../images/logo_betclic_2019.png", alt="La Horde", style="width: 8rem; height: 3rem; color: var(--primary-color);")
+  body(class="bg-image")
+  div
+    nav(class="navbar navbar-expand-lg navbar-dark sticky-top")
+      .container-fluid.margin-auto(style="max-width: 71.25rem;")
+        a.navbar-brand(href="/") 
+          img(src="../images/logo_betclic_2019.png", alt="Betclic", style="width: 8rem; height: 3rem; color: var(--primary-color);")
 
-      .row.flex-nowrap
-        .col.bg-dark-custom-body
-          .row(style="padding: 15px; padding-right: 0px;")
-            block content
-    footer.footer.bg-dark-custom.py-5-----------------------
-      .container-fluid
-        .row.justify-content-center
-          .col-lg-8.text-center
-            .mb-4
-              a.navbar-brand(href='#' style="text-decoration: none; color: #fff;") 
-                span &nbsp; Betclic Hollandais by 
-                img(src="../images/lahorde.png", alt="La Horde", style="width: 8rem; height: 2rem; color: var(--primary-color);")
-                  
-            p.mt-4.mb-0 © 2023 La Horde. All Rights Reserved.
+    .row.flex-nowrap
+      block content
+    .container-fluid
+      .row.justify-content-center
+        .col-lg-8.text-center
+          .mb-4
+            a.navbar-brand(href='#' style="text-decoration: none; color: #fff;") 
+              span &nbsp; Betclic Hollandais by 
+              img(src="../images/lahorde.png", alt="La Horde", style="width: 8rem; height: 2rem; color: var(--primary-color);")
+                
+          p.mt-4.mb-0 © 2023 La Horde. All Rights Reserved.
 
-    script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js', crossorigin='anonymous', referrerpolicy='no-referrer')
+script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js', crossorigin='anonymous')
