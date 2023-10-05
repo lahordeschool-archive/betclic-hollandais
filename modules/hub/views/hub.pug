@@ -1,22 +1,31 @@
-doctype html
-html(lang="en")
-    head
-        meta(charset="utf-8")
-        title Perudo
-        link(rel='shortcut icon' href='#')
-        link(rel='stylesheet', href='/stylesheets/hub.css', type="text/css")
-        script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js")
-        link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
-        script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js")
-        style.
-            body { margin: 0; }
-        script(type="importmap").
-            {
-                "imports": {
-                    "three": "https://unpkg.com/three@0.155.0/build/three.module.js",
-                    "three/addons/": "https://unpkg.com/three@0.155.0/examples/jsm/"
-                }
+extends ../../_common/views/layout-hub
+
+block content
+
+    link(rel='stylesheet', href='/stylesheets/hub.css', type="text/css")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js")
+    style.
+        body { margin: 0; }
+    script(type="importmap").
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.155.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.155.0/examples/jsm/"
             }
-        script(src="/scripts/hub-client.js")
-    body
-        .server-list
+        }
+    script(src="/scripts/hub-client.js")
+    .row(style="margin-top: 0px; min-height: 600px;")
+        .col-2
+        .col-4(style="margin: auto;")
+            .server-list
+        .col-5.text-center.text-lg-start(style="margin-top: 0px; padding-top: 20px;")
+            .row
+                .col-12(style="margin: auto;")
+                    .row 
+                        .col-6
+                            p#hubMessage.animate__animated.animate__flash.animate__infinite(style="font-weight: bold; float: right;")
+                                | 🁢
+                        .col-6
+                            img.shadowed(src="/images/parrot.png" style="float: right;")

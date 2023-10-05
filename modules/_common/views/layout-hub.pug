@@ -16,24 +16,16 @@ html(data-bs-theme="dark")
   body(class="bg-image")
     audio(src="/sounds/click.mp3", preload="auto", id="audioClick")
     div
-      nav(class="navbar navbar-expand-lg navbar-dark sticky-top")
+      nav(class="navbar navbar-expand-lg navbar-dark sticky-top" style="background: #EDE4D0;")
         .container-fluid.margin-auto(style="max-width: 71.25rem;")
           a.navbar-brand(href="/" style="margin: auto;")
-            img(src="../images/logo_betclic_2019.png", alt="Betclic", style="width: 8rem; height: 3rem; color: var(--primary-color);")
+            img(src="../images/logo_betclic_2019.png", alt="Betclic", style="float: left; width: 8rem; height: 3rem; color: var(--primary-color);")
+            h1(style="font-family:  cursive; float: left; margin-left: 20px;") 
+                | Hollandais Violent 
+                img(src="/images/wheel.png" style="width: 30px; height: 30px; margin-left: 10px; margin-top: -5px;")
 
-      .row.flex-nowrap
+      .row.flex-nowrap(style="padding-top: 50px;")
         block content
-      .container-fluid.mt-5(style="position: fixed; bottom: 0; width: 100%;")
-        .row.justify-content-center
-          .col-lg-4.text-center
-            .mb-4
-              a.navbar-brand(href='#' style="text-decoration: none; color: #fff;") 
-                span(style="font-family: cursive; ") &nbsp; Hollandais Violent by 
-                img(src="../images/lahorde.png", alt="La Horde", style="width: 8rem; height: 2rem; color: var(--primary-color);")
-                  
-            p.mt-4.mb-0 © 2023 La Horde. All Rights Reserved.
-          .col-4.text-center 
-            img(src="../images/logo_betclic_2019.png", alt="Betclic", style="width: 8rem; height: 3rem; color: var(--primary-color);")
 
 script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js', crossorigin='anonymous')    
 script(src="/scripts/textAnimate.js")

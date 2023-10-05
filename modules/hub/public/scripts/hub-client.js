@@ -4,9 +4,15 @@ var socket;
 $(document).ready(async function(){
 
 
+    $.get("/api/parrot/hub", function(data) {
+        animateTypingText("#hubMessage", data);
+    });
+
+
     var clientName = "";
 
     const serveurAdress = getServeurSession();
+
 
     function SetServeurSession(){
         let storedData = JSON.parse(localStorage.getItem('SessionServerAdress'));
@@ -88,6 +94,10 @@ $(document).ready(async function(){
 
     function updateServerList(servers) {
         const serverListContainer = document.querySelector('.server-list');
+
+
+        var iconsList = ["🏴‍☠️", "🦑", "🐚", "🦴", "🍺", "🎲", "🪕", "⚓️"]
+
         serverListContainer.innerHTML = ''; // Videz le contenu actuel
         console.log(servers);
         servers.forEach((server, key) => {
@@ -96,27 +106,45 @@ $(document).ready(async function(){
             serverDiv.classList.add('server');
     
             const serverName = document.createElement('h2');
-            serverName.textContent = key;
+
+            serverName.textContent = iconsList[Math.floor(Math.random() * iconsList.length)]+" Table de jeu : "+ key;
             serverDiv.appendChild(serverName);
     
             const playerCount = document.createElement('p');
-            playerCount.textContent = `Players: ${server.nbPlayers}`;
+            playerCount.textContent = `Joueurs connectés : ${server.nbPlayers}`;
+    
+            const gameStatus = document.createElement('span');
+            gameStatus.textContent = `État de le partie : ${server.gameInProgress ? "En cours" : "⏱ En attente"}`;
+            playerCount.appendChild(document.createElement('br'));
+            playerCount.appendChild(gameStatus);
             serverDiv.appendChild(playerCount);
     
-            const gameStatus = document.createElement('p');
-            gameStatus.textContent = `Game Status: ${server.gameInProgress ? "In Progress" : "Not Started"}`;
-            serverDiv.appendChild(gameStatus);
-    
             if (!server.gameInProgress) {
+
+                const connectButtonIa = document.createElement('button');
+                connectButtonIa.classList.add('btn');
+                connectButtonIa.classList.add('btn-primary');
+                connectButtonIa.textContent = '⚔️ Rejoindre en mode IA';
+                
+                // Attacher un écouteur d'événements au bouton
+                connectButtonIa.addEventListener('click', function() {
+                    handleServerConnectIA(key);
+                });
+                
+                serverDiv.appendChild(connectButtonIa);
+
+
                 const connectButton = document.createElement('button');
-                connectButton.classList.add('connect-button');
-                connectButton.textContent = 'Connect';
+                connectButton.classList.add('btn');
+                connectButton.classList.add('btn-secondary');
+                connectButton.textContent = '⌨️ Entrainement';
                 
                 // Attacher un écouteur d'événements au bouton
                 connectButton.addEventListener('click', function() {
                     handleServerConnect(key);
                 });
                 
+                serverDiv.appendChild(document.createElement('br'));
                 serverDiv.appendChild(connectButton);
             }
     
@@ -127,6 +155,12 @@ $(document).ready(async function(){
             console.log(`L'utilisateur a cliqué sur le bouton de connexion pour le serveur: ${key}`);
             SetServeurSession(key);
             redirectTo('/game-multi');
+        }
+
+        function handleServerConnectIA(key) {
+            console.log(`L'utilisateur a cliqué sur le bouton de connexion pour le serveur avec IA: ${key}`);
+            SetServeurSession(key);
+            redirectTo('/game-ia');
         }
     }
     

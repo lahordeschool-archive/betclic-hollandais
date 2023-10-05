@@ -10,9 +10,19 @@ body {
 }
 
 .server {
-    border: 1px solid #ccc;
+    background-color: #fff;
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 10px;
+}
+.server h2 {
+    font-family: cursive;
+}
+.server button{
+    width: 100%;
+}
+
+.server > button{
+    margin-bottom: 10px;
 }
 
 .connect-button {
