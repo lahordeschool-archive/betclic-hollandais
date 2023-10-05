@@ -5,14 +5,14 @@ $(document).ready(async function(){
     editor = ace.edit("editor");
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/javascript");
-    const saveBtn = document.getElementById("saveBtn")
+    const saveBtn = $(".saveBtn")
 
     var clientName = "";
     const serveurAdress = getServeurSession();
 
     DisplayCode();
 
-    saveBtn.addEventListener('click', () =>{
+    saveBtn.on('click', function(){
         saveCode();
     });
 

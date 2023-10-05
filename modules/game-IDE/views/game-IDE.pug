@@ -16,7 +16,7 @@ block content
                             | 🁢
                         br
                         p(style="width: 100%; float: left;")
-                            a(href="/game-ide/instructions" target="_blank" class="btn btn-secondary") 📜 Instructions
+                            a(href="/game-ide/instructions" target="_blank" class="btn btn-secondary") 📜 Règles du jeu
                 .row
                     .col-12
                         button.btn.btn-primary.saveBtn(style="float: right; margin-bottom: 10px;")  💾 Enregistrer l'IA 
@@ -27,25 +27,48 @@ block content
                         button.btn.btn-primary.saveBtn(style="float: right; margin-top: 10px; margin-bottom: 50px;")  💾 Enregistrer l'IA 
         .row(style="margin-top: 10px;")
             .col-8(style="margin: auto; padding: 40px; background: #fff; border-radius: 10px;")
-                h4 Fonctions disponibles pour l&apos;IA :
-                ul
-                li
-                    | window.bet(newbet) : Cette fonction permet &agrave; l&apos;IA de placer un pari. &grave;newbet&grave; est un tableau constitu&eacute; de deux &eacute;l&eacute;ments: &grave;[nombre de d&eacute;s, valeur du d&eacute;]&grave;. La fonction retourne &grave;true&grave; si le pari est valide et envoy&eacute;, sinon elle renvoie &grave;false&grave;.
-                li
-                    | window.objection() : Cette fonction permet &agrave; l&apos;IA de contester un pari pr&eacute;c&eacute;dent. Elle renvoie &grave;true&grave; si la contestation est valide et envoy&eacute;e, sinon elle renvoie &grave;false&grave;.
+                h4 Fonctions disponibles pour l'IA :
+                br
+                p Votre IA va être appelée à chaque tour de jeu, lorsque c'est à vous de jouer. Elle doit, à la fin de sa réflexion, effectuer l'une des deux actions suivantes :
+                ul(style="margin-top: 0px;")
+                    li
+                        b window.bet(newbet) 
+                        | : Cette fonction permet à l'IA de placer un pari. "newbet" est paramètre que vous devrez transmettre. Ce paramètre doit être sous la forme d'un tableau constitué de deux éléments: "[nombre de dés, valeur du dé]". La fonction retourne "true" si le pari envoyé est valide et bien pris en compte par le serveur, sinon elle renvoie "false".
+                    li
+                        b window.objection() 
+                        | : Cette fonction permet à l'IA de contester un pari précédent. C'est le fameux "Dudo". Elle renvoie "true" si la contestation est envoyée est valide (faite au bon moment du jeu) et prise en compte par le serveur, sinon elle renvoie "false".
                 p
-                | Si l&apos;une de ces fonctions renvoie &grave;false&grave;, cela signifie que l&apos;action tent&eacute;e par l&apos;IA n&apos;&eacute;tait pas valide. Apr&egrave;s 5 tentatives invalides, une action par d&eacute;faut sera ex&eacute;cut&eacute;e pour l&apos;IA.
+                | Si l'une de ces deux fonctions retourne "false", cela signifie que l'action tentée par votre IA n'est pas valide. Après 5 tentatives invalides, une action par défaut sera exécutée à la place, pour le ne pas bloquer le jeu indéfiniement.
                 
-                h4(style="margin-top: 20px;") Donn&eacute;es disponibles pour l&apos;IA :
+                h4(style="margin-top: 20px;") Données disponibles pour l'IA :
+                p Vous avez accès à plusieurs variables qui vous permettront de prendre votre décision. Ces variables sont accessibles via le paramètre "data" reçu. Voici la liste des données disponibles :
                 ul
-                li  playerList : Liste des joueurs. 
-                li  actualManche : Num&eacute;ro de la manche actuelle. 
-                li  actualRound : Num&eacute;ro du round actuel.
-                li  actualBet : Pari actuel.
-                li  actualtotalDices : Nombre total de d&eacute;s en jeu.
-                li  actualPlayerIndex : Index du joueur actuel.
-                li  playerDices : D&eacute;s du joueur.
-                li  isSpecialManche : Un bool&eacute;en indiquant si c'est la manche sp&eacute;ciale.
+                    li  
+                        b playerList 
+                        | : Liste des joueurs. 
+                    li    
+                        b actualManche 
+                        | : Numéro de la manche actuelle. 
+                    li    
+                        b actualRound 
+                        | : Numéro du round actuel.
+                    li    
+                        b actualBet 
+                        | : Pari actuel.
+                    li    
+                        b actualtotalDices 
+                        | : Nombre total de dés en jeu.
+                    li    
+                        b actualPlayerIndex 
+                        | : Index du joueur actuel.
+                    li    
+                        b playerDices 
+                        | : Dés du joueur.
+                    li    
+                        b isSpecialManche 
+                        | : Un booléen indiquant si c'est la manche spéciale.
+                p Vous pouvez sauvegarder vos données en localStorage par exemple pour les réutiliser plus tard. À vous d'être créatif et d'imaginer la meilleure stratégie pour battre les autres joueurs... humains et IA !    
+                
         .row 
             br
     
