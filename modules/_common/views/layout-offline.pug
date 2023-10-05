@@ -14,24 +14,27 @@ html(data-bs-theme="dark")
     link(rel="icon", type="image/png", href="/images/favicon.png")
     meta(name="viewport")
   body(class="bg-image")
-  div
-    nav(class="navbar navbar-expand-lg navbar-dark sticky-top")
-      .container-fluid.margin-auto(style="max-width: 71.25rem;")
-        a.navbar-brand(href="/" style="margin: auto;")
-          img(src="../images/logo_betclic_2019.png", alt="Betclic", style="width: 8rem; height: 3rem; color: var(--primary-color);")
+    audio(src="/sounds/click.mp3", preload="auto", id="audioClick")
+    div
+      nav(class="navbar navbar-expand-lg navbar-dark sticky-top")
+        .container-fluid.margin-auto(style="max-width: 71.25rem;")
+          a.navbar-brand(href="/" style="margin: auto;")
+            img(src="../images/logo_betclic_2019.png", alt="Betclic", style="width: 8rem; height: 3rem; color: var(--primary-color);")
 
-    .row.flex-nowrap
-      block content
-    .container-fluid.mt-5(style="position: fixed; bottom: 0; width: 100%;")
-      .row.justify-content-center
-        .col-lg-4.text-center
-          .mb-4
-            a.navbar-brand(href='#' style="text-decoration: none; color: #fff;") 
-              span &nbsp; Betclic Hollandais by 
-              img(src="../images/lahorde.png", alt="La Horde", style="width: 8rem; height: 2rem; color: var(--primary-color);")
-                
-          p.mt-4.mb-0 © 2023 La Horde. All Rights Reserved.
-        .col-4.text-center 
-          img(src="../images/logo_betclic_2019.png", alt="Betclic", style="width: 8rem; height: 3rem; color: var(--primary-color);")
+      .row.flex-nowrap
+        block content
+      .container-fluid.mt-5(style="position: fixed; bottom: 0; width: 100%;")
+        .row.justify-content-center
+          .col-lg-4.text-center
+            .mb-4
+              a.navbar-brand(href='#' style="text-decoration: none; color: #fff;") 
+                span &nbsp; Betclic Hollandais by 
+                img(src="../images/lahorde.png", alt="La Horde", style="width: 8rem; height: 2rem; color: var(--primary-color);")
+                  
+            p.mt-4.mb-0 © 2023 La Horde. All Rights Reserved.
+          .col-4.text-center 
+            img(src="../images/logo_betclic_2019.png", alt="Betclic", style="width: 8rem; height: 3rem; color: var(--primary-color);")
 
-script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js', crossorigin='anonymous')
+script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js', crossorigin='anonymous')    
+script(src="/scripts/common.js")
+script(src="/scripts/textAnimate.js")

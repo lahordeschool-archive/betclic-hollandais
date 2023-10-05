@@ -13,6 +13,7 @@ html(data-bs-theme="dark")
     script(src="/scripts/jquery.dataTables.min.js")
     link(rel="icon", type="image/png", href="/images/favicon.png")
   body(class="bg-dark text-white")
+    audio(src="/sounds/click.mp3", preload="auto", id="audioClick")
     .container-fluid
       .row.flex-nowrap(style="height: 100vh;")
         .col-auto.col-md-1.col-xl-1.col-xxl-1.px-sm-2.px-0.bg-dark-custom(style="max-width: 56px; padding: 0px !important;")
@@ -43,7 +44,8 @@ html(data-bs-theme="dark")
                 i.bi.bi-box-arrow-right
                 span Logout
     script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js', crossorigin='anonymous', referrerpolicy='no-referrer')
-    script(src="/scripts/textAnimate.js")
+    script(src="/scripts/textAnimate.js")    
+    script(src="/scripts/common.js")
     script.
       const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
       const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))

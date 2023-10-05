@@ -59,3 +59,8 @@ body.bg-image {
   font-family: 'Treasure Map Dead Hand';
   src: url('stylesheets/fonts/Treamd.ttf') format('ttf'), /* Add other formats as needed */
 }
+
+.shadowed {
+  -webkit-filter: drop-shadow(5px 5px 5px #222222);
+  filter: drop-shadow(5px 5px 5px #222222);
+}
