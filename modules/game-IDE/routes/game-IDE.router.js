@@ -17,6 +17,15 @@ module.exports = function (io) {
     }
   });
 
+    /* GET game page. */
+    router.get("/instructions", (req, res) => {
+      if (req.isAuthenticated()) {
+        res.render("../views/instructions");
+      } else {
+        res.redirect("/login");
+      }
+    });
+
   router.get("/logout", disconnect);
 
   return router;

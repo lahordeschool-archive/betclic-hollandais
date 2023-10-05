@@ -1,0 +1,74 @@
+extends ../../_common/views/layout-hub
+
+block content
+
+    link(rel='stylesheet', href='/stylesheets/hub.css', type="text/css")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.1.3/socket.io.js")
+    link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js")
+    style.
+        body { margin: 0; }
+    script(type="importmap").
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.155.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.155.0/examples/jsm/"
+            }
+        }
+    script(src="/scripts/hub-client.js")
+    .container-fluid
+        .row(style="margin-top: 0px;")
+            .col-7(style="margin: auto;")
+                a(href="/hub" style="float: right; margin-bottom: 10px;") ⬅️ Retour au hub
+        .row(style="margin-top: 0px;")
+            .col-7(style="margin: auto; padding: 40px; background: #fff; border-radius: 10px;")
+                img(src="/images/treasure-skull.png" style="float: left;  height: 100px; margin-right: 10px;")
+                p#instructionsMessage.animate__animated.animate__flash.animate__infinite(style="font-weight: bold; float: left; max-width: 80%")
+                    | 🁢
+        .row(style="margin-top: 20px;")
+            .col-7(style="margin: auto; padding: 40px; background: #fff; border-radius: 10px;")
+                h2 Règles du jeu du Perudo
+                br
+                h4 But du jeu :
+                p
+                    Le Perudo est un jeu de dés et de bluff. Le but est de parier sur le nombre total de dés affichant une certaine face, en comptant les dés de tous les joueurs. Vous devez soit augmenter la mise, soit contester celle de l'adversaire précédent. Le perdant d'un tour perd un dé pour le prochain tour. Le gagnant est le dernier joueur ayant au moins un dé.
+                h4 Préparation :
+                p
+                | - Chaque joueur commence avec 5 dés.
+                br
+                | - Les dés sont lancés en secret, cachés sous un gobelet ou une main.
+                p
+                h4 Déroulement d'un tour :
+                ol
+                    li
+                        b Première mise:
+                        |  Le premier joueur (celui qui commence change à chaque tour) fait une mise en déclarant un nombre et une face de dé (par exemple, "trois 4"). Cela signifie qu'il pense qu'il y a au total (en comptant les dés de tous les joueurs) au moins trois dés affichant un 4.
+                    li
+                        b Mises suivantes:
+                        |  En tournant dans le sens des aiguilles d'une montre, chaque joueur peut :
+                        ul
+                            li Augmenter la mise en augmentant soit le nombre de dés, soit la valeur de la face, ou les deux.
+                            li Contester la mise précédente en déclarant "Dudo" (ce qui signifie "je doute" en espagnol).
+                    li
+                        b Règle du 1 :
+                        |  Le "1" est un joker. Il peut représenter n'importe quelle face de dé. Lorsqu'un joueur parie sur le nombre de "1", la mise suivante peut être sur un nombre supérieur de "1" ou le double d'un autre nombre (par exemple, après "trois 1", on peut dire "quatre 1" ou "six 2").
+                    li
+                        b Fin du tour:
+                        |  Si un joueur conteste en disant "Dudo", tous les dés sont révélés.
+                        ul
+                            li Si la mise est correcte ou sous-estimée (il y a autant ou plus de dés correspondants que la mise), le contestataire perd un dé.
+                            li Si la mise est surestimée (il y a moins de dés correspondants que la mise), le joueur qui a fait la mise perd un dé.
+                h4 Fin du jeu :
+                p
+                    Quand un joueur perd tous ses dés, il est éliminé du jeu. Le jeu se termine lorsque tous les joueurs sauf un ont été éliminés. Le dernier joueur restant est le gagnant.
+                h4 Conseil :
+                p
+                    | Bluffer est une partie essentielle du Perudo ! Vous n'avez pas toujours besoin de dire la vérité sur votre mise; le but est de tromper vos adversaires.
+    script. 
+        $(document).ready(async function(){
+
+
+        $.get("/api/parrot/instructions", function(data) {
+            animateTypingText("#instructionsMessage", data);
+        });
+        });
