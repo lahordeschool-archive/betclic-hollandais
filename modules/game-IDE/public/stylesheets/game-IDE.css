@@ -1,7 +1,7 @@
 *{margin: 0;}
 
 .header {
-    background: #57a958;
+    background: #d30e18;
     text-align: left;
     font-size: 20px;
     font-weight: bold;
@@ -30,35 +30,59 @@
 }
 
 .btn {
-    background: #57a958;
+    background: #d30e18;
     color: white;
     padding: 8px;
     border: 0;
 }
 
 .output {
-        padding: 4px;
-        border: 2px solid gray;
-        min-height: 100px;
-        width: 99%;
-        resize: none;
-
+    padding: 4px;
+    min-height: 100px;
+    width: 100%;
+    background-color: hsla(0, 0%, 0%, 0.5);
+    margin-bottom: 25px;
+    color: white;
 }
 
 .server-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: block; 
+    overflow: hidden;
+    text-align: center;
+    width: 80%;
+    margin: auto;
 }
 
 .server {
-    border: 1px solid #ccc;
-    padding: 10px;
     border-radius: 5px;
+    background-color: hsla(0, 0%, 41%, 0.35);
+    color: white;
+    width: 47.5%;
+    float: left;
+    margin: 10px 1.25%;
+}
+
+.server h2{
+    color: #d30e18;
+    margin: 10px 0;
+    font-weight: 700;
+    font-size: 2em;
+}
+
+.server button{
+    margin: 10px 0;
+}
+
+.servertitle{
+    text-align: center;
+    font-weight: 700;
+    font-size: 32px;
+    color: #d30e18;
+    margin: 15px 0;
 }
 
 .connect-button {
-    background-color: #4CAF50; /* Green */
+    background-color: #d30e18; /* Green */
     border: none;
     color: white;
     padding: 15px 32px;
@@ -70,8 +94,14 @@
     cursor: pointer;
     border-radius: 5px;
 }
+
+.connect-button:hover {
+    background-color: #a80c14; /* Green */
+}
+
 body{
-    background:  url('../Asset/bg-perudo.jpg');*
+    background-image:  url('../Asset/bg-perudo.jpg');
+    background-attachment: fixed;
     margin:auto;
     
 }
@@ -79,7 +109,7 @@ body{
 .box-infos{
    margin-top: 3em;
    padding: 3em;
-   background-color: hsla(60, 18%, 97%, 0.75);
+   background-color: hsla(60, 18%, 97%, 0.35);
    border-radius: 20px;
 }
 
@@ -102,4 +132,62 @@ h2{
     text-align: center;
     font-weight: 700;
     
+}
+
+.regletitle h1{
+    padding-top: 25px;
+    padding-bottom: 25px;
+    font-weight: 700;
+}
+
+.regleresume{
+    margin: auto;
+    font-size: 1.5em;
+    text-align: center;
+    font-weight: 700;
+}
+
+.regleresume p{
+    margin-top: 25px;
+    margin-bottom:50px;
+}
+
+.reglefonction{
+
+}
+
+.reglefonction li{
+    margin: 10px 0;
+}
+
+.reglefonction h2{
+    margin-bottom: 25px;
+    font-weight: 700;
+}
+
+
+.regledonnee{
+
+}
+
+.regledonnee li{
+    margin: 10px 0;
+}
+
+.regledonnee h2{
+    margin: 25px 0;
+    font-weight: 700;
+}
+
+.reglejeu{
+
+}
+
+.reglejeu h2{
+    margin: 25px 0;
+    font-weight: 700;
+}
+
+.reglejeu li{
+    margin: 10px 0;
 }
