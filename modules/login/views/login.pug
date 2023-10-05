@@ -1,24 +1,23 @@
 extends ../../_common/views/layout-offline
 
 block content
-    .row.align-items-center.g-lg-5.py-5(style="min-height: 65vh;")
-        .col-sm-6.col-12.text-center.text-lg-start
-            h1.display-4.fw-bold.lh-1.text-body-emphasis.mb-3 Login
-            p.col-lg-10.fs-4 Hey oh matelot. Merci de t'identifier avant de rejoindre le jeu.
-            p.col-lg-10.fs-4 Good luck out there.
+    .row.align-items-center.g-3.py-5(style="min-height: 65vh;padding: 0 5%;")
+        .col-sm-6.col-12.text-center
+            h1.text-center.display-4.fw-bold.lh-1.text-body-emphasis.mb-3 Login
+            p.fs-4 Hey oh matelot. Merci de t'identifier avant de rejoindre le jeu.
+            p.fs-4 Et bon pillage marin d'eaux douces
         .col-sm-6.col-12.mx-auto
-            form.p-4.p-md-5.border.rounded-3.bg-body-tertiary(action="/login", method="post")
+            form.p-2.p-md-3.p-lg-4.border.rounded-3.bg-body-tertiary(action="/login", method="post",style="background-color:#ffffff40")
                 .form-floating.mb-3
                     .form-row
-                        .col-md-6.mb-3
-                            label(for="floatingInput") Email
-                            input#floatingInput(type="email", placeholder="email", name="email", required)
-                        .col-md-6.mb-3
-                            label(for="floatingPassword") Mot de passe
-                            input#floatingPassword(type="password", placeholder="password", name="password", required)
-                    .row 
-                        .col-12
-                            button.btn.btn-primary(type="submit") Login
-                            a(href="/login/register") Créer un compte
+                        .row.mb-4.mt-3
+                            label.col-12.offset-md-1.col-md-5(for="floatingInput") Email
+                            input.col-12.col-md-5#floatingInput(type="email", placeholder="email", name="email", required)
+                        .row.mb-3
+                            label.col-12.offset-md-1.col-md-5(for="floatingPassword") Mot de passe
+                            input.col-12.col-md-5#floatingPassword(type="password", placeholder="password", name="password", required)
+                    .row.mt-5
+                        button.col-12.offset-0.col-md-10.offset-md-1.btn.btn-primary(type="submit") Login
+                        a.mt-4(href="/login/register",style="text-align: center;margin-top:10px;color: black;font-weight: 700;") Créer un compte
 
 

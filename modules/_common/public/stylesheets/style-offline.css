@@ -52,12 +52,17 @@ body.bg-image {
 }
 
 .btn-primary{
-  background-color: #5F2EEA !important;
-  border-color: #5F2EEA !important;
+  background-color: #d30e18 !important;
+  border-color: #d30e18 !important;
 }
+.btn-primary:hover{
+  background-color: #a80c14 !important;
+  border-color: #a80c14 !important;
+}
+
 .rainbow-text-loop {
   -webkit-animation: rainbow 5s; 
-  color: #5F2EEA;
+  color: #a30c13;
 }
 @keyframes rainbow{
   0%{color: #fff;}
