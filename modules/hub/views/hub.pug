@@ -16,16 +16,30 @@ block content
             }
         }
     script(src="/scripts/hub-client.js")
-    .row(style="margin-top: 0px; min-height: 600px;")
-        .col-2
-        .col-4(style="margin: auto;")
-            .server-list
-        .col-5.text-center.text-lg-start(style="margin-top: 0px; padding-top: 20px;")
-            .row
-                .col-12(style="margin: auto;")
-                    .row 
-                        .col-6
-                            p#hubMessage.animate__animated.animate__flash.animate__infinite(style="font-weight: bold; float: right;")
+    .container-fluid
+        .row(style="margin-top: 0px;")
+            .col-7(style="margin: auto;")
+                .row
+                    .card(style="border-radius: 10px; ")
+                        .card-body 
+                            img(src="/images/treasure-skull.png" style="float: left;  height: 100px; margin-right: 10px;")
+                            p#skullMessage.animate__animated.animate__flash.animate__infinite(style="font-weight: bold; float: left; min-height: 100px; max-width: 80%")
                                 | 🁢
-                        .col-6
-                            img.shadowed(src="/images/parrot.png" style="float: right;")
+                            br
+                            p(style="width: 100%; float: left;")
+                                a(href="/instructions" class="btn btn-success") ⚙️ IDE = fais ton IA
+                                | &nbsp;
+                                a(href="/instructions" class="btn btn-secondary") 📜 Instructions
+        .row(style="margin-top: 10px; min-height: 600px;")
+            .col-2
+            .col-4(style="margin: auto;")
+                .server-list
+            .col-5.text-center.text-lg-start(style="margin-top: 0px; padding-top: 20px;")
+                .row
+                    .col-12(style="margin: auto;")
+                        .row 
+                            .col-6
+                                p#hubMessage.animate__animated.animate__flash.animate__infinite(style="font-weight: bold; float: right;")
+                                    | 🁢
+                            .col-6
+                                img.shadowed(src="/images/parrot.png" style="float: right;")

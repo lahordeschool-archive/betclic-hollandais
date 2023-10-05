@@ -8,6 +8,10 @@ $(document).ready(async function(){
         animateTypingText("#hubMessage", data);
     });
 
+    $.get("/api/parrot/skull", function(data) {
+        animateTypingText("#skullMessage", data);
+    });
+
 
     var clientName = "";
 
