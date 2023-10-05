@@ -10,6 +10,8 @@ const poolsController = new PoolsController();
 const gameController = new Players_GameController();
 const gameIAController = new IA_GameController();
 
+const { generateLiveMessage } = require("../../../lib/openai");
+
 gameController.address = "1111";
 gameIAController.address = "2222"
 
@@ -209,6 +211,11 @@ module.exports = function(io) {
     } else {
         res.redirect("/login");
     }
+  });
+
+  router.get("/parrot/:messageType", async (req, res) => {
+    const message = await generateLiveMessage(req.params.messageType);
+        res.send(message);
   });
 
   return router;

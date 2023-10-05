@@ -52,26 +52,10 @@ body.bg-image {
 }
 
 .btn-primary{
-  background-color: #5F2EEA !important;
-  border-color: #5F2EEA !important;
+  background-color: #D30E17 !important;
+  border-color: #D30E17 !important;
 }
-.rainbow-text-loop {
-  -webkit-animation: rainbow 5s; 
-  color: #5F2EEA;
-}
-@keyframes rainbow{
-  0%{color: #fff;}
-  10%{color: purple;}
-  20%{color: #fe4655;}
-  30%{color: CadetBlue;}
-  40%{color: yellow;}
-  50%{color: #fe4655;}
-  60%{color: green;}
-  70%{color: cyan;}
-  80%{color: DeepPink;}
-  90%{color: DodgerBlue;}
-  100%{color: #fe4655;}
- }
+
 
  @font-face {
   font-family: 'Treasure Map Dead Hand';
