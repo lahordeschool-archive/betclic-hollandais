@@ -66,9 +66,7 @@ block content
                     | Bluffer est une partie essentielle du Perudo ! Vous n'avez pas toujours besoin de dire la vérité sur votre mise; le but est de tromper vos adversaires.
     script. 
         $(document).ready(async function(){
-
-
-        $.get("/api/parrot/instructions", function(data) {
-            animateTypingText("#instructionsMessage", data);
-        });
+            $.get("/api/parrot/instructions", function(data) {
+                animateTypingText("#instructionsMessage", data);
+            });
         });

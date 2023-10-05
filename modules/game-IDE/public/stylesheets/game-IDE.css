@@ -22,7 +22,10 @@
     border: 1px solid gray;
 }
 
-#editor { height: 400px; }
+#editor { 
+    min-height: 800px; 
+}
+
 
 .button-container {
     text-align: right;
@@ -104,90 +107,4 @@ body{
     background-attachment: fixed;
     margin:auto;
     
-}
-
-.box-infos{
-   margin-top: 3em;
-   padding: 3em;
-   background-color: hsla(60, 18%, 97%, 0.35);
-   border-radius: 20px;
-}
-
-h1{
-    margin:  auto;
-    padding: 2em 0;
-    font-weight: 700;
-}
-
-h2{
-    font-size: 1.5em;
-    font-weight: 500;
-    text-decoration: underline;
-    width: 100%;
-}
-
-.regle{
-    margin: auto;
-    font-size: 1.5em;
-    text-align: center;
-    font-weight: 700;
-    
-}
-
-.regletitle h1{
-    padding-top: 25px;
-    padding-bottom: 25px;
-    font-weight: 700;
-}
-
-.regleresume{
-    margin: auto;
-    font-size: 1.5em;
-    text-align: center;
-    font-weight: 700;
-}
-
-.regleresume p{
-    margin-top: 25px;
-    margin-bottom:50px;
-}
-
-.reglefonction{
-
-}
-
-.reglefonction li{
-    margin: 10px 0;
-}
-
-.reglefonction h2{
-    margin-bottom: 25px;
-    font-weight: 700;
-}
-
-
-.regledonnee{
-
-}
-
-.regledonnee li{
-    margin: 10px 0;
-}
-
-.regledonnee h2{
-    margin: 25px 0;
-    font-weight: 700;
-}
-
-.reglejeu{
-
-}
-
-.reglejeu h2{
-    margin: 25px 0;
-    font-weight: 700;
-}
-
-.reglejeu li{
-    margin: 10px 0;
 }
