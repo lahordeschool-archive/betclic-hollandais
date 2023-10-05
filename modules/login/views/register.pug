@@ -1,38 +1,44 @@
 extends ../../_common/views/layout-offline
 
 block content
-    .row.align-items-center.g-lg-5.py-5(style="min-height: 65vh;")
-        .col-3
+    script(src="/scripts/register.js")
+    .row.align-items-center.g-lg-5.py-5(style="margin-top: 0px; min-height: 600px;")
+        
+        .col-5.text-center.text-lg-start(style="margin-top: 0px;")
+            .row
+                .col-12(style="margin: auto; padding-top: 40px;")
+                    img(src="/images/parrot.png" style="float: left;")
+                    p#registerMessage(style="font-weight: bold;") ARRRRRRRRR
+        .col-sm-7.col-12.mx-auto
 
-        .col-3.text-center.text-lg-start
-            h1.display-4.fw-bold.lh-1.text-body-emphasis.mb-3 Créer un compte
-            p.col-lg-10.fs-4 Bienvenue à bord, matelot! Inscrivez-vous pour rejoindre l'aventure.
-        .col-3.mx-auto
-            form.p-4.p-md-5.border.rounded-3.bg-body-tertiary(action="/login/register", method="post")
-                .form-floating.mb-3
-                    .row
-                        .col-6
-                            label(for="firstnameInput") Prénom
-                            br
-                            input#firstnameInput(type="text", placeholder="Prénom", name="firstname", required)
-                        .col-6
-                            label(for="lastnameInput") Nom
-                            br
-                            input#lastnameInput(type="text", placeholder="Nom", name="lastname", required)
-                .form-floating.mb-3
-                    .row
-                        .col-12
-                            label(for="emailRegisterInput") Email
-                            br
-                            input#emailRegisterInput(type="email", placeholder="Email", name="email", required)
-                .form-floating.mb-3
-                    .row
-                        .col-12
-                            label(for="passwordRegisterInput") Mot de passe
-                            br
-                            input#passwordRegisterInput(type="password", placeholder="Mot de passe", name="password", required)
-                .row 
-                    .col-12
-                        button.btn.btn-primary(type="submit") S'inscrire
-                        a(href="/login") Déjà inscrit? Connectez-vous.
-        .col-2
+            .row  
+                .col-8(style="border-radius: 15px; background: #fff;")
+                    form.p-4.p-md-5.bg-body-tertiary(action="/login/register", method="post" style="border: none; padding: 2rem !important;")
+                        .form-floating.mb-3
+                            .form-row.text-center
+                                h3 Créer un compte
+                                br
+                                br
+                                .row 
+                                    .col-1
+                                    .col-md-10.mb-3
+                                        input#firstnameInput.form-control(type="text", placeholder="Prénom", name="firstname", required)
+                                .row 
+                                    .col-1
+                                    .col-md-10.mb-3
+                                        input#lastnameInput.form-control(type="text", placeholder="Nom", name="lastname", required)
+                                .row 
+                                    .col-1
+                                    .col-md-10.mb-3
+                                        input#emailRegisterInput.form-control(type="email", placeholder="Email", name="email", required)
+                                .row 
+                                    .col-1
+                                    .col-md-10.mb-3
+                                        input#passwordRegisterInput.form-control(type="password", placeholder="Mot de passe", name="password", required)                               
+                                .row 
+                                    .col-1
+                                    .col-md-10.mb-3
+                                        button.btn.btn-primary(type="submit" style="width: 100%") S'inscrire
+                                        br
+                                        br
+                                        a(href="/login") Déjà inscrit? Connectez-vous.
