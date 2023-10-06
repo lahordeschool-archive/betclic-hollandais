@@ -68,8 +68,10 @@ class IA_GameController {
     }
 
     setPlayerBet(playerBet){
-        console.log('set player bet = ',playerBet )
-        this.playerList[this.currentPlayer].bet = playerBet;
+        if(this.gameInProgress){
+            console.log('set player bet = ',playerBet )
+            this.playerList[this.currentPlayer].bet = playerBet;
+        }
     }
 
     resetPlayersBets(){
@@ -116,81 +118,87 @@ class IA_GameController {
     }
 
     objection() {
-        let count;
+        if(this.gameInProgress){
+            let count;
         
-        if(this.specialManche){
-            count = this.allDices.filter(die => die === this.currentBet[1]).length;
-            this.specialManche = false;
-        }else{
-            count = this.allDices.filter(die => die === this.currentBet[1] || die === 1).length;
-        }
-
-
-        let finish = false;
-
-        this.mancheLoser = count >= this.currentBet[0] ? this.currentPlayer : this.lastPlayer;
-    
-        this.playerList[this.mancheLoser].diceNb--;
-        console.log("le joueur :" + this.playerList[this.mancheLoser].name + " vient de perdre un des");
-        
-        if(this.playerList[this.mancheLoser].diceNb === 1){
-            this.currentBet = [0,1];
-            this.specialManche = true;
-        }else{
-            this.currentBet = [0,2];
-        }
-        
-        this.playerList.forEach(player => {
-            console.log("le joueur :" + player.name);
-            console.log("nb des :" + player.diceNb);
-            console.log("les des :" + player.dices);
-        });
-
-        let countPlayer = 0;
-        let win;
-        this.playerList.forEach(player => {
-            if(player.diceNb > 0){
-                countPlayer++;
-                win = player.name;
-            }
-        });
-
-        if(countPlayer === 1){
-            finish = true;
-        }
-
-        if(!finish){
-
-            this.currentPlayer = this.mancheLoser;
-
-            while(this.playerList[this.currentPlayer].diceNb === 0){
-                this.currentPlayer = (this.currentPlayer+1)% this.playerList.length;
+            if(this.specialManche){
+                count = this.allDices.filter(die => die === this.currentBet[1]).length;
+                this.specialManche = false;
+            }else{
+                count = this.allDices.filter(die => die === this.currentBet[1] || die === 1).length;
             }
 
-            this.currentManche++;
-            this.betList = [];
-            this.currentRound = 1;
-            this.rollDices();
-        }else{
-            console.log("le gagnant est :" + win);
-            this.winner = win;
-            this.gameInProgress = false;
+
+            let finish = false;
+
+            this.mancheLoser = count >= this.currentBet[0] ? this.currentPlayer : this.lastPlayer;
+        
+            this.playerList[this.mancheLoser].diceNb--;
+            console.log("le joueur :" + this.playerList[this.mancheLoser].name + " vient de perdre un des");
+            
+            if(this.playerList[this.mancheLoser].diceNb === 1){
+                this.currentBet = [0,1];
+                this.specialManche = true;
+            }else{
+                this.currentBet = [0,2];
+            }
+            
+            this.playerList.forEach(player => {
+                console.log("le joueur :" + player.name);
+                console.log("nb des :" + player.diceNb);
+                console.log("les des :" + player.dices);
+            });
+
+            let countPlayer = 0;
+            let win;
+            this.playerList.forEach(player => {
+                if(player.diceNb > 0){
+                    countPlayer++;
+                    win = player.name;
+                }
+            });
+
+            if(countPlayer === 1){
+                finish = true;
+            }
+
+            if(!finish){
+
+                this.currentPlayer = this.mancheLoser;
+
+                while(this.playerList[this.currentPlayer].diceNb === 0){
+                    this.currentPlayer = (this.currentPlayer+1)% this.playerList.length;
+                }
+
+                this.currentManche++;
+                this.betList = [];
+                this.currentRound = 1;
+                this.rollDices();
+            }else{
+                console.log("le gagnant est :" + win);
+                this.winner = win;
+                this.gameInProgress = false;
+            }
         }
     }
 
     bet(count, value) {
-        this.setPlayerBet([count, value]);
-        this.currentBet = [count, value];
-        this.betList.push(this.currentBet);
-        this.currentRound++;
+        if(this.gameInProgress){
+            this.setPlayerBet([count, value]);
+            this.currentBet = [count, value];
+            this.betList.push(this.currentBet);
+            this.currentRound++;
 
-        this.lastPlayer = this.currentPlayer;
+            this.lastPlayer = this.currentPlayer;
 
-        this.currentPlayer = (this.currentPlayer+1)% this.playerList.length;
-
-        while(this.playerList[this.currentPlayer].diceNb === 0){
             this.currentPlayer = (this.currentPlayer+1)% this.playerList.length;
+
+            console.log(this.playerList[this.currentPlayer]);
+            while(this.playerList[this.currentPlayer].diceNb === 0){
+                this.currentPlayer = (this.currentPlayer+1)% this.playerList.length;
+            }
         }
+        
     }
 
     getDataOther(player){

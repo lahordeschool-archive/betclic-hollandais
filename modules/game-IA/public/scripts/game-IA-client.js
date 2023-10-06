@@ -161,6 +161,7 @@ $(document).ready(async function() {
 
     window.objection = function (){
         console.log('ia object');
+        console.log('Verif ia objection = '+VerifyObjection());
         if(VerifyObjection()){
             console.log('Objection');
             socket.emit('objection', serveurAddress);
@@ -480,6 +481,8 @@ const PerudoAI = (() => {
         if (newBet != null) {
             console.log('IA tes bet '+ newBet);
             window.bet(newBet);
+        } else if(JSON.stringify(previousBet) == JSON.stringify([0,1]) || JSON.stringify(previousBet) == JSON.stringify([0,2])) {
+            window.bet([prevCount + 1, prevValue]);
         } else {
             window.objection();
         }

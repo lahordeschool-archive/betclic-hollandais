@@ -109,7 +109,8 @@ module.exports = function (io) {
     });
 
     function VerifPlayerPlayInTime(address, manche, round){
-      if(manche === controller.currentManche && round === controller.currentRound && controller.winner == null){
+      let controller = poolsController.PoolList.get(address);
+      if(controller.gameInProgress && manche === controller.currentManche && round === controller.currentRound && controller.winner == null){
         console.log('Action par default demander car le joueur na pas jouer');
         console.log('manche au set :' + manche);
         console.log('manche au call :' + controller.currentManche);

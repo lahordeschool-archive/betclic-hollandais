@@ -43,8 +43,12 @@ class PoolsController {
     }
     
     defaultAction(controller){
-        let data = controller.dataCurrentPlayer;
-        PerudoAI.decideAction(controller, data.CurrentBet, data.YourDices, data.TotaDices, data.IsSpecialManche);
+        console.log("************************ action default API **********************");
+        console.log("Game In Progress :" + controller.gameInProgress);
+        if(controller.gameInProgress){
+            let data = controller.dataCurrentPlayer;
+            PerudoAI.decideAction(controller, data.CurrentBet, data.YourDices, data.TotaDices, data.IsSpecialManche);
+        }
     }
 
     
@@ -124,10 +128,12 @@ const PerudoAI = (() => {
                 }
             }
         }
-    
+
         if (newBet != null) {
             controller.bet(newBet[0], newBet[1]);
-        } else {
+        } else if(JSON.stringify(previousBet) == JSON.stringify([0,1]) || JSON.stringify(previousBet) == JSON.stringify([0,2])) {
+            controller.bet(prevCount + 1, prevValue);
+        }else {
             controller.objection();
         }
     }
