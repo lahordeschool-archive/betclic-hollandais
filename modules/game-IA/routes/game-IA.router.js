@@ -11,7 +11,7 @@ module.exports = function (io) {
   /* GET game page. */
   router.get("/", (req, res) => {
     if (req.isAuthenticated()) {
-      res.render("../views/game-IA", { user: req.userObj });
+      res.render("../views/game-IA2", { user: req.user });
     } else {
       res.redirect("/login");
     }

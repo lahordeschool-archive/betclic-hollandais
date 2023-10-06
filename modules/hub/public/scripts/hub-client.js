@@ -118,7 +118,7 @@ $(document).ready(async function(){
             playerCount.textContent = `Joueurs connectés : ${server.nbPlayers}`;
     
             const gameStatus = document.createElement('span');
-            gameStatus.textContent = `État de le partie : ${server.gameInProgress ? "En cours" : "⏱ En attente"}`;
+            gameStatus.textContent = `État de le partie : ${server.gameInProgress ? "⚔️ En cours" : "⏱ En attente"}`;
             playerCount.appendChild(document.createElement('br'));
             playerCount.appendChild(gameStatus);
             serverDiv.appendChild(playerCount);

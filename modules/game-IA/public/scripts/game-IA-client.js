@@ -15,7 +15,7 @@ var isSpecialManche = false;
 
 var iterration = 0;
 
-window.addEventListener("load", async ()=> {
+$(document).ready(async function() {
 
     function SetServeurSession(){
         let storedData = JSON.parse(localStorage.getItem('SessionServerAdress'));
@@ -38,6 +38,7 @@ window.addEventListener("load", async ()=> {
                 } else {
                     // Utilisez vos données comme vous le souhaitez
                     console.log(storedData.value);
+                    $("#numeroTable").text(storedData.value);
                     socket.emit('connectPlayer', ({name: localStorage.getItem('UserFirstName'), mail: localStorage.getItem('UserMail'), adress: storedData.value}));
                     return storedData.value;
                 }
@@ -50,11 +51,13 @@ window.addEventListener("load", async ()=> {
         window.location.href = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + newPath;
     }
 
-    
+  
+
+
     socket = await io.connect();
 
     socket.on('connect', () => {
-        //updateFunction();
+        updateFunction();
         serveurAdress = getServeurSession();
 
         console.log('Connected to the server from client');
@@ -71,22 +74,40 @@ window.addEventListener("load", async ()=> {
         console.log(socket);
         socket.emit('connected');
         
+        $("#launchBattleButton").on('click', function(){
+            console.log("launch battle")
+            socket.emit('launchBattle', serveurAdress);
+        });
+
+        socket.on("BattleLaunched", () => {
+            UI.hideLaunchButton();
+        });
 
         if(serveurAdress === false){
-            redirectTo('/game-IDE');
+            redirectTo('/hub');
         }else{
             socket.emit('getServer', {serveurAdress: serveurAdress, mail: localStorage.getItem('UserMail')});
         }
 
         socket.on("ServerNotConnect", () => {
             localStorage.removeItem('SessionServerAdress');
-            redirectTo('/game-IDE');
+            redirectTo('/hub');
         });
 
         socket.on("messageTestReceived", (message) => {
             console.log(message);
         });
         
+        socket.on("updateClassement", (classement) => {
+            console.log("update classement")
+            console.log(classement);
+            UI.refreshClassement(classement);
+        });
+
+        socket.on("updateHistorique", (entry) => {
+            UI.addHistoriqueEntry(entry);
+        });
+
         socket.on("PlayerTurn", (gameInfo) => {
 
             playerList = gameInfo.listPlayers;
@@ -236,6 +257,35 @@ window.addEventListener("load", async ()=> {
             betValue.value = actualBet[1];
         }
     
+        function refreshClassement(classement){
+            $("#classement").html("");
+            for(let i = 0; i< classement.length; i++){
+                let dicesIcons = "";
+                if(classement[i].score == 0){
+                    dicesIcons = "🏴‍☠️ ";
+                } else{
+                    for(let j = 0; j< classement[i].score; j++){
+                        dicesIcons += "🎲 ";
+                    }
+                }
+                let isYou = "";
+                if(classement[i].mail == localStorage.getItem('UserMail')){
+                    isYou = " (Vous)";
+                }
+                
+                $("#classement").append("<li>"+dicesIcons+"● "+classement[i].name+isYou+"</li>")
+            }
+
+        }
+
+        function hideLaunchButton(){
+            $("#battleLaunch").hide();
+        }
+
+        function addHistoriqueEntry(entry){
+            $('#historique').prepend("<li>"+entry+"</li>");
+        }
+
         function displayDices(){
             if(cubes == null){
                 let dicesScene = document.querySelector('.dices-scene');
@@ -282,7 +332,10 @@ window.addEventListener("load", async ()=> {
 
             return {
                 displayDices: displayDices,
-                refreshDisplay: refreshDisplay
+                refreshDisplay: refreshDisplay,
+                refreshClassement : refreshClassement,
+                hideLaunchButton: hideLaunchButton,
+                addHistoriqueEntry: addHistoriqueEntry
             };
     })();
 });
@@ -328,7 +381,7 @@ function updateFunction(){
     try {
         const newFunction = new Function('data', code);
         window.yourTurn = newFunction;
-        alert('Function updated successfully!');
+        $('#iaState').show();
     } catch (error) {
         console.log(error.message);
         alert('Error in your code: ' + error.message);
