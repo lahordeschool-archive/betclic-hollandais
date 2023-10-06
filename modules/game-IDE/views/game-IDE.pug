@@ -71,7 +71,13 @@ block content
                 
         .row 
             br
-    
+    #modalIDESaved.modal        
+        .modal-dialog.modal-dialog-centered
+            .modal-content
+                .modal-header
+                    button(type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close")
+                .modal-body
+                    p ✅ Code sauvegardé avec succès ! 
     script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js')
     script(src='/IDE-lib/ace.js')
     script(src='/IDE-lib/theme-monokai.js')

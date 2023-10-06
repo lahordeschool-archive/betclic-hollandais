@@ -14,6 +14,7 @@ $(document).ready(async function(){
 
     saveBtn.on('click', function(){
         saveCode();
+        $("#modalIDESaved").modal('show');
     });
 
     function SetServeurSession(){
@@ -68,7 +69,6 @@ $(document).ready(async function(){
 function saveCode() {
     let data = editor.getSession().getValue();
     localStorage.setItem("My_AI", data);
-    alert('save code');
 }
 
 function DisplayCode() {
