@@ -15,28 +15,17 @@ block content
     script(src="/scripts/hub-client.js")
     .container-fluid
         .row(style="margin-top: 0px;")
-            .col-7(style="margin: auto;")
-                .row
-                    .card(style="border-radius: 10px; ")
-                        .card-body 
-                            img(src="/images/treasure-skull.png" style="float: left;  height: 100px; margin-right: 10px;")
-                            p#skullMessage.animate__animated.animate__flash.animate__infinite(style="font-weight: bold; float: left; min-height: 100px; max-width: 80%")
-                                | 🁢
-                            br
-                            p(style="width: 100%; float: left;")
-                                a(href="/game-ide" target="_blank" class="btn btn-success") ⚙️ IDE = fais ton IA
-                                | &nbsp;
-                                a(href="/game-ide/instructions" target="_blank" class="btn btn-secondary") 📜 Règles du jeu
+            .col-12.col-md-6.offset-0.offset-md-3(style="margin: auto;")
+                .card(style="border-radius: 10px; ")
+                    .card-body 
+                        img(src="/images/treasure-skull.png" style="float: left;  height: 100px; margin-right: 10px;")
+                        p#skullMessage.animate__animated.animate__flash.animate__infinite(style="font-weight: bold; float: left; min-height: 100px; max-width: 80%")
+                            | 🁢
+                        br
+                        p(style="width: 100%; float: left;text-align: center;")
+                            a(href="/game-ide" target="_blank" class="btn btn-success") ⚙️ IDE = fais ton IA
+                            | &nbsp;
+                            a(href="/game-ide/instructions" target="_blank" class="btn btn-secondary") Règles du jeu
         .row(style="margin-top: 10px; min-height: 600px;")
-            .col-2
-            .col-4(style="margin: auto;")
+            .col-12.offset-0.col-md-6.offset-md-3
                 .server-list
-            .col-5.text-center.text-lg-start(style="margin-top: 0px; padding-top: 20px;")
-                .row
-                    .col-12(style="margin: auto;")
-                        .row 
-                            .col-6
-                                p#hubMessage.animate__animated.animate__flash.animate__infinite(style="font-weight: bold; float: right;")
-                                    | 🁢
-                            .col-6
-                                img.shadowed(src="/images/parrot.png" style="float: right;")
