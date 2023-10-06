@@ -150,7 +150,7 @@ $(document).ready(async function() {
         socket.on("finish", (playerName) => {
             alert('Gagnant :'+ playerName);
             localStorage.removeItem('SessionServerAddress');
-            redirectTo('/game-IDE');
+            //redirectTo('/game-IDE');
         });
 
         function yourTurn(data){

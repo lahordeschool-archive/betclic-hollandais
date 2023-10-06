@@ -28,30 +28,30 @@ window.addEventListener("load", async ()=>{
     const objectionBtn = document.getElementById("objectionButton");
     var canPlay = false;
 
-    var serveurAdress;
+    var serveurAddress;
 
     function SetServeurSession(){
-        let storedData = JSON.parse(localStorage.getItem('SessionServerAdress'));
+        let storedData = JSON.parse(localStorage.getItem('SessionServeraddress'));
         const data = {
             value: storedData.value,
             timestamp: new Date().getTime()
         };
         
-        localStorage.setItem('SessionServerAdress', JSON.stringify(data));
+        localStorage.setItem('SessionServeraddress', JSON.stringify(data));
     }
 
     function getServeurSession(){
-        if(localStorage.getItem('SessionServerAdress')){
-            let storedData = JSON.parse(localStorage.getItem('SessionServerAdress'));
+        if(localStorage.getItem('SessionServeraddress')){
+            let storedData = JSON.parse(localStorage.getItem('SessionServeraddress'));
             if (storedData) {
                 const timeNow = new Date().getTime();
                 const timeLimit =  5 * 60 * 1000;
                 if (timeNow - storedData.timestamp > timeLimit) {
-                    localStorage.removeItem('SessionServerAdress');
+                    localStorage.removeItem('SessionServeraddress');
                 } else {
                     // Utilisez vos données comme vous le souhaitez
                     console.log(storedData.value);
-                    socket.emit('connectPlayer', ({name: localStorage.getItem('UserFirstName'), mail: localStorage.getItem('UserMail'), adress: storedData.value}));
+                    socket.emit('connectPlayer', ({name: localStorage.getItem('UserFirstName'), mail: localStorage.getItem('UserMail'), address: storedData.value}));
                     return storedData.value;
                 }
             }
@@ -83,21 +83,21 @@ window.addEventListener("load", async ()=>{
 
     socket.on('connect', () => {
 
-        serveurAdress = getServeurSession();
+        serveurAddress = getServeurSession();
 
         console.log('Connected to the server from client');
         // You can perform actions here when the connection is established
         console.log(socket);
         socket.emit('connected');
 
-        if(serveurAdress === false){
+        if(serveurAddress === false){
             redirectTo('/hub');
         }else{
-            socket.emit('getServer', {serveurAdress: serveurAdress, mail: localStorage.getItem('UserMail')});
+            socket.emit('getServer', {serveurAddress: serveurAddress, mail: localStorage.getItem('UserMail')});
         }
 
         socket.on("ServerNotConnect", () => {
-            localStorage.removeItem('SessionServerAdress');
+            localStorage.removeItem('SessionServeraddress');
             redirectTo('/hub');
         });
 
@@ -374,14 +374,14 @@ window.addEventListener("load", async ()=>{
         let value = parseInt(customNum[1].querySelector('.num-input').value);
 
         if(VerifyBet(actualBet, [count,value])){
-            socket.emit( 'bet' , {bet: [count,value], adress: serveurAdress});
+            socket.emit( 'bet' , {bet: [count,value], address: serveurAddress});
             console.log("New bet");
             
             canPlay = false;
         }else{
             alert('Paris invalide');
         }
-    });
+    });address
 
     function VerifyObjection(bet){
         //check is a new bet
@@ -394,7 +394,7 @@ window.addEventListener("load", async ()=>{
 
     objectionBtn.addEventListener('click', () =>{
         if(VerifyObjection(actualBet)){
-            socket.emit( 'objection', serveurAdress );
+            socket.emit( 'objection', serveurAddress );
             console.log("Objection");
             
             canPlay = false;
@@ -404,7 +404,7 @@ window.addEventListener("load", async ()=>{
     });
 
     playBtn.addEventListener('click', () =>{
-        socket.emit( 'launchBattle', serveurAdress );
+        socket.emit( 'launchBattle', serveurAddress );
         console.log("lancement");
 
         cubes = null;

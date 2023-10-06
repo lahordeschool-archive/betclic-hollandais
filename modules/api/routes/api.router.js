@@ -209,7 +209,7 @@ module.exports = function (io) {
         emitToAllInController("updateHistorique", getTime() + " - Début de la partie", controller);
 
         controllerMaj(controller);
-        setTimeout(() => nextTurn(data.address), 5000); // Attendre 5 secondes
+        setTimeout(() => nextTurn(address), 5000); // Attendre 5 secondes
       } else {
         console.log("Not enough players for init server " + address);
       }
