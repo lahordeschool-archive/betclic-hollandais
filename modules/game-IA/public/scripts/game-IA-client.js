@@ -148,9 +148,9 @@ $(document).ready(async function() {
         });
 
         socket.on("finish", (playerName) => {
-            alert('Gagnant :'+ playerName);
+            UI.addHistoriqueEntry("Gagnant "+playerName+" !");
             localStorage.removeItem('SessionServerAdress');
-            redirectTo('/game-IDE');
+            //redirectTo('/game-IDE');
         });
 
         function yourTurn(data){
@@ -162,7 +162,7 @@ $(document).ready(async function() {
     window.objection = function (){
         console.log('ia object');
         if(VerifyObjection()){
-            alert('Objection');
+            console.log('Objection');
             socket.emit('objection', serveurAdress);
             iterration = 0;
             return true;
@@ -183,7 +183,7 @@ $(document).ready(async function() {
         console.log('ia bet '+ newBet);
         console.log('Verif ia bet = '+VerifyBet(newBet));
         if(VerifyBet(newBet)){
-            alert('bet :'+ newBet);
+            console.log('bet :'+ newBet);
             socket.emit( 'bet' , {bet: newBet, adress: serveurAdress});
             iterration = 0;
             return true;
