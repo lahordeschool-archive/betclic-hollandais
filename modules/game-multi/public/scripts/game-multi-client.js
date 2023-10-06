@@ -28,26 +28,26 @@ window.addEventListener("load", async ()=>{
     const objectionBtn = document.getElementById("objectionButton");
     var canPlay = false;
 
-    var serveurAddress;
+    var serveurAddress;address
 
     function SetServeurSession(){
-        let storedData = JSON.parse(localStorage.getItem('SessionServeraddress'));
+        let storedData = JSON.parse(localStorage.getItem('SessionServerAddress'));
         const data = {
             value: storedData.value,
             timestamp: new Date().getTime()
         };
         
-        localStorage.setItem('SessionServeraddress', JSON.stringify(data));
+        localStorage.setItem('SessionServerAddress', JSON.stringify(data));
     }
 
     function getServeurSession(){
-        if(localStorage.getItem('SessionServeraddress')){
-            let storedData = JSON.parse(localStorage.getItem('SessionServeraddress'));
+        if(localStorage.getItem('SessionServerAddress')){
+            let storedData = JSON.parse(localStorage.getItem('SessionServerAddress'));
             if (storedData) {
                 const timeNow = new Date().getTime();
                 const timeLimit =  5 * 60 * 1000;
                 if (timeNow - storedData.timestamp > timeLimit) {
-                    localStorage.removeItem('SessionServeraddress');
+                    localStorage.removeItem('SessionServerAddress');
                 } else {
                     // Utilisez vos données comme vous le souhaitez
                     console.log(storedData.value);
@@ -97,7 +97,7 @@ window.addEventListener("load", async ()=>{
         }
 
         socket.on("ServerNotConnect", () => {
-            localStorage.removeItem('SessionServeraddress');
+            localStorage.removeItem('SessionServerAddress');
             redirectTo('/hub');
         });
 
