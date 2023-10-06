@@ -166,21 +166,30 @@ label { margin-right: 10px; }
   background-color: #00000040;  
   border-top-right-radius: 10px;
   padding: 15px;
+  width:25%;
   border: 1px black solid ;
 }
 
 .middle-box{
   width: 50%;
+
 }
 
 .right-box{
   width:25%;
+  background-color: #00000040;  
+  border-top-left-radius: 10px;
+  padding: 15px;
+  border: 1px black solid ;
 }
 .game-info {
   font-family: Arial, sans-serif;
   background-color: cadetblue;
   margin: 0px 0px 20px 0px;
   padding: 10px;
+  height: 100%;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
 }
 
 .round-info {
