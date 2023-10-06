@@ -28,7 +28,7 @@ window.addEventListener("load", async ()=>{
     const objectionBtn = document.getElementById("objectionButton");
     var canPlay = false;
 
-    var serveurAddress;address
+    var serveurAddress;
 
     function SetServeurSession(){
         let storedData = JSON.parse(localStorage.getItem('SessionServerAddress'));
@@ -381,7 +381,7 @@ window.addEventListener("load", async ()=>{
         }else{
             alert('Paris invalide');
         }
-    });address
+    });
 
     function VerifyObjection(bet){
         //check is a new bet
