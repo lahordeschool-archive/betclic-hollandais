@@ -331,27 +331,41 @@ window.addEventListener("load", async ()=>{
 
     }
 
-    function VerifyBet(currentBet, newBet) {
-        // Check is a new bet
-        if (JSON.stringify(currentBet) == JSON.stringify(newBet)) {
+    function VerifyBet(newBet) {
+        // Vérifier s'il s'agit d'un nouveau pari
+        if (JSON.stringify(actualBet) == JSON.stringify(newBet)) {
             return false;
         }
     
-        // Check is outbid
-        if (newBet[0] > currentBet[0] || (newBet[0] === currentBet[0] && newBet[1] > currentBet[1])) {
+        // Vérifier si nous essayons de passer des dés réguliers aux pacos
+        if (newBet[1] === 1 && actualBet[1] !== 1) {
+            // Assurez-vous que le nombre de dés pariés pour le paco est supérieur à la moitié du pari précédent
+            if (newBet[0] >= Math.ceil(actualBet[0] / 2)) {
+                return true;
+            }
+        }
+    
+        // Vérifier si nous essayons de passer des pacos aux dés réguliers
+        if (newBet[1] !== 1 && actualBet[1] === 1) {
+            // Assurez-vous que le nombre de dés pariés est au moins le double de l'ancien pari + 1
+            if (newBet[0] >= ((2 * actualBet[0]) + 1) && newBet[1] >= 1) {
+                return true;
+            }
+        }
+    
+        // Vérifier si le nouveau pari surenchérit sur l'ancien pari
+        if ((newBet[0] > actualBet[0] && newBet[1] == actualBet[1]) || (newBet[0] >= actualBet[0] && newBet[1] > actualBet[1])) {
             return true;
         }
     
-        // Check for paco switch to a numeric value
-        if (currentBet[1] === 1 && newBet[1] !== 1 && newBet[0] > currentBet[0]) {
-            return true;
+        // Si le pari précédent était un paco, vous pouvez surenchérir sur la valeur ou le nombre
+        if (actualBet[1] === 1 && newBet[1] === 1) {
+            if (newBet[0] > actualBet[0]) {
+                return true;
+            }
         }
     
-        // If not outbid, check is a paco switch
-        if (newBet[1] === 1 && newBet[0] <= currentBet[0] / 2) {
-            return true;
-        }
-    
+        // Si aucune des conditions ci-dessus n'est satisfaite, le pari n'est pas valide
         return false;
     }
     

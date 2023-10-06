@@ -288,26 +288,40 @@ window.addEventListener("load", async ()=> {
 });
 
 function VerifyBet(newBet) {
-    // Check is a new bet
+    // Vérifier s'il s'agit d'un nouveau pari
     if (JSON.stringify(actualBet) == JSON.stringify(newBet)) {
         return false;
     }
 
-    // Check is outbid
-    if (newBet[0] > actualBet[0] || (newBet[0] === actualBet[0] && newBet[1] > actualBet[1])) {
+    // Vérifier si nous essayons de passer des dés réguliers aux pacos
+    if (newBet[1] === 1 && actualBet[1] !== 1) {
+        // Assurez-vous que le nombre de dés pariés pour le paco est supérieur à la moitié du pari précédent
+        if (newBet[0] >= Math.ceil(actualBet[0] / 2)) {
+            return true;
+        }
+    }
+
+    // Vérifier si nous essayons de passer des pacos aux dés réguliers
+    if (newBet[1] !== 1 && actualBet[1] === 1) {
+        // Assurez-vous que le nombre de dés pariés est au moins le double de l'ancien pari + 1
+        if (newBet[0] >= ((2 * actualBet[0]) + 1) && newBet[1] >= 1) {
+            return true;
+        }
+    }
+
+    // Vérifier si le nouveau pari surenchérit sur l'ancien pari
+    if ((newBet[0] > actualBet[0] && newBet[1] == actualBet[1]) || (newBet[0] >= actualBet[0] && newBet[1] > actualBet[1])) {
         return true;
     }
 
-    // Check for paco switch to a numeric value
-    if (actualBet[1] === 1 && newBet[1] !== 1 && newBet[0] > actualBet[0]) {
-        return true;
+    // Si le pari précédent était un paco, vous pouvez surenchérir sur la valeur ou le nombre
+    if (actualBet[1] === 1 && newBet[1] === 1) {
+        if (newBet[0] > actualBet[0]) {
+            return true;
+        }
     }
 
-    // If not outbid, check is a paco switch
-    if (newBet[1] === 1 && newBet[0] <= actualBet[0] / 2) {
-        return true;
-    }
-
+    // Si aucune des conditions ci-dessus n'est satisfaite, le pari n'est pas valide
     return false;
 }
 
@@ -344,11 +358,10 @@ const PerudoAI = (() => {
         const otherDice = totalDice - myDice.length;
         const expectedCount = otherDice / 6;  // Supposition : chaque face du dé a une chance égale d'apparaître.
     
-        return myCount + expectedCount;
+        return Math.ceil(myCount + expectedCount);
     }
     
     function decideAction(previousBet, myDice, totalDice, isSpecialManche) {
-        console.log('IA Default Action');
         let [prevCount, prevValue] = previousBet;
         let newBet = null;
     
@@ -358,24 +371,21 @@ const PerudoAI = (() => {
         }
         
         console.log(probabilities);
-        let contest;
+        let NoneContest;
         if (!isSpecialManche) {
             console.log("Ajout bonus ");
             let pacoProbability = probabilities[1];
-            contest = pacoProbability + probabilities[prevValue] > prevCount;
+            NoneContest = pacoProbability + probabilities[prevValue] > prevCount;
         }else{
-            contest = probabilities[prevValue] > prevCount;
+            NoneContest = probabilities[prevValue] > prevCount;
         }
 
-        if (contest) {
+        if (NoneContest) {
             if (prevValue === 1) {
                 // Essayer de surenchérir sur les pacos
-                if(probabilities[1]> prevCount) {
+                if(probabilities[1]> prevCount && probabilities[1]> 1) {
                     newBet = [probabilities[1] , 1];
-                }
-    
-                // Si impossible de surenchérir sur pacos, essayer de quitter les pacos
-                if (newBet === null) {
+                }else{ // Si impossible de surenchérir sur pacos, essayer de quitter les pacos
                     for (let value = 6; value >= 2; value--) {
                         if (probabilities[value] >= prevCount * 2 + 1) {
                             newBet = [probabilities[value], value];
@@ -386,29 +396,16 @@ const PerudoAI = (() => {
     
             } else {
                 console.log("Essayez d'augmenter la valeur tout en maintenant ou en augmentant le nombre de dés ");
-                // Essayez d'augmenter la valeur tout en maintenant ou en augmentant le nombre de dés
-                for (let value = prevValue + 1; value <= 6; value++) {
-                    for (let count = prevCount; count <= totalDice; count++) {
-                        console.log(count);
-                        console.log(probabilities[value]);
-                        console.log(probabilities[value] >= count);
-
-                        if (probabilities[value] >= count) {
-                            newBet = [count, value];
-                            break;
-                        }
+                
+                for (let value = 6; value >= prevValue; value--) {
+                    if (probabilities[value] >= prevCount && probabilities[value]> 1) {
+                        newBet = [probabilities[value], value];
+                        break;
                     }
-                    if (newBet != null) break;
                 }
-
-                // Si nous ne pouvons pas augmenter la valeur, essayons d'augmenter le nombre de dés pariés
-                if (newBet === null) {
-                    console.log("Essayez d'augmenter le nombre de dés pariés ");
-                    for (let count = prevCount + 1; count <= totalDice; count++) {
-                        if (probabilities[prevValue] >= count) {
-                            newBet = [count, prevValue];
-                            break;
-                        }
+                if(newBet != null){
+                    if(newBet[0] === prevCount && newBet[1] === prevValue){
+                        newBet = null;
                     }
                 }
 
@@ -418,19 +415,17 @@ const PerudoAI = (() => {
                     newBet[0] <= pacoProbability + probabilities[newBet[1]];
                 }
 
-                // Si nous ne pouvons toujours pas parier plus, essayons de passer aux pacos
-                if (newBet === null) {
-                    for (let count = Math.ceil(prevCount / 2); count <= totalDice; count++) {
-                        if (probabilities[1] >= count) {
-                            newBet = [count, 1];
-                            break;
-                        }
+               
+                if (newBet === null) { // Si nous ne pouvons toujours pas parier plus, essayons de passer aux pacos
+                    if (probabilities[1] >= Math.ceil(prevCount / 2) && probabilities[1] > 1) {
+                        newBet = [probabilities[1], 1];
                     }
                 }
             }
         }
     
         if (newBet != null) {
+            console.log('IA tes bet '+ newBet);
             window.bet(newBet);
         } else {
             window.objection();

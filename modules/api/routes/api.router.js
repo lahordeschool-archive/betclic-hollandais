@@ -110,10 +110,22 @@ module.exports = function(io) {
 
     function VerifPlayerPlayInTime(controller, manche, round){
       if(manche === controller.currentManche, round === controller.currentRound){
+        console.log('Action par default demander car le joueur na pas jouer');
+        console.log('manche au set :' + manche);
+        console.log('manche au call :' + controller.currentManche);
+        console.log('round au set :' + round);
+        console.log('round au call :' + controller.currentRound);
         poolsController.defaultAction(controller);
         controller.dataSet();
         controller.playerList[controller.currentPlayer].socket.emit('PlayerTurn', controller.dataCurrentPlayer);
         controllerMaj(controller);
+      }
+      else{
+        console.log('Action par default non demander car le joueur a jouer');
+        console.log('manche au set :' + manche);
+        console.log('manche au call :' + controller.currentManche);
+        console.log('round au set :' + round);
+        console.log('round au call :' + controller.currentRound);
       }
        
     }
@@ -123,6 +135,7 @@ module.exports = function(io) {
         controller.playerList[controller.currentPlayer].socket.emit('PlayerTurn', controller.dataCurrentPlayer);
         setTimeout(() => VerifPlayerPlayInTime(controller, controller.currentManche, controller.currentRound), 60000);
       } catch (error) {
+        console.log('Action par default demander car echec de emit PlayerTurn');
         poolsController.defaultAction(controller);
       }
     }
@@ -149,32 +162,36 @@ module.exports = function(io) {
     
     socket.on('objection', (adress) =>{
       let controller = poolsController.PoolList.get(adress);
-      if(socket === controller.playerList[controller.currentPlayer].socket){
-        console.log('objection');
-        controller.objection();
-        controller.dataSet();
-        if(controller.winner == null){
-          setTimeout(() => nextTurn(controller), 5000);  // Attendre 5 secondes
-          controllerMaj(controller);
-        }else{
-          emitToAllInController('finish', controller.winner, controller);
-          controller.removeAllPlayer();
-          const mapArray = [...poolsController.getServerList()];
-          emitToAll('HubMaj', mapArray);
-        }   
+      if(controller.gameInProgress){
+        if(socket === controller.playerList[controller.currentPlayer].socket){
+          console.log('objection');
+          controller.objection();
+          controller.dataSet();
+          if(controller.winner == null){
+            setTimeout(() => nextTurn(controller), 5000);  // Attendre 5 secondes
+            controllerMaj(controller);
+          }else{
+            emitToAllInController('finish', controller.winner, controller);
+            controller.removeAllPlayer();
+            const mapArray = [...poolsController.getServerList()];
+            emitToAll('HubMaj', mapArray);
+          }   
+        }
       }
     });
 
     socket.on('bet', (data) =>{
       let controller = poolsController.PoolList.get(data.adress);
-      console.log('controller '+ data.adress +' list Players' + controller.playerList);
-      if(socket === controller.playerList[controller.currentPlayer].socket){
-        console.log('you can bet');
-        controller.bet(data.bet[0], data.bet[1]);
-        controller.dataSet();
-          
-        setTimeout(() => nextTurn(controller), 5000);  // Attendre 5 secondes
-        controllerMaj(controller);
+      if(controller.gameInProgress){
+        console.log('controller '+ data.adress +' list Players' + controller.playerList);
+        if(socket === controller.playerList[controller.currentPlayer].socket){
+          console.log('you can bet');
+          controller.bet(data.bet[0], data.bet[1]);
+          controller.dataSet();
+            
+          setTimeout(() => nextTurn(controller), 5000);  // Attendre 5 secondes
+          controllerMaj(controller);
+        }
       }
     });
 
