@@ -14,9 +14,15 @@ body {
     padding: 10px;
     border-radius: 10px;
 }
-.server h2 {
-    font-family: cursive;
+
+@font-face {
+    font-family: 'Booter';
+    src: url('../stylesheets/fonts/BOOTERFZ.ttf') format('truetype');
 }
+.server h2 {
+    font-family: 'Booter', sans-serif;
+}
+
 .server button{
     width: 100%;
 }
