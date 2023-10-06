@@ -60,9 +60,9 @@ module.exports = function (io) {
 
     socket.on("getServer", (data) => {
       let controller;
-      if (poolsController.PoolList.has(data.serveurAdress)) {
+      if (poolsController.PoolList.has(data.serveurAddress)) {
         let alreadyLogged = false;
-        controller = poolsController.PoolList.get(data.serveurAdress);
+        controller = poolsController.PoolList.get(data.serveurAddress);
         controller.playerList.forEach((player) => {
           if (player.mail === data.mail) {
             alreadyLogged = true;
@@ -86,8 +86,8 @@ module.exports = function (io) {
     });
 
     socket.on("connectPlayer", (user) => {
-      let controller = poolsController.PoolList.get(user.adress);
-      console.log("connection IA de " + user + " on " + user.adress);
+      let controller = poolsController.PoolList.get(user.address);
+      console.log("connection IA de " + user + " on " + user.address);
       let alreadyLogged = false;
       controller.playerList.forEach((player) => {
         if (player.mail === user.mail) {
@@ -101,7 +101,7 @@ module.exports = function (io) {
         !controller.gameInProgress
       ) {
         controller.addPlayer(user.name, user.mail, socket);
-        console.log("New Player " + user.name + " on server " + user.adress);
+        console.log("New Player " + user.name + " on server " + user.address);
       }
       const mapArray = [...poolsController.getServerList()];
       emitToAll("HubMaj", mapArray);
@@ -134,6 +134,7 @@ module.exports = function (io) {
     }
 
     function nextTurn(address) {
+      let controller = poolsController.PoolList.get(address);
       try {
         controller.playerList[controller.currentPlayer].socket.emit(
           "PlayerTurn",
@@ -188,11 +189,11 @@ module.exports = function (io) {
       return hour + ":" + minutes;
     }
 
-    socket.on("launchBattle", (adress) => {
-      let controller = poolsController.PoolList.get(adress);
+    socket.on("launchBattle", (address) => {
+      let controller = poolsController.PoolList.get(address);
       console.log(
         "init " +
-          adress +
+          address +
           " controller = " +
           controller +
           " playerList = " +
@@ -208,14 +209,14 @@ module.exports = function (io) {
         emitToAllInController("updateHistorique", getTime() + " - Début de la partie", controller);
 
         controllerMaj(controller);
-        setTimeout(() => nextTurn(controller), 5000); // Attendre 5 secondes
+        setTimeout(() => nextTurn(data.address), 5000); // Attendre 5 secondes
       } else {
-        console.log("Not enough players for init server " + adress);
+        console.log("Not enough players for init server " + address);
       }
     });
 
-    socket.on("objection", (adress) => {
-      let controller = poolsController.PoolList.get(adress);
+    socket.on("objection", (address) => {
+      let controller = poolsController.PoolList.get(address);
       if(controller.gameInProgress){
         if(socket === controller.playerList[controller.currentPlayer].socket){
           console.log('objection');
@@ -223,7 +224,7 @@ module.exports = function (io) {
           emitToAllInController("updateHistorique", getTime() + " - " + controller.playerList[controller.currentPlayer].name + " : Moi je dis : DUDO ! Faites voir vos dés.", controller);
           controller.dataSet();
           if(controller.winner == null){
-            setTimeout(() => nextTurn(controller), 5000);  // Attendre 5 secondes
+            setTimeout(() => nextTurn(data.address), 5000);  // Attendre 5 secondes
             controllerMaj(controller);
           }else{
             emitToAllInController('finish', controller.winner, controller);
@@ -236,22 +237,22 @@ module.exports = function (io) {
     });
 
     socket.on("bet", (data) => {
-      let controller = poolsController.PoolList.get(data.adress);
+      let controller = poolsController.PoolList.get(data.address);
       if(controller.gameInProgress){
-        console.log('controller '+ data.adress +' list Players' + controller.playerList);
+        console.log('controller '+ data.address +' list Players' + controller.playerList);
         if(socket === controller.playerList[controller.currentPlayer].socket){
           console.log('you can bet');
           controller.bet(data.bet[0], data.bet[1]);
           controller.dataSet();
           emitToAllInController("updateHistorique", getTime() + " - " + controller.playerList[controller.currentPlayer].name + " : Je parie qu'il y a "+data.bet[0]+" dés de "+data.bet[1], controller);
-          setTimeout(() => nextTurn(controller), 5000);  // Attendre 5 secondes
+          setTimeout(() => nextTurn(data.address), 5000);  // Attendre 5 secondes
           controllerMaj(controller);
         }
       }
     });
 
-    socket.on("MajRequest", (adress) => {
-      let controller = poolsController.PoolList.get(adress);
+    socket.on("MajRequest", (address) => {
+      let controller = poolsController.PoolList.get(address);
       controllerMaj(controller);
     });
 

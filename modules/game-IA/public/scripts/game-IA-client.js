@@ -1,6 +1,6 @@
 var socket;
 let editor;
-var serveurAdress;
+var serveurAddress;
 
 var clientName = '';
 
@@ -18,28 +18,28 @@ var iterration = 0;
 $(document).ready(async function() {
 
     function SetServeurSession(){
-        let storedData = JSON.parse(localStorage.getItem('SessionServerAdress'));
+        let storedData = JSON.parse(localStorage.getItem('SessionServerAddress'));
         const data = {
             value: storedData.value,
             timestamp: new Date().getTime()
         };
         
-        localStorage.setItem('SessionServerAdress', JSON.stringify(data));
+        localStorage.setItem('SessionServerAddress', JSON.stringify(data));
     }
 
     function getServeurSession(){
-        if(localStorage.getItem('SessionServerAdress')){
-            let storedData = JSON.parse(localStorage.getItem('SessionServerAdress'));
+        if(localStorage.getItem('SessionServerAddress')){
+            let storedData = JSON.parse(localStorage.getItem('SessionServerAddress'));
             if (storedData) {
                 const timeNow = new Date().getTime();
                 const timeLimit =  5 * 60 * 1000;
                 if (timeNow - storedData.timestamp > timeLimit) {
-                    localStorage.removeItem('SessionServerAdress');
+                    localStorage.removeItem('SessionServerAddress');
                 } else {
                     // Utilisez vos données comme vous le souhaitez
                     console.log(storedData.value);
                     $("#numeroTable").text(storedData.value);
-                    socket.emit('connectPlayer', ({name: localStorage.getItem('UserFirstName'), mail: localStorage.getItem('UserMail'), adress: storedData.value}));
+                    socket.emit('connectPlayer', ({name: localStorage.getItem('UserFirstName'), mail: localStorage.getItem('UserMail'), address: storedData.value}));
                     return storedData.value;
                 }
             }
@@ -58,7 +58,7 @@ $(document).ready(async function() {
 
     socket.on('connect', () => {
         updateFunction();
-        serveurAdress = getServeurSession();
+        serveurAddress = getServeurSession();
 
         console.log('Connected to the server from client');
         
@@ -76,21 +76,21 @@ $(document).ready(async function() {
         
         $("#launchBattleButton").on('click', function(){
             console.log("launch battle")
-            socket.emit('launchBattle', serveurAdress);
+            socket.emit('launchBattle', serveurAddress);
         });
 
         socket.on("BattleLaunched", () => {
             UI.hideLaunchButton();
         });
 
-        if(serveurAdress === false){
+        if(serveurAddress === false){
             redirectTo('/hub');
         }else{
-            socket.emit('getServer', {serveurAdress: serveurAdress, mail: localStorage.getItem('UserMail')});
+            socket.emit('getServer', {serveurAddress: serveurAddress, mail: localStorage.getItem('UserMail')});
         }
 
         socket.on("ServerNotConnect", () => {
-            localStorage.removeItem('SessionServerAdress');
+            localStorage.removeItem('SessionServerAddress');
             redirectTo('/hub');
         });
 
@@ -149,7 +149,7 @@ $(document).ready(async function() {
 
         socket.on("finish", (playerName) => {
             alert('Gagnant :'+ playerName);
-            localStorage.removeItem('SessionServerAdress');
+            localStorage.removeItem('SessionServerAddress');
             redirectTo('/game-IDE');
         });
 
@@ -163,7 +163,7 @@ $(document).ready(async function() {
         console.log('ia object');
         if(VerifyObjection()){
             console.log('Objection');
-            socket.emit('objection', serveurAdress);
+            socket.emit('objection', serveurAddress);
             iterration = 0;
             return true;
         }else{
@@ -184,7 +184,7 @@ $(document).ready(async function() {
         console.log('Verif ia bet = '+VerifyBet(newBet));
         if(VerifyBet(newBet)){
             console.log('bet :'+ newBet);
-            socket.emit( 'bet' , {bet: newBet, adress: serveurAdress});
+            socket.emit( 'bet' , {bet: newBet, address: serveurAddress});
             iterration = 0;
             return true;
         }else{

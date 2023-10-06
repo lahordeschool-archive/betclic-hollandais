@@ -8,7 +8,7 @@ $(document).ready(async function(){
     const saveBtn = $(".saveBtn")
 
     var clientName = "";
-    const serveurAdress = getServeurSession();
+    const serveurAddress = getServeurSession();
 
     DisplayCode();
 
@@ -18,33 +18,33 @@ $(document).ready(async function(){
     });
 
     function SetServeurSession(){
-        let storedData = JSON.parse(localStorage.getItem('SessionServerAdress'));
+        let storedData = JSON.parse(localStorage.getItem('SessionServerAddress'));
         const data = {
             value: storedData.value,
             timestamp: new Date().getTime()
         };
         
-        localStorage.setItem('SessionServerAdress', JSON.stringify(data));
+        localStorage.setItem('SessionServerAddress', JSON.stringify(data));
     }
 
-    function SetServeurSession(adress){
+    function SetServeurSession(address){
         const data = {
-            value: adress,
+            value: address,
             timestamp: new Date().getTime()
         };
         
-        localStorage.setItem('SessionServerAdress', JSON.stringify(data));
+        localStorage.setItem('SessionServerAddress', JSON.stringify(data));
     }
 
     function getServeurSession(){
-        if(localStorage.getItem('SessionServerAdress')){
-            let storedData = JSON.parse(localStorage.getItem('SessionServerAdress'));
+        if(localStorage.getItem('SessionServerAddress')){
+            let storedData = JSON.parse(localStorage.getItem('SessionServerAddress'));
             if (storedData) {
                 const timeNow = new Date().getTime();
                 const timeLimit =  5 * 60 * 1000;
                 if (timeNow - storedData.timestamp > timeLimit) {
-                    localStorage.removeItem('SessionServerAdress');
-                    console.log('SessionServerAdress remove')
+                    localStorage.removeItem('SessionServerAddress');
+                    console.log('SessionServerAddress remove')
                 } else {
                     // Utilisez vos données comme vous le souhaitez
                     return storedData.value;

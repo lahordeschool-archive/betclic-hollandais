@@ -11,13 +11,13 @@ class PoolsController {
         
     }
 
-    addPool(poolAdress) {
+    addPool(poolAddress) {
         const newGame = new GameController();
-        this.PoolList.set(poolAdress, newGame);
+        this.PoolList.set(poolAddress, newGame);
     }
 
-    addPlayer(playerName, mail, socket, poolAdress){
-        let gameController = this.PoolList[poolAdress];
+    addPlayer(playerName, mail, socket, poolAddress){
+        let gameController = this.PoolList[poolAddress];
         let alreadyLogged = false;
         gameController.playerList.forEach(player => {
             if(player.mail === mail){
