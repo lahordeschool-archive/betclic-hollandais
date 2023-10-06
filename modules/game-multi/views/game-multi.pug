@@ -21,9 +21,9 @@ html(lang="en")
 		
 	body
 		font(color='white')
-		h2(style='text-align: center;font-size: 40px;') HOLLANDAIS VIOLENT
-		button.playBtn PLAY NEW GAME
-		button.refreshBtn Refresh
+		h2(style='text-align: center;font-size: 40px;display:none') HOLLANDAIS VIOLENT
+		button.playBtn(style="display:none") PLAY NEW GAME
+		button.refreshBtn(style="display:none") Refresh
 		.bet-display
 			p Votre nom :
 			.user-name
@@ -35,23 +35,28 @@ html(lang="en")
 				|  ×
 				input.bet-input.bet-number(type='number' value='2' readonly='')
 		.dices-scene
-		.estimation
-			p Quantity
-			.custom-num
-				i.fa.fa-angle-up.arr-up(style='display: block;color: black;font-size: 24px;padding: 5px;')
-				input.num-input(type='number' value='3' data-color='#000000')
-				i.fa.fa-angle-down.arr-down(style='display: block;color: black;font-size: 24px;padding: 5px;')
-			p Value
-			.custom-num
-				i.fa.fa-angle-up.arr-up(style='display: block;color: black;font-size: 24px;padding: 5px;')
-				input.num-input(type='number' value='3' data-color='#000000')
-				i.fa.fa-angle-down.arr-down(style='display: block;color: black;font-size: 24px;padding: 5px;')
-		.game-button 
-			button.betBtn(id="betButton") BET
-			button.pacoSwitchBtn(id="pacoSwitchButton") paco&apos;s switch
-			button.objectionBtn(id="objectionButton") Contest
-		.game-info
-			.players
+		.gameplay
+			.left-box 
+				.estimation
+					p Quantity
+					.custom-num
+						i.fa.fa-angle-up.arr-up(style='display: block;color: black;font-size: 24px;padding: 5px;')
+						input.num-input(type='number' value='3' data-color='#000000')
+						i.fa.fa-angle-down.arr-down(style='display: block;color: black;font-size: 24px;padding: 5px;')
+					p Value
+					.custom-num
+						i.fa.fa-angle-up.arr-up(style='display: block;color: black;font-size: 24px;padding: 5px;')
+						input.num-input(type='number' value='3' data-color='#000000')
+						i.fa.fa-angle-down.arr-down(style='display: block;color: black;font-size: 24px;padding: 5px;')
+				.game-button(style="display: grid;")
+					button.betBtn(id="betButton") BET
+					button.pacoSwitchBtn(id="pacoSwitchButton") paco&apos;s switch
+					button.objectionBtn(id="objectionButton") Contest
+			.middle-box 
+				.game-info
+					.players
+			.right-box 
+
 
 
 script(src='/scripts/game-multi-client.js')
