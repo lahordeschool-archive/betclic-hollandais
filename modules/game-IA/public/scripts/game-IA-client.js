@@ -383,7 +383,7 @@ const PerudoAI = (() => {
         if (NoneContest) {
             if (prevValue === 1) {
                 // Essayer de surenchérir sur les pacos
-                if(probabilities[1]> prevCount && probabilities[1]> 1) {
+                if(probabilities[1]> prevCount && probabilities[1] >= 1) {
                     newBet = [probabilities[1] , 1];
                 }else{ // Si impossible de surenchérir sur pacos, essayer de quitter les pacos
                     for (let value = 6; value >= 2; value--) {
@@ -398,7 +398,7 @@ const PerudoAI = (() => {
                 console.log("Essayez d'augmenter la valeur tout en maintenant ou en augmentant le nombre de dés ");
                 
                 for (let value = 6; value >= prevValue; value--) {
-                    if (probabilities[value] >= prevCount && probabilities[value]> 1) {
+                    if (probabilities[value] >= prevCount && probabilities[value] >= 1) {
                         newBet = [probabilities[value], value];
                         break;
                     }
@@ -417,7 +417,7 @@ const PerudoAI = (() => {
 
                
                 if (newBet === null) { // Si nous ne pouvons toujours pas parier plus, essayons de passer aux pacos
-                    if (probabilities[1] >= Math.ceil(prevCount / 2) && probabilities[1] > 1) {
+                    if (probabilities[1] >= Math.ceil(prevCount / 2) && probabilities[1] >= 1) {
                         newBet = [probabilities[1], 1];
                     }
                 }
