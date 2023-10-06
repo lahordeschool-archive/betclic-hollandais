@@ -55,10 +55,16 @@ body.bg-image {
 }
 
 
- @font-face {
-  font-family: 'Treasure Map Dead Hand';
-  src: url('stylesheets/fonts/Treamd.ttf') format('ttf'), /* Add other formats as needed */
+@font-face {
+  font-family: 'Booter';
+  src: url('../stylesheets/fonts/BOOTERFZ.ttf') format('truetype');
 }
+
+h1 {
+  font-family: 'Booter', sans-serif;
+}
+
+
 
 .shadowed {
   -webkit-filter: drop-shadow(5px 5px 5px #222222);
