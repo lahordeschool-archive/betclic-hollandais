@@ -162,7 +162,6 @@ $(document).ready(async function() {
     window.objection = function (){
         console.log('ia object');
         if(VerifyObjection()){
-            alert('Objection');
             socket.emit('objection', serveurAdress);
             iterration = 0;
             return true;
@@ -183,7 +182,6 @@ $(document).ready(async function() {
         console.log('ia bet '+ newBet);
         console.log('Verif ia bet = '+VerifyBet(newBet));
         if(VerifyBet(newBet)){
-            alert('bet :'+ newBet);
             socket.emit( 'bet' , {bet: newBet, adress: serveurAdress});
             iterration = 0;
             return true;

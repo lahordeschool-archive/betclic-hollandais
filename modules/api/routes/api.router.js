@@ -108,8 +108,8 @@ module.exports = function (io) {
       updateClassement(controller);
     });
 
-    function VerifPlayerPlayInTime(controller, manche, round){
-      if(manche === controller.currentManche, round === controller.currentRound){
+    function VerifPlayerPlayInTime(address, manche, round){
+      if(manche === controller.currentManche && round === controller.currentRound && controller.winner == null){
         console.log('Action par default demander car le joueur na pas jouer');
         console.log('manche au set :' + manche);
         console.log('manche au call :' + controller.currentManche);
@@ -133,7 +133,7 @@ module.exports = function (io) {
        
     }
 
-    function nextTurn(controller) {
+    function nextTurn(address) {
       try {
         controller.playerList[controller.currentPlayer].socket.emit(
           "PlayerTurn",
@@ -142,7 +142,7 @@ module.exports = function (io) {
         setTimeout(
           () =>
             VerifPlayerPlayInTime(
-              controller,
+              address,
               controller.currentManche,
               controller.currentRound
             ),
