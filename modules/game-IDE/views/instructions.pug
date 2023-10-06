@@ -19,26 +19,21 @@ block content
     .container-fluid
         .row(style="margin-top: 0px;")
             .col-7(style="margin: auto;")
-                a(href="/hub" style="float: right; margin-bottom: 10px;") ⬅️ Retour au hub
-        .row(style="margin-top: 0px;")
-            .col-7(style="margin: auto; padding: 40px; background: #fff; border-radius: 10px;")
-                img(src="/images/treasure-skull.png" style="float: left;  height: 100px; margin-right: 10px;")
-                p#instructionsMessage.animate__animated.animate__flash.animate__infinite(style="font-weight: bold; float: left; max-width: 80%")
-                    | 🁢
+                a(href="/hub" style="float: right; margin-bottom: 10px;") Retour au hub
         .row(style="margin-top: 20px;")
             .col-7(style="margin: auto; padding: 40px; background: #fff; border-radius: 10px;")
-                h2 Règles du jeu du Perudo
+                h2(style="font-weight : 700;text-align: center;") Règles du jeu du Perudo
                 br
-                h4 But du jeu :
+                h4(style="font-weight : 700") But du jeu :
                 p
                     Le Perudo est un jeu de dés et de bluff. Le but est de parier sur le nombre total de dés affichant une certaine face, en comptant les dés de tous les joueurs. Vous devez soit augmenter la mise, soit contester celle de l'adversaire précédent. Le perdant d'un tour perd un dé pour le prochain tour. Le gagnant est le dernier joueur ayant au moins un dé.
-                h4 Préparation :
+                h4(style="font-weight : 700") Préparation :
                 p
                 | - Chaque joueur commence avec 5 dés.
                 br
                 | - Les dés sont lancés en secret, cachés sous un gobelet ou une main.
                 p
-                h4 Déroulement d'un tour :
+                h4(style="font-weight : 700") Déroulement d'un tour :
                 ol
                     li
                         b Première mise:
@@ -58,10 +53,10 @@ block content
                         ul
                             li Si la mise est correcte ou sous-estimée (il y a autant ou plus de dés correspondants que la mise), le contestataire perd un dé.
                             li Si la mise est surestimée (il y a moins de dés correspondants que la mise), le joueur qui a fait la mise perd un dé.
-                h4 Fin du jeu :
+                h4(style="font-weight : 700") Fin du jeu :
                 p
                     Quand un joueur perd tous ses dés, il est éliminé du jeu. Le jeu se termine lorsque tous les joueurs sauf un ont été éliminés. Le dernier joueur restant est le gagnant.
-                h4 Conseil :
+                h4(style="font-weight : 700") Conseil :
                 p
                     | Bluffer est une partie essentielle du Perudo ! Vous n'avez pas toujours besoin de dire la vérité sur votre mise; le but est de tromper vos adversaires.
     script. 
