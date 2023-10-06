@@ -224,7 +224,7 @@ module.exports = function (io) {
           emitToAllInController("updateHistorique", getTime() + " - " + controller.playerList[controller.currentPlayer].name + " : Moi je dis : DUDO ! Faites voir vos dés.", controller);
           controller.dataSet();
           if(controller.winner == null){
-            setTimeout(() => nextTurn(data.address), 5000);  // Attendre 5 secondes
+            setTimeout(() => nextTurn(address), 5000);  // Attendre 5 secondes
             controllerMaj(controller);
           }else{
             emitToAllInController('finish', controller.winner, controller);
