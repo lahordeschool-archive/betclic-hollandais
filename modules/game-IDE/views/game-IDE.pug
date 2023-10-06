@@ -3,25 +3,20 @@ extends ../../_common/views/layout-hub
 block content
     .container
         .row 
-            .col-2
-            .col-8
-
-                .row(style="margin-top: 0px;")
-                    .col-12(style="margin: auto;")
-                        a(href="/hub" style="float: right; margin-bottom: 10px;") Retour au hub
-                .card(style="border-radius: 10px; margin-bottom: 10px;")
-                    .card-body 
-                        img(src="/images/treasure-skull.png" style="float: left;  height: 100px; margin-right: 10px;")
-                        p#ideMessage.animate__animated.animate__flash.animate__infinite(style="font-weight: bold; float: left; min-height: 100px; max-width: 80%")
-                            | 🁢
+            .col-8.offset-2
+                .row(style="text-align: center; justify-content: center;") 
+                        img(src="/images/treasure-skull.png" style="float: left;  height: 100px; width:150px")
                         br
                         p(style="width: 100%; float: left;")
                             a(href="/game-ide/instructions" target="_blank" class="btn btn-secondary") Règles du jeu
+
+                .row(style="margin-top: 0px;")
+                    a(href="/hub" style="text-align: center; margin-bottom: 10px;") Retour au hub 
                 .row
                     #editor.editor
                 .row
-                    .col-12
-                        button.btn.btn-primary.saveBtn(style="float: right; margin-top: 10px; margin-bottom: 50px;")  Enregistrer l'IA 
+                  .col-12.offset-0.col-md-6.offset-md-3
+                    button.btn.btn-primary.saveBtn(style="margin-top: 10px; margin-bottom: 50px;width: 100%;")  Enregistrer l'IA 
         .row(style="margin-top: 10px;")
             .col-8(style="margin: auto; padding: 40px; background: #fff; border-radius: 10px;")
                 h4(style="font-weight : 700") Fonctions disponibles pour l'IA :
