@@ -1,8 +1,8 @@
 class IA_GameController {
 
-    constructor() {
+    constructor(router) {
         this.address = '';
-
+        this.router = router;
         this.gameInProgress = false;
 
         this.currentRound = 1;
@@ -121,7 +121,9 @@ class IA_GameController {
         let resultOfObjection = false;
         if(this.gameInProgress){
             let count;
-        
+            if (this.currentTimeout) {
+                clearTimeout(this.currentTimeout);
+            }
             if(this.specialManche){
                 count = this.allDices.filter(die => die === this.currentBet[1]).length;
                 this.specialManche = false;
@@ -153,6 +155,7 @@ class IA_GameController {
             let countPlayer = 0;
             let win;
             this.playerList.forEach(player => {
+                console.log("il reste "+player.diceNb+" dés à "+player.name)
                 if(player.diceNb > 0){
                     countPlayer++;
                     win = player.name;
@@ -178,7 +181,7 @@ class IA_GameController {
             }else{
                 //console.log("le gagnant est :" + win);
 
-                resultOfObjection = "La partie est terminée. Le gagnant est :" + win;
+                //resultOfObjection = "La partie est terminée. Le gagnant est :" + win;
                 this.winner = win;
                 this.gameInProgress = false;
             }
@@ -190,6 +193,9 @@ class IA_GameController {
         let resultOfBet = false;
         if(this.gameInProgress){
             this.setPlayerBet([count, value]);
+            if (this.currentTimeout) {
+                clearTimeout(this.currentTimeout);
+            }
             resultOfBet = this.playerList[this.currentPlayer].name + " - Je paris qu'il y a " + count + " dés de " + value;
             this.currentBet = [count, value];
             this.betList.push(this.currentBet);

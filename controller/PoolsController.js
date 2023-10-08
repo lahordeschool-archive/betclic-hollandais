@@ -2,9 +2,9 @@ const GameController = require('("../../../controller/IA_GameController');
 
 class PoolsController {
 
-    constructor() {
+    constructor(router) {
         this.PoolList = new Map();
-
+        this.router = router;
     }
 
     init() {
@@ -42,12 +42,14 @@ class PoolsController {
         return servers;
     }
     
-    defaultAction(controller){
+    defaultAction(controller, address){
         console.log("************************ action default API **********************");
         console.log("Game In Progress :" + controller.gameInProgress);
         if(controller.gameInProgress){
             let data = controller.dataCurrentPlayer;
-            PerudoAI.decideAction(controller, data.CurrentBet, data.YourDices, data.TotaDices, data.IsSpecialManche);
+            data.address = address;
+            PerudoAI.PoolsController = this;
+            PerudoAI.decideAction(this.router, controller, data, data.CurrentBet, data.YourDices, data.TotaDices, data.IsSpecialManche);
         }
     }
 
@@ -66,7 +68,7 @@ const PerudoAI = (() => {
         return Math.ceil(myCount + expectedCount);
     }
     
-    function decideAction(controller, previousBet, myDice, totalDice, isSpecialManche) {
+    function decideAction(router, controller, data, previousBet, myDice, totalDice, isSpecialManche) {
         let [prevCount, prevValue] = previousBet;
         let newBet = null;
     
@@ -130,11 +132,19 @@ const PerudoAI = (() => {
         }
 
         if (newBet != null) {
-            controller.bet(newBet[0], newBet[1]);
+
+            console.log("bet 1 par défaut = "+newBet[0]+" "+newBet[1]);
+            router.betAction({bet: [newBet[0], newBet[1]], address: data.address}, router.socketUsers[data.currentPlayer], true);
+            //controller.bet(newBet[0], newBet[1]);
         } else if(JSON.stringify(previousBet) == JSON.stringify([0,1]) || JSON.stringify(previousBet) == JSON.stringify([0,2])) {
+
+            console.log("bet 2 par défaut");
+            router.betAction({bet: [prevCount + 1, prevValue], address: data.address}, router.socketUsers[data.currentPlayer], true);
             controller.bet(prevCount + 1, prevValue);
         }else {
-            controller.objection();
+            console.log("objection par défaut");
+            router.objectionAction(data.address, true);
+            //controller.objection();
         }
     }
     
