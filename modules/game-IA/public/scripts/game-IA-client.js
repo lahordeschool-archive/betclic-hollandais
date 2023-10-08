@@ -15,16 +15,14 @@ var isSpecialManche = false;
 
 var iterration = 0;
 
-
 function rollDice(dices) {
   for (var i = 0; i <= dices.length; i++) {
-
     //clean dice faces
     for (var j = 1; j <= 6; j++) {
-        $("#dice" + i +"").removeClass("show-" + j);
+      $("#dice" + i + "").removeClass("show-" + j);
     }
 
-    $("#dice" + i +"").addClass("show-" + dices[i]);
+    $("#dice" + i + "").addClass("show-" + dices[i]);
   }
 }
 $(document).ready(async function () {
@@ -122,24 +120,30 @@ $(document).ready(async function () {
     socket.on("updateHistorique", (entry) => {
       UI.addHistoriqueEntry(entry);
     });
-
     socket.on("PlayerTurn", (gameInfo) => {
-      playerList = gameInfo.listPlayers;
-      actualManche = gameInfo.CurrentManche;
-      actualRound = gameInfo.CurrentRound;
-      actualBet = gameInfo.CurrentBet;
-      actualtotalDices = gameInfo.TotaDices;
-      actualPlayerIndex = gameInfo.CurrentPlayer;
-      playerDices = gameInfo.YourDices;
-      isSpecialManche = gameInfo.IsSpecialManche;
+      if (
+        gameInfo.listPlayers[gameInfo.CurrentPlayer].mail ==
+        localStorage.getItem("UserMail")
+      ) {
+        playerList = gameInfo.listPlayers;
+        actualManche = gameInfo.CurrentManche;
+        actualRound = gameInfo.CurrentRound;
+        actualBet = gameInfo.CurrentBet;
+        actualtotalDices = gameInfo.TotaDices;
+        actualPlayerIndex = gameInfo.CurrentPlayer;
+        playerDices = gameInfo.YourDices;
+        isSpecialManche = gameInfo.IsSpecialManche;
 
-      UI.displayDices();
-      UI.refreshDisplay();
+        UI.displayDices();
+        UI.refreshDisplay();
 
-      window.yourTurn(gameInfo);
-      //setTimeout(yourTurn(gameInfo), 5000);
+        if (!window.location.href.includes("/training")) {
+          window.yourTurn(gameInfo);
+        }
+        //setTimeout(yourTurn(gameInfo), 5000);
 
-      SetServeurSession();
+        SetServeurSession();
+      }
     });
 
     socket.on("Maj", (gameInfo) => {
@@ -166,14 +170,14 @@ $(document).ready(async function () {
       //redirectTo('/game-IDE');
     });
 
-    function yourTurn(data) {
+    /*function yourTurn(data) {
       PerudoAI.decideAction(
         actualBet,
         playerDices,
         actualtotalDices,
         isSpecialManche
       );
-    }
+    }*/
   });
 
   window.objection = function () {
@@ -279,8 +283,6 @@ $(document).ready(async function () {
         //playersScene.innerHTML += PlayerHTML;
       });
 
-  
-
       betCount.value = actualBet[0];
       betValue.value = actualBet[1];
     }
@@ -318,14 +320,13 @@ $(document).ready(async function () {
 
     function displayDices() {
       $("#dicesTable").show();
-      rollDice(
-        [playerDices[0] ? playerDices[0] : 0,
+      rollDice([
+        playerDices[0] ? playerDices[0] : 0,
         playerDices[1] ? playerDices[1] : 0,
         playerDices[2] ? playerDices[2] : 0,
         playerDices[3] ? playerDices[3] : 0,
-        playerDices[4] ? playerDices[4] : 0]
-      );
-      
+        playerDices[4] ? playerDices[4] : 0,
+      ]);
     }
 
     return {
