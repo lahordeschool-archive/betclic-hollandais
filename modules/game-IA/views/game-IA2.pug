@@ -31,14 +31,14 @@ block content
                                 br
                                 p.col-3.p-0 A vous de jouer : 
                                 .col-9
-                                    input.bet-input-entry.bet-count-entry(type='number' value='1' max='6' min='1'  style='max-width : 50px; margin-right : 5px')
+                                    input#betCount.bet-count-entry(type='number' value='1' max='6' min='1'  style='max-width : 50px; margin-right : 5px')
                                     a X
-                                    input.bet-input-entry.bet-number-entry(type='number' value='2' max='6' min='1'  style='max-width : 50px; margin-left : 5px')
+                                    input#betValue.bet-number-entry(type='number' value='2' max='6' min='1'  style='max-width : 50px; margin-left : 5px')
                                 .row 
                                     .col-2 
-                                        button#betButton.btn.btn-primary(type="button" style="width: 100%;") Parier
+                                        button#betButton.btn.btn-primary(type="button" disabled style="width: 100%;") Parier
                                     .col-2 
-                                        button#betButton.btn.btn-secondary(type="button" style="width: 100%;") Objection
+                                        button#objectionButton.btn.btn-secondary(type="button" disabled style="width: 100%;") Objection
                             endif
                 .row 
                     .col-12(style="padding: 0px;")

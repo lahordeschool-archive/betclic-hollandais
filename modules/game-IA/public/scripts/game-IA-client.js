@@ -118,6 +118,9 @@ $(document).ready(async function () {
     });
 
     socket.on("updateHistorique", (entry) => {
+
+      $("#betButton").attr("disabled", "disabled");
+      $("#objectionButton").attr("disabled", "disabled");
       UI.addHistoriqueEntry(entry);
     });
     socket.on("PlayerTurn", (gameInfo) => {
@@ -139,11 +142,25 @@ $(document).ready(async function () {
 
         if (!window.location.href.includes("/training")) {
           window.yourTurn(gameInfo);
+        } else {
+            $("#betButton").removeAttr("disabled");
+            $("#objectionButton").removeAttr("disabled");
         }
         //setTimeout(yourTurn(gameInfo), 5000);
 
         SetServeurSession();
+      } else {
+        $("#betButton").attr("disabled", "disabled");
+        $("#objectionButton").attr("disabled", "disabled");
       }
+    });
+
+    $("#betButton").on("click", function () {
+        window.bet([$("#betCount").val(), $("#betValue").val()]);
+    });
+
+    $("#objectionButton").on("click", function () {
+        window.objection();
     });
 
     socket.on("Maj", (gameInfo) => {
@@ -285,6 +302,8 @@ $(document).ready(async function () {
 
       betCount.value = actualBet[0];
       betValue.value = actualBet[1];
+      $("#betCount").val(actualBet[0]);
+      $("#betValue").val(actualBet[1]);
     }
 
     function refreshClassement(classement) {

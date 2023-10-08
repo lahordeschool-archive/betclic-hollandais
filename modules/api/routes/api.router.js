@@ -235,11 +235,11 @@ module.exports = function (io) {
     });
 
     socket.on("objection", (address) => {
-      router.objectionAction(address);
+      router.objectionAction(address, false);
     });
 
     socket.on("bet", (data) => {
-      router.betAction(data, socket, poolsController);
+      router.betAction(data, socket, poolsController, false);
     });
 
     socket.on("MajRequest", (address) => {
@@ -262,7 +262,7 @@ module.exports = function (io) {
     }
     return hour + ":" + minutes;
   }
-  router.betAction = function (data, socket, isDefaultAction = false) {
+  router.betAction = function (data, socket, isDefaultAction) {
     console.log(data.address);
     let controller = poolsController.PoolList.get(data.address);
     if (controller.gameInProgress) {
@@ -289,7 +289,7 @@ module.exports = function (io) {
     }
   };
 
-  router.objectionAction = function (address, isDefaultAction = false) {
+  router.objectionAction = function (address, isDefaultAction) {
     let controller = poolsController.PoolList.get(address);
     if (controller.gameInProgress) {
       //if(socket === controller.playerList[controller.currentPlayer].socket){
