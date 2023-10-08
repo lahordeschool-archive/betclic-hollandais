@@ -4,7 +4,7 @@ type: nodejs:18
 
 disk: 512
 resources:
-    base_memory: 768
+    base_memory: 700
 
 mounts:
   'logs':
