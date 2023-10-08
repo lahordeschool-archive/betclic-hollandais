@@ -15,11 +15,11 @@ const { generateLiveMessage } = require("../../../lib/openai");
 gameController.address = "1111";
 gameIAController.address = "2222";
 
-poolsController.addPool("3333");
-poolsController.addPool("4444");
-poolsController.addPool("3334");
-poolsController.addPool("3335");
-poolsController.addPool("3336");
+poolsController.addPool("1000");
+poolsController.addPool("2000");
+poolsController.addPool("3000");
+poolsController.addPool("4000");
+poolsController.addPool("5000");
 
 const socketUsers = {};
 

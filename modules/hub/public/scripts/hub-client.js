@@ -62,7 +62,7 @@ $(document).ready(async function(){
     $.get("/api/getUserInfos", function(data) {
         clientName = data.firstname;
         localStorage.setItem('UserFirstName', clientName);
-        localStorage.setItem('UserMail', data.id);
+        localStorage.setItem('UserMail', data.email);
     }).fail(function() {
         console.error("Erreur lors de la récupération des informations de l'utilisateur.");
     });
