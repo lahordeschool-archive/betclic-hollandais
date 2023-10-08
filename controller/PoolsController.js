@@ -43,8 +43,6 @@ class PoolsController {
     }
     
     defaultAction(controller, address){
-        console.log("************************ action default API **********************");
-        console.log("Game In Progress :" + controller.gameInProgress);
         if(controller.gameInProgress){
             let data = controller.dataCurrentPlayer;
             data.address = address;
@@ -77,10 +75,8 @@ const PerudoAI = (() => {
             probabilities[value] = estimateProbability(totalDice, myDice, value);
         }
         
-        console.log(probabilities);
         let NoneContest;
         if (!isSpecialManche) {
-            console.log("Ajout bonus ");
             let pacoProbability = probabilities[1];
             NoneContest = pacoProbability + probabilities[prevValue] > prevCount;
         }else{
@@ -102,7 +98,6 @@ const PerudoAI = (() => {
                 }
     
             } else {
-                console.log("Essayez d'augmenter la valeur tout en maintenant ou en augmentant le nombre de dés ");
                 
                 for (let value = 6; value >= prevValue; value--) {
                     if (probabilities[value] >= prevCount && probabilities[value] >= 1) {
@@ -117,7 +112,6 @@ const PerudoAI = (() => {
                 }
 
                 if (!isSpecialManche && newBet != null) {
-                    console.log("Ajout bonus ");
                     let pacoProbability = probabilities[1];
                     newBet[0] <= pacoProbability + probabilities[newBet[1]];
                 }
@@ -133,12 +127,11 @@ const PerudoAI = (() => {
 
         if (newBet != null) {
 
-            console.log("bet 1 par défaut = "+newBet[0]+" "+newBet[1]);
+            console.log("bet par défaut = "+newBet[0]+" "+newBet[1]);
             router.betAction({bet: [newBet[0], newBet[1]], address: data.address}, router.socketUsers[data.currentPlayer], true);
             //controller.bet(newBet[0], newBet[1]);
         } else if(JSON.stringify(previousBet) == JSON.stringify([0,1]) || JSON.stringify(previousBet) == JSON.stringify([0,2])) {
-
-            console.log("bet 2 par défaut");
+            console.log("bet par défaut");
             router.betAction({bet: [prevCount + 1, prevValue], address: data.address}, router.socketUsers[data.currentPlayer], true);
             controller.bet(prevCount + 1, prevValue);
         }else {

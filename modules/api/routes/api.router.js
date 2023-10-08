@@ -120,7 +120,7 @@ module.exports = function (io) {
         console.log(
           "Action par default demandée pour le joueur " +
             currentPlayer +
-            " car il n'a pas jouer"
+            " car il n'a pas joué"
         );
 
         // Avant d'exécuter l'action par défaut, annulez le timeout pour éviter des appels multiples
@@ -140,7 +140,7 @@ module.exports = function (io) {
         controllerMaj(controller);
       } else {
         // Le log ci-dessous est optionnel, décommentez-le si vous souhaitez des logs supplémentaires
-        // console.log('Action par default non demander car le joueur a jouer');
+        
       }
     };
 
@@ -170,7 +170,7 @@ module.exports = function (io) {
           5000 // Modifié à 5 secondes (5000 ms) comme vous l'avez mentionné initialement
         );
       } catch (error) {
-        console.log("Action par default demander car echec de emit PlayerTurn");
+        console.log("Action par default demandée car echec de emit PlayerTurn");
 
         // Avant d'exécuter l'action par défaut, assurez-vous d'annuler le timeout pour éviter les problèmes
         if (controller.currentTimeout) {
@@ -230,7 +230,7 @@ module.exports = function (io) {
         controllerMaj(controller);
         setTimeout(() => router.nextTurn(address), 5000); // Attendre 5 secondes
       } else {
-        console.log("Not enough players for init server " + address);
+        console.log("Not enough players to init server " + address);
       }
     });
 
@@ -263,15 +263,9 @@ module.exports = function (io) {
     return hour + ":" + minutes;
   }
   router.betAction = function (data, socket, isDefaultAction) {
-    console.log(data.address);
     let controller = poolsController.PoolList.get(data.address);
     if (controller.gameInProgress) {
-      console.log(
-        "bet received from " +
-          controller.currentPlayer +
-          " player with name : " +
-          controller.playerList[controller.currentPlayer].name
-      );
+      
       //if(socket === controller.playerList[controller.currentPlayer].socket){
       let resultOfBet = controller.bet(data.bet[0], data.bet[1]);
       controller.dataSet();
@@ -293,12 +287,7 @@ module.exports = function (io) {
     let controller = poolsController.PoolList.get(address);
     if (controller.gameInProgress) {
       //if(socket === controller.playerList[controller.currentPlayer].socket){
-      console.log(
-        "objection received from " +
-          controller.currentPlayer +
-          " player with name : " +
-          controller.playerList[controller.currentPlayer].name
-      );
+      
       emitToAllInController(
         "updateHistorique",
         getTime() +
