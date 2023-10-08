@@ -226,7 +226,8 @@ $(document).ready(async function () {
       socket.emit("bet", { bet: newBet, address: serveurAddress });
       iterration = 0;
       return true;
-    } else {
+    } 
+    /*else {
       iterration++;
       if (iterration === 5) {
         PerudoAI.decideAction(
@@ -240,7 +241,7 @@ $(document).ready(async function () {
       } else {
         return false;
       }
-    }
+    }*/
   };
 
   const UI = (() => {
