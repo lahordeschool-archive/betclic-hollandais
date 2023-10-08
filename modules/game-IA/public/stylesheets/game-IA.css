@@ -107,6 +107,7 @@ label { margin-right: 10px; }
 
 .bet-count, .bet-number, .player {
   font-weight: bold;
+  max-width: 50px;
 }
 
 .custom-num{

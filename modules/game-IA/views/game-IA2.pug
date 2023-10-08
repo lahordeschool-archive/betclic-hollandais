@@ -48,11 +48,12 @@ block content
                                 p Votre nom : #{user.firstname} #{user.lastname}
                             .player-name                           
                                 p Tour du joueur :
-                            .bet-values
-                                p Pari actuel :
-                                input.bet-input.bet-count(type='number' value='0' readonly='')
-                                |  ×
-                                input.bet-input.bet-number(type='number' value='2' readonly='')
+                            .row.bet-values
+                                p.col-3.p-0 Pari actuel : 
+                                .col-9
+                                    input.bet-input.bet-count(type='number' value='0' readonly='' disabled style='max-width : 50px; margin-right : 5px')
+                                    a X
+                                    input.bet-input.bet-number(type='number' value='2' readonly='' disabled style='max-width : 50px; margin-left : 5px')
         .row 
             br
     #modalIDESaved.modal        
