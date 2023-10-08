@@ -46,7 +46,7 @@ module.exports = function (io) {
 
   io.on("connection", (socket) => {
     socketUsers[socket.id] = socket;
-    
+
     socket.on("disconnect", () => {
       delete socketUsers[socket.id];
     });
@@ -100,72 +100,88 @@ module.exports = function (io) {
       router.updateClassement(controller);
     });
 
-    router.VerifPlayerPlayInTime = function(address, manche, round, currentPlayer) {
+    router.VerifPlayerPlayInTime = function (
+      address,
+      manche,
+      round,
+      currentPlayer
+    ) {
       let controller = poolsController.PoolList.get(address);
-  
-      // Vérifiez si le timeout est toujours valide et d'autres conditions requises
-      if (controller.currentTimeout && controller.gameInProgress && manche === controller.currentManche && round === controller.currentRound && controller.winner == null) {
-  
-          console.log('Action par default demandée pour le joueur '+currentPlayer+' car il n\'a pas jouer');
-          
-          // Avant d'exécuter l'action par défaut, annulez le timeout pour éviter des appels multiples
-          clearTimeout(controller.currentTimeout);
-          controller.currentTimeout = null; // Réinitialisez-le pour éviter toute confusion future
-          
-          poolsController.defaultAction(controller, address);
-          controller.dataSet();
-          
-          controller.playerList[controller.currentPlayer].socket.emit(
-              "PlayerTurn",
-              controller.dataCurrentPlayer
-          );
-          
-          controllerMaj(controller);
-      } else {
-          // Le log ci-dessous est optionnel, décommentez-le si vous souhaitez des logs supplémentaires
-          // console.log('Action par default non demander car le joueur a jouer');
-      }
-  }
-  
 
-    router.nextTurn = function(address) {
+      // Vérifiez si le timeout est toujours valide et d'autres conditions requises
+      if (
+        controller.currentTimeout &&
+        controller.gameInProgress &&
+        manche === controller.currentManche &&
+        round === controller.currentRound &&
+        controller.winner == null
+      ) {
+        console.log(
+          "Action par default demandée pour le joueur " +
+            currentPlayer +
+            " car il n'a pas jouer"
+        );
+
+        // Avant d'exécuter l'action par défaut, annulez le timeout pour éviter des appels multiples
+        clearTimeout(controller.currentTimeout);
+        controller.currentTimeout = null; // Réinitialisez-le pour éviter toute confusion future
+
+        poolsController.defaultAction(controller, address);
+        controller.dataSet();
+
+        if (controller.playerList[controller.currentPlayer]) {
+          controller.playerList[controller.currentPlayer].socket.emit(
+            "PlayerTurn",
+            controller.dataCurrentPlayer
+          );
+        }
+
+        controllerMaj(controller);
+      } else {
+        // Le log ci-dessous est optionnel, décommentez-le si vous souhaitez des logs supplémentaires
+        // console.log('Action par default non demander car le joueur a jouer');
+      }
+    };
+
+    router.nextTurn = function (address) {
       let controller = poolsController.PoolList.get(address);
-  
+
       // Si un timeout précédent existe pour ce controller, l'annuler
       if (controller.currentTimeout) {
-          clearTimeout(controller.currentTimeout);
+        clearTimeout(controller.currentTimeout);
       }
-  
-      try {
-          controller.playerList[controller.currentPlayer].socket.emit(
-              "PlayerTurn",
-              controller.dataCurrentPlayer
-          );
-  
-          // Stockez l'ID de timeout dans l'objet controller
-          controller.currentTimeout = setTimeout(
-              () => router.VerifPlayerPlayInTime(
-                  address,
-                  controller.currentManche,
-                  controller.currentRound,
-                  controller.currentPlayer
-              ),
-              5000 // Modifié à 5 secondes (5000 ms) comme vous l'avez mentionné initialement
-          );
-      } catch (error) {
-          console.log('Action par default demander car echec de emit PlayerTurn');
-  
-          // Avant d'exécuter l'action par défaut, assurez-vous d'annuler le timeout pour éviter les problèmes
-          if (controller.currentTimeout) {
-              clearTimeout(controller.currentTimeout);
-              controller.currentTimeout = null; // Réinitialisez-le pour éviter toute confusion future
-          }
-  
-          poolsController.defaultAction(controller);
-      }
-  }  
 
-    router.updateClassement = function(controller) {
+      try {
+        controller.playerList[controller.currentPlayer].socket.emit(
+          "PlayerTurn",
+          controller.dataCurrentPlayer
+        );
+
+        // Stockez l'ID de timeout dans l'objet controller
+        controller.currentTimeout = setTimeout(
+          () =>
+            router.VerifPlayerPlayInTime(
+              address,
+              controller.currentManche,
+              controller.currentRound,
+              controller.currentPlayer
+            ),
+          5000 // Modifié à 5 secondes (5000 ms) comme vous l'avez mentionné initialement
+        );
+      } catch (error) {
+        console.log("Action par default demander car echec de emit PlayerTurn");
+
+        // Avant d'exécuter l'action par défaut, assurez-vous d'annuler le timeout pour éviter les problèmes
+        if (controller.currentTimeout) {
+          clearTimeout(controller.currentTimeout);
+          controller.currentTimeout = null; // Réinitialisez-le pour éviter toute confusion future
+        }
+
+        poolsController.defaultAction(controller);
+      }
+    };
+
+    router.updateClassement = function (controller) {
       let classement = [];
       controller.playerList.forEach((player) => {
         classement.push({
@@ -184,13 +200,11 @@ module.exports = function (io) {
         }
       });
       emitToAllInController("updateClassement", classement, controller);
-    }
-
-
+    };
 
     socket.on("launchBattle", (address) => {
       let controller = poolsController.PoolList.get(address);
-      
+
       if (controller.playerList.length >= 2) {
         controller.init();
 
@@ -206,7 +220,11 @@ module.exports = function (io) {
         emitToAll("HubMaj", mapArray);
         emitToAllInController("BattleLaunched", {}, controller);
 
-        emitToAllInController("updateHistorique", getTime() + " - Début de la partie", controller);
+        emitToAllInController(
+          "updateHistorique",
+          getTime() + " - Début de la partie",
+          controller
+        );
 
         controllerMaj(controller);
         setTimeout(() => router.nextTurn(address), 5000); // Attendre 5 secondes
@@ -222,8 +240,6 @@ module.exports = function (io) {
     socket.on("bet", (data) => {
       router.betAction(data, socket, poolsController);
     });
-
-
 
     socket.on("MajRequest", (address) => {
       let controller = poolsController.PoolList.get(address);
@@ -245,46 +261,77 @@ module.exports = function (io) {
     }
     return hour + ":" + minutes;
   }
-  router.betAction = function(data, socket, isDefaultAction = false){
+  router.betAction = function (data, socket, isDefaultAction = false) {
     console.log(data.address);
     let controller = poolsController.PoolList.get(data.address);
-    if(controller.gameInProgress){
-      console.log("bet received from "+controller.currentPlayer+" player with name : "+controller.playerList[controller.currentPlayer].name);
+    if (controller.gameInProgress) {
+      console.log(
+        "bet received from " +
+          controller.currentPlayer +
+          " player with name : " +
+          controller.playerList[controller.currentPlayer].name
+      );
       //if(socket === controller.playerList[controller.currentPlayer].socket){
-        let resultOfBet = controller.bet(data.bet[0], data.bet[1]);
-        controller.dataSet();
-        emitToAllInController("updateHistorique", getTime() + " - " + resultOfBet + (isDefaultAction ? " - (action par défaut)" : ""), controller);
-        setTimeout(() => router.nextTurn(data.address), 5000);  // Attendre 5 secondes
-        controllerMaj(controller);
+      let resultOfBet = controller.bet(data.bet[0], data.bet[1]);
+      controller.dataSet();
+      emitToAllInController(
+        "updateHistorique",
+        getTime() +
+          " - " +
+          resultOfBet +
+          (isDefaultAction ? " - (action par défaut)" : ""),
+        controller
+      );
+      setTimeout(() => router.nextTurn(data.address), 5000); // Attendre 5 secondes
+      controllerMaj(controller);
       //}
     }
-  }
+  };
 
-  router.objectionAction = function(address, isDefaultAction = false){
+  router.objectionAction = function (address, isDefaultAction = false) {
     let controller = poolsController.PoolList.get(address);
-    if(controller.gameInProgress){
+    if (controller.gameInProgress) {
       //if(socket === controller.playerList[controller.currentPlayer].socket){
-        console.log('objection received from '+controller.currentPlayer+' player with name : '+controller.playerList[controller.currentPlayer].name);
-        emitToAllInController("updateHistorique", getTime() + " - " + controller.playerList[controller.currentPlayer].name + " : Moi je dis : DUDO ! Faites voir vos dés.", controller);
-        
-        let resultOfObjection = controller.objection();
-        if(resultOfObjection){
-          emitToAllInController("updateHistorique", getTime() + " - " + resultOfObjection + (isDefaultAction ? " - (action par défaut)" : ""), controller);
-          router.updateClassement(controller);
-        }
-        controller.dataSet();
-        if(controller.winner == null){
-          setTimeout(() => router.nextTurn(address), 5000);  // Attendre 5 secondes
-          controllerMaj(controller);
-        }else{
-          emitToAllInController('finish', controller.winner, controller);
-          controller.removeAllPlayer();
-          const mapArray = [...poolsController.getServerList()];
-          emitToAll('HubMaj', mapArray);
-        }   
+      console.log(
+        "objection received from " +
+          controller.currentPlayer +
+          " player with name : " +
+          controller.playerList[controller.currentPlayer].name
+      );
+      emitToAllInController(
+        "updateHistorique",
+        getTime() +
+          " - " +
+          controller.playerList[controller.currentPlayer].name +
+          " : Moi je dis : DUDO ! Faites voir vos dés.",
+        controller
+      );
+
+      let resultOfObjection = controller.objection();
+      if (resultOfObjection) {
+        emitToAllInController(
+          "updateHistorique",
+          getTime() +
+            " - " +
+            resultOfObjection +
+            (isDefaultAction ? " - (action par défaut)" : ""),
+          controller
+        );
+        router.updateClassement(controller);
+      }
+      controller.dataSet();
+      if (controller.winner == null) {
+        setTimeout(() => router.nextTurn(address), 5000); // Attendre 5 secondes
+        controllerMaj(controller);
+      } else {
+        emitToAllInController("finish", controller.winner, controller);
+        controller.removeAllPlayer();
+        const mapArray = [...poolsController.getServerList()];
+        emitToAll("HubMaj", mapArray);
+      }
       //}
     }
-  }
+  };
 
   /* GET user info */
   router.get("/getUserInfos", (req, res) => {

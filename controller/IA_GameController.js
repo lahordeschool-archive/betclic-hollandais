@@ -265,7 +265,7 @@ class IA_GameController {
             CurrentRound : this.currentRound,
             CurrentPlayer : this.currentPlayer,
             BetList : this.BetList,
-            YourDices : this.playerList[this.currentPlayer].dices ? this.playerList[this.currentPlayer].dices : [],
+            YourDices :  this.playerList[this.currentPlayer] !== undefined ? this.playerList[this.currentPlayer].dices ? this.playerList[this.currentPlayer].dices : [] : [],
             TotaDices : this.allDices.length,
             IsSpecialManche : this.specialManche
         };

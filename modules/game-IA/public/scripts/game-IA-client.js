@@ -17,8 +17,6 @@ var iterration = 0;
 
 
 function rollDice(dices) {
-  console.log(dices);
-  console.log("ok")
   for (var i = 0; i <= dices.length; i++) {
 
     //clean dice faces
@@ -27,7 +25,6 @@ function rollDice(dices) {
     }
 
     $("#dice" + i +"").addClass("show-" + dices[i]);
-    console.log("show-" + dices[i])
   }
 }
 $(document).ready(async function () {
@@ -282,11 +279,7 @@ $(document).ready(async function () {
         //playersScene.innerHTML += PlayerHTML;
       });
 
-      if (displayActualPlayer) {
-        displayActualPlayer.textContent = playerList[actualPlayerIndex].name;
-      } else {
-        console.error("L'élément .text-field.player n'a pas été trouvé.");
-      }
+  
 
       betCount.value = actualBet[0];
       betValue.value = actualBet[1];
