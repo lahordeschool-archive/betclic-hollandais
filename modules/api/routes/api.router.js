@@ -45,16 +45,16 @@ module.exports = function (io) {
   const router = express.Router();
 
   io.on("connection", (socket) => {
-    console.log(`A client connected with ID: ${socket.id}`);
+    //console.log`A client connected with ID: ${socket.id}`);
     socketUsers[socket.id] = socket;
 
     socket.on("disconnect", () => {
-      console.log(`Client with ID: ${socket.id} disconnected`);
+      //console.log`Client with ID: ${socket.id} disconnected`);
       delete socketUsers[socket.id];
     });
 
     socket.on("connected", () => {
-      console.log('Client connected and sent a "connected" message');
+      //console.log('Client connected and sent a "connected" message');
       // Handle the event here
     });
 
@@ -70,8 +70,8 @@ module.exports = function (io) {
           }
         });
         if (!alreadyLogged && controller.gameInProgress) {
-          console.log("can't connect user " + data.mail);
-          console.log("Party in progress " + controller.gameInProgress);
+          //console.log("can't connect user " + data.mail);
+          //console.log("Party in progress " + controller.gameInProgress);
           socket.emit("ServerNotConnect");
         }
       } else {
@@ -80,14 +80,14 @@ module.exports = function (io) {
     });
 
     socket.on("messageTest", () => {
-      console.log('Client sent a "messageTest" message');
+      //console.log('Client sent a "messageTest" message');
       // Handle the event here
       emitToAll("messageTestReceived", 'Server received "messageTest" message');
     });
 
     socket.on("connectPlayer", (user) => {
       let controller = poolsController.PoolList.get(user.address);
-      console.log("connection IA de " + user + " on " + user.address);
+      //console.log("connection IA de " + user + " on " + user.address);
       let alreadyLogged = false;
       controller.playerList.forEach((player) => {
         if (player.mail === user.mail) {
@@ -101,7 +101,7 @@ module.exports = function (io) {
         !controller.gameInProgress
       ) {
         controller.addPlayer(user.name, user.mail, socket);
-        console.log("New Player " + user.name + " on server " + user.address);
+        //console.log("New Player " + user.name + " on server " + user.address);
       }
       const mapArray = [...poolsController.getServerList()];
       emitToAll("HubMaj", mapArray);
@@ -111,11 +111,11 @@ module.exports = function (io) {
     function VerifPlayerPlayInTime(address, manche, round){
       let controller = poolsController.PoolList.get(address);
       if(controller.gameInProgress && manche === controller.currentManche && round === controller.currentRound && controller.winner == null){
-        console.log('Action par default demander car le joueur na pas jouer');
-        console.log('manche au set :' + manche);
-        console.log('manche au call :' + controller.currentManche);
-        console.log('round au set :' + round);
-        console.log('round au call :' + controller.currentRound);
+        //console.log('Action par default demander car le joueur na pas jouer');
+        //console.log('manche au set :' + manche);
+        //console.log('manche au call :' + controller.currentManche);
+        //console.log('round au set :' + round);
+        //console.log('round au call :' + controller.currentRound);
         poolsController.defaultAction(controller);
         controller.dataSet();
         controller.playerList[controller.currentPlayer].socket.emit(
@@ -125,11 +125,11 @@ module.exports = function (io) {
         controllerMaj(controller);
       }
       else{
-        console.log('Action par default non demander car le joueur a jouer');
-        console.log('manche au set :' + manche);
-        console.log('manche au call :' + controller.currentManche);
-        console.log('round au set :' + round);
-        console.log('round au call :' + controller.currentRound);
+        //console.log('Action par default non demander car le joueur a jouer');
+        //console.log('manche au set :' + manche);
+        //console.log('manche au call :' + controller.currentManche);
+        //console.log('round au set :' + round);
+        //console.log('round au call :' + controller.currentRound);
       }
        
     }
@@ -151,7 +151,7 @@ module.exports = function (io) {
           60000
         );
       } catch (error) {
-        console.log('Action par default demander car echec de emit PlayerTurn');
+        //console.log('Action par default demander car echec de emit PlayerTurn');
         poolsController.defaultAction(controller);
       }
     }
@@ -176,7 +176,7 @@ module.exports = function (io) {
         }
       });
 
-      console.log(classement);
+      //console.logclassement);
       emitToAllInController("updateClassement", classement, controller);
     }
 
@@ -192,16 +192,19 @@ module.exports = function (io) {
 
     socket.on("launchBattle", (address) => {
       let controller = poolsController.PoolList.get(address);
-      console.log(
-        "init " +
-          address +
-          " controller = " +
-          controller +
-          " playerList = " +
-          controller.playerList[0].name
-      );
+      //console.log
+
       if (controller.playerList.length >= 2) {
         controller.init();
+
+        //determine current player that has launched the game
+        controller.playerList.forEach((player, index) => {
+          if (player.socket === socket) {
+            controller.currentPlayer = index;
+            console.log("current player is "+index+ " player name is "+player.name);
+          }
+        });
+
         controller.dataSet();
         const mapArray = [...poolsController.getServerList()];
         emitToAll("HubMaj", mapArray);
@@ -212,7 +215,7 @@ module.exports = function (io) {
         controllerMaj(controller);
         setTimeout(() => nextTurn(address), 5000); // Attendre 5 secondes
       } else {
-        console.log("Not enough players for init server " + address);
+        //console.log("Not enough players for init server " + address);
       }
     });
 
@@ -220,9 +223,13 @@ module.exports = function (io) {
       let controller = poolsController.PoolList.get(address);
       if(controller.gameInProgress){
         if(socket === controller.playerList[controller.currentPlayer].socket){
-          console.log('objection');
-          controller.objection();
+          //console.log('objection');
           emitToAllInController("updateHistorique", getTime() + " - " + controller.playerList[controller.currentPlayer].name + " : Moi je dis : DUDO ! Faites voir vos dés.", controller);
+          
+          let resultOfObjection = controller.objection();
+          if(resultOfObjection){
+            emitToAllInController("updateHistorique", getTime() + " - " + resultOfObjection, controller);
+          }
           controller.dataSet();
           if(controller.winner == null){
             setTimeout(() => nextTurn(address), 5000);  // Attendre 5 secondes
@@ -240,12 +247,13 @@ module.exports = function (io) {
     socket.on("bet", (data) => {
       let controller = poolsController.PoolList.get(data.address);
       if(controller.gameInProgress){
-        console.log('controller '+ data.address +' list Players' + controller.playerList);
+        //console.log('controller '+ data.address +' list Players' + controller.playerList);
+        console.log("bet received from "+controller.currentPlayer+" player with name : "+controller.playerList[controller.currentPlayer].name);
         if(socket === controller.playerList[controller.currentPlayer].socket){
-          console.log('you can bet');
-          controller.bet(data.bet[0], data.bet[1]);
+          //console.log('you can bet');
+          let resultOfBet = controller.bet(data.bet[0], data.bet[1]);
           controller.dataSet();
-          emitToAllInController("updateHistorique", getTime() + " - " + controller.playerList[controller.currentPlayer].name + " : Je parie qu'il y a "+data.bet[0]+" dés de "+data.bet[1], controller);
+          emitToAllInController("updateHistorique", getTime() + " - " + resultOfBet, controller);
           setTimeout(() => nextTurn(data.address), 5000);  // Attendre 5 secondes
           controllerMaj(controller);
         }

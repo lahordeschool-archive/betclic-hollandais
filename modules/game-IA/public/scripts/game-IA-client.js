@@ -37,7 +37,7 @@ $(document).ready(async function() {
                     localStorage.removeItem('SessionServerAddress');
                 } else {
                     // Utilisez vos données comme vous le souhaitez
-                    console.log(storedData.value);
+                    //console.log(storedData.value);
                     $("#numeroTable").text(storedData.value);
                     socket.emit('connectPlayer', ({name: localStorage.getItem('UserFirstName'), mail: localStorage.getItem('UserMail'), address: storedData.value}));
                     return storedData.value;
@@ -60,7 +60,7 @@ $(document).ready(async function() {
         updateFunction();
         serveurAddress = getServeurSession();
 
-        console.log('Connected to the server from client');
+        //console.log('Connected to the server from client');
         
         if(localStorage.getItem('UserFirstName') == null){
             $.get("/api/getUserInfos", function(data) {
@@ -71,11 +71,11 @@ $(document).ready(async function() {
             });
         }
 
-        console.log(socket);
+        //console.log(socket);
         socket.emit('connected');
         
         $("#launchBattleButton").on('click', function(){
-            console.log("launch battle")
+            //console.log("launch battle")
             socket.emit('launchBattle', serveurAddress);
         });
 
@@ -95,12 +95,12 @@ $(document).ready(async function() {
         });
 
         socket.on("messageTestReceived", (message) => {
-            console.log(message);
+            //console.log(message);
         });
         
         socket.on("updateClassement", (classement) => {
-            console.log("update classement")
-            console.log(classement);
+            //console.log("update classement")
+            //console.log(classement);
             UI.refreshClassement(classement);
         });
 
@@ -121,8 +121,8 @@ $(document).ready(async function() {
 
             UI.displayDices();
             UI.refreshDisplay();
-            console.log('YOUR TURN');
-            console.log(window.yourTurn);
+            //console.log('YOUR TURN');
+            //console.log(window.yourTurn);
             //window.yourTurn(gameInfo);
             yourTurn(gameInfo);
             //setTimeout(yourTurn(gameInfo), 5000);
@@ -160,10 +160,10 @@ $(document).ready(async function() {
     });
 
     window.objection = function (){
-        console.log('ia object');
-        console.log('Verif ia objection = '+VerifyObjection());
+        //console.log('ia object');
+        //console.log('Verif ia objection = '+VerifyObjection());
         if(VerifyObjection()){
-            console.log('Objection');
+            console.log('Objection '+actualRound);
             socket.emit('objection', serveurAddress);
             iterration = 0;
             return true;
@@ -181,10 +181,12 @@ $(document).ready(async function() {
     }
     
     window.bet = function (newBet){
-        console.log('ia bet '+ newBet);
-        console.log('Verif ia bet = '+VerifyBet(newBet));
+        //console.log('ia bet '+ newBet);
+        //console.log('Verif ia bet = '+VerifyBet(newBet));
         if(VerifyBet(newBet)){
-            console.log('bet :'+ newBet);
+            //console.log('bet :'+ newBet);
+
+            console.log('Bet '+actualRound);
             socket.emit( 'bet' , {bet: newBet, address: serveurAddress});
             iterration = 0;
             return true;
@@ -247,8 +249,8 @@ $(document).ready(async function() {
             });
     
             if (displayActualPlayer) {
-                console.log(playerList);
-                console.log(actualPlayerIndex);
+                //console.log(playerList);
+                //console.log(actualPlayerIndex);
                 displayActualPlayer.textContent = playerList[actualPlayerIndex].name;
             } else {
                 console.error("L'élément .text-field.player n'a pas été trouvé.");
@@ -398,7 +400,7 @@ function updateFunction(){
         window.yourTurn = newFunction;
         $('#iaState').show();
     } catch (error) {
-        console.log(error.message);
+        //console.log(error.message);
         alert('Error in your code: ' + error.message);
     }
 }
@@ -424,10 +426,10 @@ const PerudoAI = (() => {
             probabilities[value] = estimateProbability(totalDice, myDice, value);
         }
         
-        console.log(probabilities);
+        //console.log(probabilities);
         let NoneContest;
         if (!isSpecialManche) {
-            console.log("Ajout bonus ");
+            //console.log("Ajout bonus ");
             let pacoProbability = probabilities[1];
             NoneContest = pacoProbability + probabilities[prevValue] > prevCount;
         }else{
@@ -449,7 +451,7 @@ const PerudoAI = (() => {
                 }
     
             } else {
-                console.log("Essayez d'augmenter la valeur tout en maintenant ou en augmentant le nombre de dés ");
+                //console.log("Essayez d'augmenter la valeur tout en maintenant ou en augmentant le nombre de dés ");
                 
                 for (let value = 6; value >= prevValue; value--) {
                     if (probabilities[value] >= prevCount && probabilities[value] >= 1) {
@@ -464,7 +466,7 @@ const PerudoAI = (() => {
                 }
 
                 if (!isSpecialManche && newBet != null) {
-                    console.log("Ajout bonus ");
+                    //console.log("Ajout bonus ");
                     let pacoProbability = probabilities[1];
                     newBet[0] <= pacoProbability + probabilities[newBet[1]];
                 }
@@ -479,7 +481,7 @@ const PerudoAI = (() => {
         }
     
         if (newBet != null) {
-            console.log('IA tes bet '+ newBet);
+            //console.log('IA tes bet '+ newBet);
             window.bet(newBet);
         } else if(JSON.stringify(previousBet) == JSON.stringify([0,1]) || JSON.stringify(previousBet) == JSON.stringify([0,2])) {
             window.bet([prevCount + 1, prevValue]);

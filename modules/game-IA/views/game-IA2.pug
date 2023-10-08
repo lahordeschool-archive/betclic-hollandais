@@ -16,8 +16,13 @@ block content
                             span#numeroTable
                         p#battleLaunch(style="width: 100%; float: left;")
                             button#launchBattleButton( class="btn btn-primary") ⚔️ Démarrer partie
-                            | &nbsp;
-                            span#iaState(style="display: none;") ✅ IA chargée
+                            if !isTraining
+                                | &nbsp;
+                                span#iaState(style="display: none;") ✅ IA chargée
+                            else 
+                                | &nbsp;
+                                span#iaState(style="display: none;") ⚠️ Mode entrainement, vous jouez manuellement.
+                            endif
                 .row 
                     .col-5(style="padding: 0px;")
                         div(style="background: #fff; border-radius: 10px; padding: 20px; margin-right: 20px;")

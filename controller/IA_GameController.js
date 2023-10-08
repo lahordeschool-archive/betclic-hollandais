@@ -69,7 +69,7 @@ class IA_GameController {
 
     setPlayerBet(playerBet){
         if(this.gameInProgress){
-            console.log('set player bet = ',playerBet )
+            //console.log('set player bet = ',playerBet )
             this.playerList[this.currentPlayer].bet = playerBet;
         }
     }
@@ -118,6 +118,7 @@ class IA_GameController {
     }
 
     objection() {
+        let resultOfObjection = false;
         if(this.gameInProgress){
             let count;
         
@@ -134,8 +135,8 @@ class IA_GameController {
             this.mancheLoser = count >= this.currentBet[0] ? this.currentPlayer : this.lastPlayer;
         
             this.playerList[this.mancheLoser].diceNb--;
-            console.log("le joueur :" + this.playerList[this.mancheLoser].name + " vient de perdre un des");
-            
+            //console.log("le joueur :" + this.playerList[this.mancheLoser].name + " vient de perdre un des");
+            resultOfObjection = "Le joueur " + this.playerList[this.mancheLoser].name + " vient de perdre un dés";
             if(this.playerList[this.mancheLoser].diceNb === 1){
                 this.currentBet = [0,1];
                 this.specialManche = true;
@@ -144,9 +145,9 @@ class IA_GameController {
             }
             
             this.playerList.forEach(player => {
-                console.log("le joueur :" + player.name);
-                console.log("nb des :" + player.diceNb);
-                console.log("les des :" + player.dices);
+                //console.log("le joueur :" + player.name);
+                //console.log("nb des :" + player.diceNb);
+                //console.log("les des :" + player.dices);
             });
 
             let countPlayer = 0;
@@ -175,16 +176,21 @@ class IA_GameController {
                 this.currentRound = 1;
                 this.rollDices();
             }else{
-                console.log("le gagnant est :" + win);
+                //console.log("le gagnant est :" + win);
+
+                resultOfObjection = "La partie est terminée. Le gagnant est :" + win;
                 this.winner = win;
                 this.gameInProgress = false;
             }
         }
+        return resultOfObjection;
     }
 
     bet(count, value) {
+        let resultOfBet = false;
         if(this.gameInProgress){
             this.setPlayerBet([count, value]);
+            resultOfBet = this.playerList[this.currentPlayer].name + " - Je paris qu'il y a " + count + " dés de " + value;
             this.currentBet = [count, value];
             this.betList.push(this.currentBet);
             this.currentRound++;
@@ -193,16 +199,16 @@ class IA_GameController {
 
             this.currentPlayer = (this.currentPlayer+1)% this.playerList.length;
 
-            console.log(this.playerList[this.currentPlayer]);
+            ////console.log(this.playerList[this.currentPlayer]);
             while(this.playerList[this.currentPlayer].diceNb === 0){
                 this.currentPlayer = (this.currentPlayer+1)% this.playerList.length;
             }
         }
-        
+        return resultOfBet;
     }
 
     getDataOther(player){
-        //console.log(this.dataCurrentPlayer);
+        ////console.log(this.dataCurrentPlayer);
         let dataOtherPlayer = {
             listPlayers : this.getPlayerListWithoutDicesValue(),
             MinPaco : this.dataCurrentPlayer.MinPaco,
@@ -216,9 +222,9 @@ class IA_GameController {
             TotaDices : this.allDices.length,
             IsSpecialManche : this.specialManche
         };
-        // console.log('Pre set other player dices '+player.name+' dices '+player.dices);
+        // //console.log('Pre set other player dices '+player.name+' dices '+player.dices);
         // dataOtherPlayer.YourDices = player.dices;
-        // console.log('Set other player dices '+player.name+' dices '+dataOtherPlayer.YourDices);
+        // //console.log('Set other player dices '+player.name+' dices '+dataOtherPlayer.YourDices);
         return dataOtherPlayer;
     }
 
@@ -240,10 +246,10 @@ class IA_GameController {
             this.minNumber = null;
         }
 
-        // console.log('******************************************************\n******************************************************\n******************************************************\n******************************************************\n');
-        // console.log('index Player '+ this.currentPlayer);
-        // console.log('Player '+ this.playerList[this.currentPlayer]);
-        console.log('Dices in dataCurrentPlayer set :'+this.playerList[this.currentPlayer].dices);
+        // //console.log('******************************************************\n******************************************************\n******************************************************\n******************************************************\n');
+        // //console.log('index Player '+ this.currentPlayer);
+        // //console.log('Player '+ this.playerList[this.currentPlayer]);
+        //console.log('Dices in dataCurrentPlayer set :'+this.playerList[this.currentPlayer].dices);
         this.dataCurrentPlayer = {
             listPlayers : this.getPlayerListWithoutDicesValue(),
             MinPaco : this.minPaco,

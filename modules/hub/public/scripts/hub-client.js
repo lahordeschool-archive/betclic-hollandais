@@ -158,7 +158,7 @@ $(document).ready(async function(){
         function handleServerConnect(key) {
             console.log(`L'utilisateur a cliqué sur le bouton de connexion pour le serveur: ${key}`);
             SetServeurSession(key);
-            redirectTo('/game-multi');
+            redirectTo('/game-ia/training');
         }
 
         function handleServerConnectIA(key) {
