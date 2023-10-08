@@ -33,7 +33,7 @@ body {
   width:200px;
 }
 
-.cube {
+/* .cube {
   width:200px;
   height: 200px;
   position: relative;
@@ -73,7 +73,7 @@ body {
 .cube__face--3  { transform: rotateY( 90deg) translateZ(100px); }
 .cube__face--4   { transform: rotateY(-90deg) translateZ(100px); }
 .cube__face--5   { transform: rotateX( 90deg) translateZ(100px); }
-.cube__face--6 { transform: rotateX(-90deg) translateZ(100px); }
+.cube__face--6 { transform: rotateX(-90deg) translateZ(100px); } */
 
 label { margin-right: 10px; }
 
