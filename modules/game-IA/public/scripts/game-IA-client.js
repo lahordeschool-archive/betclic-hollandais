@@ -253,7 +253,7 @@ $(document).ready(async function () {
                 </div>
             `;
 
-      gameInfoScene.insertAdjacentHTML("afterbegin", gameInfoHTML);
+      $(".game-info").html(gameInfoHTML);
 
       let playersScene = document.querySelector(".players");
       let players = document.querySelectorAll(".player");
@@ -279,7 +279,7 @@ $(document).ready(async function () {
                     </div>
                 `;
 
-        playersScene.innerHTML += PlayerHTML;
+        //playersScene.innerHTML += PlayerHTML;
       });
 
       if (displayActualPlayer) {
@@ -316,6 +316,7 @@ $(document).ready(async function () {
 
     function hideLaunchButton() {
       $("#battleLaunch").hide();
+      $("#ongoingBetZone").show();
     }
 
     function addHistoriqueEntry(entry) {

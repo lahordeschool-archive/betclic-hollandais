@@ -3,8 +3,7 @@ extends ../../_common/views/layout-game
 block content
     .container
         .row 
-            .offset-0.offset-md-0
-            .col-12.col-md-8
+            .col-12.col-md-8(style="margin: auto;")
                 .row(style="margin-top: 0px;")
                     .col-12(style="margin: auto;")
                         a(href="/hub" style="float: right; margin-bottom: 10px;") ⬅️ Fuir la partie (retour au hub)
@@ -22,6 +21,12 @@ block content
                                 | &nbsp;
                                 span#iaState(style="display: none;") ⚠️ Mode entrainement, vous jouez manuellement.
                             endif
+                        #ongoingBetZone.bet-values(style="display: none;")
+                            p.col-3.p-0 Pari actuel : 
+                            .col-9
+                                input.bet-input.bet-count(type='number' value='0' readonly='' disabled style='max-width : 50px; margin-right : 5px')
+                                a X
+                                input.bet-input.bet-number(type='number' value='2' readonly='' disabled style='max-width : 50px; margin-left : 5px')
                 .row 
                     .col-12(style="padding: 0px;")
                         div(style="background: #fff; border-radius: 10px; padding: 20px; margin-bottom: 20px;")
@@ -191,19 +196,7 @@ block content
                     //-     h4(style="font-family: cursive;") 
                     //-     | Tour de : 
                     //-     span#currentPlayer(style="font-family: cursive, right;") Nom joueur
-                .row
-                    .col-12(style="background: #fff; border-radius: 10px; padding: 20px;")
-                        .bet-display
-                            .user-name
-                                p Votre nom : #{user.firstname} #{user.lastname}
-                            .player-name                           
-                                p Tour du joueur :
-                            .row.bet-values
-                                p.col-3.p-0 Pari actuel : 
-                                .col-9
-                                    input.bet-input.bet-count(type='number' value='0' readonly='' disabled style='max-width : 50px; margin-right : 5px')
-                                    a X
-                                    input.bet-input.bet-number(type='number' value='2' readonly='' disabled style='max-width : 50px; margin-left : 5px')
+
         .row 
             br
     #modalIDESaved.modal        
