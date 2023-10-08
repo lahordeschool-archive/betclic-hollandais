@@ -59,15 +59,13 @@ $(document).ready(async function(){
         window.location.href = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + newPath;
     }  
 
-    if(localStorage.getItem('UserFirstName') == null){
-        $.get("/api/getUserInfos", function(data) {
-            clientName = data.firstname;
-            localStorage.setItem('UserFirstName', clientName);
-            localStorage.setItem('UserMail', data.id);
-        }).fail(function() {
-            console.error("Erreur lors de la récupération des informations de l'utilisateur.");
-        });
-    }
+    $.get("/api/getUserInfos", function(data) {
+        clientName = data.firstname;
+        localStorage.setItem('UserFirstName', clientName);
+        localStorage.setItem('UserMail', data.id);
+    }).fail(function() {
+        console.error("Erreur lors de la récupération des informations de l'utilisateur.");
+    });
 
     clientName = localStorage.getItem('UserFirstName');
 

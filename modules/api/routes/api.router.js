@@ -86,6 +86,7 @@ module.exports = function (io) {
         if (player.mail === user.mail) {
           alreadyLogged = true;
           player.socket = socket;
+          "Player " + player.mail + " reconnected";
         }
       });
       if (
@@ -336,7 +337,13 @@ module.exports = function (io) {
   /* GET user info */
   router.get("/getUserInfos", (req, res) => {
     if (req.isAuthenticated()) {
-      res.send(req.user);
+      res.send({
+        "_id": req.user._id,
+        iaCode: req.user.iaCode,
+        firstname: req.user.firstname,
+        lastname: req.user.lastname,
+        email: req.user.email,
+      });
     } else {
       res.redirect("/login");
     }
