@@ -193,7 +193,7 @@ class IA_GameController {
       }
       resultOfBet =
         this.playerList[this.currentPlayer].name +
-        " - Je paris qu'il y a " +
+        " - Je parie qu'il y a " +
         count +
         " dés de " +
         value;

@@ -351,6 +351,15 @@ module.exports = function (io) {
     const message = await generateLiveMessage(req.params.messageType);
     res.send(message);
   });
+
+
+  router.post("/comment/", async (req, res) => {
+    var username = req.body.username;
+    var history = req.body.history;
+    const message = await generateLiveMessage("comment", { username, history });
+    res.send(message);
+  });
+
   router.socketUsers = socketUsers;
   poolsController.router = router;
   return router;

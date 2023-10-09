@@ -25,6 +25,26 @@ function rollDice(dices) {
     $("#dice" + i + "").addClass("show-" + dices[i]);
   }
 }
+
+function commentGameWithParrot() {
+  var history = $("#historique li")
+    .map(function () {
+      return $(this).text();
+    })
+    .get()
+    .join("\n");
+  var postData = {
+    username: localStorage.getItem("UserFirstName"),
+    history: history,
+    playerDices: playerDices,
+  };
+
+  $.post("/api/comment", postData, function (data) {
+    //$("#comment").html(data);
+    animateTypingText("#comment", "🦜 : " + data);
+  });
+}
+
 $(document).ready(async function () {
   $("#dicesTable").hide();
 
@@ -91,10 +111,14 @@ $(document).ready(async function () {
 
     $("#launchBattleButton").on("click", function () {
       socket.emit("launchBattle", serveurAddress);
+
+        
+      
     });
 
     socket.on("BattleLaunched", () => {
       UI.hideLaunchButton();
+      animateTypingText("#comment", "🦜 : Bonne chance chers pirates, que La Horde soit avec vous !");
     });
 
     if (serveurAddress === false) {
@@ -118,7 +142,6 @@ $(document).ready(async function () {
     });
 
     socket.on("updateHistorique", (entry) => {
-
       $("#betButton").attr("disabled", "disabled");
       $("#objectionButton").attr("disabled", "disabled");
       UI.addHistoriqueEntry(entry);
@@ -143,9 +166,12 @@ $(document).ready(async function () {
         if (!window.location.href.includes("/training")) {
           window.yourTurn(gameInfo);
         } else {
-            $("#betButton").removeAttr("disabled");
-            $("#objectionButton").removeAttr("disabled");
+          $("#betButton").removeAttr("disabled");
+          $("#objectionButton").removeAttr("disabled");
         }
+        
+        Math.random() > 0.5 && commentGameWithParrot();
+
         //setTimeout(yourTurn(gameInfo), 5000);
 
         SetServeurSession();
@@ -156,11 +182,11 @@ $(document).ready(async function () {
     });
 
     $("#betButton").on("click", function () {
-        window.bet([$("#betCount").val(), $("#betValue").val()]);
+      window.bet([$("#betCount").val(), $("#betValue").val()]);
     });
 
     $("#objectionButton").on("click", function () {
-        window.objection();
+      window.objection();
     });
 
     socket.on("Maj", (gameInfo) => {
@@ -182,6 +208,7 @@ $(document).ready(async function () {
     socket.on("finish", (playerName) => {
       console.log("finish");
       UI.addHistoriqueEntry("Partie terminée ! Le gagnant est : " + playerName);
+      commentGameWithParrot();
       //alert('Gagnant :'+ playerName);
       //localStorage.removeItem('SessionServerAddress');
       //redirectTo('/game-IDE');
@@ -226,7 +253,7 @@ $(document).ready(async function () {
       socket.emit("bet", { bet: newBet, address: serveurAddress });
       iterration = 0;
       return true;
-    } 
+    }
     /*else {
       iterration++;
       if (iterration === 5) {
