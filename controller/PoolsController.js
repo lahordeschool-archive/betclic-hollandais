@@ -133,7 +133,7 @@ const PerudoAI = (() => {
             console.log("bet par défaut");
             router.betAction({bet: [prevCount + 1, prevValue], address: data.address}, router.socketUsers[data.currentPlayer], true);
             controller.bet(prevCount + 1, prevValue);
-        }else if(prevCount === newBet[0] &&  prevValue === value || newBet === null){
+        }else if((prevCount === newBet[0] &&  prevValue === value) || newBet === null){
             console.log("objection par défaut");
             router.objectionAction(data.address, true);
             //controller.objection();
