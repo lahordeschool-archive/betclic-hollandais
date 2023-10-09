@@ -125,7 +125,7 @@ const PerudoAI = (() => {
             }
         }
 
-        if (newBet != null && !(JSON.stringify(previousBet) == JSON.stringify([0,1])) || !(JSON.stringify(previousBet) == JSON.stringify([0,2])) && (prevCount != newBet[0] &&  prevValue != value) ){
+        if (newBet !== null && newBet !== undefined && !(JSON.stringify(previousBet) == JSON.stringify([0,1])) || !(JSON.stringify(previousBet) == JSON.stringify([0,2])) && (prevCount != newBet[0] &&  prevValue != value) ){
             console.log("bet par défaut = "+newBet[0]+" "+newBet[1]);
             router.betAction({bet: [newBet[0], newBet[1]], address: data.address}, router.socketUsers[data.currentPlayer], true);
             //controller.bet(newBet[0], newBet[1]);
