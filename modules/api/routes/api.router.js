@@ -25,6 +25,12 @@ poolsController.addPool("7000");
 poolsController.addPool("8000");
 poolsController.addPool("9000");
 poolsController.addPool("10000");
+poolsController.addPool("11000");
+poolsController.addPool("12000");
+poolsController.addPool("13000");
+poolsController.addPool("14000");
+poolsController.addPool("15000");
+poolsController.addPool("16000");
 
 const socketUsers = {};
 
