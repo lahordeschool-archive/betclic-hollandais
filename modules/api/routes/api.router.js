@@ -20,6 +20,11 @@ poolsController.addPool("2000");
 poolsController.addPool("3000");
 poolsController.addPool("4000");
 poolsController.addPool("5000");
+poolsController.addPool("6000");
+poolsController.addPool("7000");
+poolsController.addPool("8000");
+poolsController.addPool("9000");
+poolsController.addPool("10000");
 
 const socketUsers = {};
 
