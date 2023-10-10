@@ -131,6 +131,11 @@ module.exports = function (io) {
         controller.dataSet();
 
         if (controller.playerList[controller.currentPlayer]) {
+          if(controller.dataCurrentPlayer && controller.betList){
+            controller.dataCurrentPlayer.betList = controller.betList;
+          } else if(controller.dataCurrentPlayer){
+            controller.dataCurrentPlayer.betList = [];
+          }
           controller.playerList[controller.currentPlayer].socket.emit(
             "PlayerTurn",
             controller.dataCurrentPlayer
