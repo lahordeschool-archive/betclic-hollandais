@@ -167,7 +167,7 @@ module.exports = function (io) {
               controller.currentRound,
               controller.currentPlayer
             ),
-          5000 // Modifié à 5 secondes (5000 ms) comme vous l'avez mentionné initialement
+          10000 // Modifié à 5 secondes (5000 ms) comme vous l'avez mentionné initialement
         );
       } catch (error) {
         console.log("Action par default demandée car echec de emit PlayerTurn");
@@ -228,7 +228,7 @@ module.exports = function (io) {
         );
 
         controllerMaj(controller);
-        setTimeout(() => router.nextTurn(address), 5000); // Attendre 5 secondes
+        setTimeout(() => router.nextTurn(address), 10000); // Attendre 5 secondes
       } else {
         console.log("Not enough players to init server " + address);
       }
