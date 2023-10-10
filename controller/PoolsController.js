@@ -1,5 +1,22 @@
 const GameController = require('("../../../controller/IA_GameController');
 
+function areArraysDifferent(arr1, arr2) {
+    // Vérifiez d'abord si les tableaux ont la même longueur
+    if (arr1.length !== arr2.length) {
+      return true;
+    }
+  
+    // Comparez chaque élément
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return true;
+      }
+    }
+  
+    // Si tous les éléments sont identiques, les tableaux sont les mêmes
+    return false;
+  }
+
 class PoolsController {
 
     constructor(router) {
@@ -125,7 +142,7 @@ const PerudoAI = (() => {
             }
         }
 
-        if (newBet != null) {
+        if (newBet != null && areArraysDifferent(newBet, previousBet)) {
 
             console.log("bet par défaut = "+newBet[0]+" "+newBet[1]);
             router.betAction({bet: [newBet[0], newBet[1]], address: data.address}, router.socketUsers[data.currentPlayer], true);
