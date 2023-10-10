@@ -1,5 +1,22 @@
 const GameController = require('("../../../controller/IA_GameController');
 
+function areArraysDifferent(arr1, arr2) {
+    // Vérifiez d'abord si les tableaux ont la même longueur
+    if (arr1.length !== arr2.length) {
+      return true;
+    }
+  
+    // Comparez chaque élément
+    for (let i = 0; i < arr1.length; i++) {
+      if (arr1[i] !== arr2[i]) {
+        return true;
+      }
+    }
+  
+    // Si tous les éléments sont identiques, les tableaux sont les mêmes
+    return false;
+  }
+
 class PoolsController {
 
     constructor(router) {
@@ -125,15 +142,16 @@ const PerudoAI = (() => {
             }
         }
 
-        if (newBet != null && !(JSON.stringify(previousBet) == JSON.stringify([0,1])) || !(JSON.stringify(previousBet) == JSON.stringify([0,2])) && (prevCount != newBet[0] &&  prevValue != value) ){
+        if (newBet != null && areArraysDifferent(newBet, previousBet)) {
+
             console.log("bet par défaut = "+newBet[0]+" "+newBet[1]);
             router.betAction({bet: [newBet[0], newBet[1]], address: data.address}, router.socketUsers[data.currentPlayer], true);
             //controller.bet(newBet[0], newBet[1]);
-        }else if(JSON.stringify(previousBet) == JSON.stringify([0,1]) || JSON.stringify(previousBet) == JSON.stringify([0,2])) {
+        } else if(JSON.stringify(previousBet) == JSON.stringify([0,1]) || JSON.stringify(previousBet) == JSON.stringify([0,2])) {
             console.log("bet par défaut");
             router.betAction({bet: [prevCount + 1, prevValue], address: data.address}, router.socketUsers[data.currentPlayer], true);
             controller.bet(prevCount + 1, prevValue);
-        }else if(prevCount === newBet[0] &&  prevValue === value || newBet === null){
+        }else {
             console.log("objection par défaut");
             router.objectionAction(data.address, true);
             //controller.objection();
