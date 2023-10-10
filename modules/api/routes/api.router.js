@@ -169,7 +169,7 @@ module.exports = function (io) {
         );
 
         // Stockez l'ID de timeout dans l'objet controller
-        controller.currentTimeout = setTimeout(
+        /*controller.currentTimeout = setTimeout(
           () =>
             router.VerifPlayerPlayInTime(
               address,
@@ -178,7 +178,7 @@ module.exports = function (io) {
               controller.currentPlayer
             ),
           5000 // Modifié à 5 secondes (5000 ms) comme vous l'avez mentionné initialement
-        );
+        );*/
       } catch (error) {
         console.log("Action par default demandée car echec de emit PlayerTurn");
 

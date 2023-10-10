@@ -168,7 +168,19 @@ $(document).ready(async function () {
         if (!window.location.pathname.includes("/training")) {
           console.log("game info");
           console.log(gameInfo);
-          
+
+          window.currentTimeout = setTimeout(function () {
+            console.log("timeout");
+            console.log(actualBet)
+            if(VerifyObjection()){
+                window.objection();
+            }
+            else {
+                window.bet([actualBet[0] + 1, actualBet[1]]);
+            }
+            
+          }, 5000);
+
           window.yourTurn(gameInfo);
         } else {
           $("#betButton").removeAttr("disabled");
@@ -232,6 +244,7 @@ $(document).ready(async function () {
   window.objection = function () {
     if (VerifyObjection()) {
       console.log("Objection " + actualRound);
+      clearTimeout(window.currentTimeout);
       socket.emit("objection", serveurAddress);
       iterration = 0;
       return true;
@@ -251,10 +264,11 @@ $(document).ready(async function () {
       }
     }
   };
-
+  
   window.bet = function (newBet) {
     if (VerifyBet(newBet)) {
       console.log("Bet " + actualRound);
+      clearTimeout(window.currentTimeout);
       socket.emit("bet", { bet: newBet, address: serveurAddress });
       iterration = 0;
       return true;

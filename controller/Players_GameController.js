@@ -32,7 +32,6 @@ class Players_GameController {
 
         this.rollDices();
         this.turn();
-        console.log("init de controller");
     }
 
     addPlayer(playerName, mail, socket){
@@ -56,7 +55,6 @@ class Players_GameController {
     }
 
     setPlayerBet(playerBet){
-        console.log('set player bet = ',playerBet )
         this.playerList[this.currentPlayer].bet = playerBet;
     }
 
