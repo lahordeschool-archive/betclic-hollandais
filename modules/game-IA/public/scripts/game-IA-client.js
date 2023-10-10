@@ -140,7 +140,7 @@ $(document).ready(async function () {
         UI.displayDices();
         UI.refreshDisplay();
 
-        if (!window.location.href.includes("/training")) {
+        if (!window.location.pathname.includes("/training")) {
           window.yourTurn(gameInfo);
         } else {
             $("#betButton").removeAttr("disabled");
