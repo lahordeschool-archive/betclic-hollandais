@@ -111,14 +111,14 @@ $(document).ready(async function () {
 
     $("#launchBattleButton").on("click", function () {
       socket.emit("launchBattle", serveurAddress);
-
-        
-      
     });
 
     socket.on("BattleLaunched", () => {
       UI.hideLaunchButton();
-      animateTypingText("#comment", "🦜 : Bonne chance chers pirates, que La Horde soit avec vous !");
+      animateTypingText(
+        "#comment",
+        "🦜 : Bonne chance chers pirates, que La Horde soit avec vous !"
+      );
     });
 
     if (serveurAddress === false) {
@@ -163,13 +163,15 @@ $(document).ready(async function () {
         UI.displayDices();
         UI.refreshDisplay();
 
-        if (!window.location.href.includes("/training")) {
+        if (!window.location.pathname.includes("/training")) {
+          console.log("game info");
+          console.log(gameInfo);
           window.yourTurn(gameInfo);
         } else {
           $("#betButton").removeAttr("disabled");
           $("#objectionButton").removeAttr("disabled");
         }
-        
+
         Math.random() > 0.5 && commentGameWithParrot();
 
         //setTimeout(yourTurn(gameInfo), 5000);
