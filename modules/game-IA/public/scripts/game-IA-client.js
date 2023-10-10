@@ -159,8 +159,8 @@ $(document).ready(async function () {
         actualPlayerIndex = gameInfo.CurrentPlayer;
         playerDices = gameInfo.YourDices;
         isSpecialManche = gameInfo.IsSpecialManche;
-        if(gameInfo && gameInfo.betList){
-            betList = gameInfo.betList;
+        if (gameInfo && gameInfo.betList) {
+          betList = gameInfo.betList;
         }
         UI.displayDices();
         UI.refreshDisplay();
@@ -171,14 +171,12 @@ $(document).ready(async function () {
 
           window.currentTimeout = setTimeout(function () {
             console.log("timeout");
-            console.log(actualBet)
-            if(VerifyObjection()){
-                window.objection();
+            console.log(actualBet);
+            if (VerifyObjection()) {
+              window.objection();
+            } else {
+              window.bet([actualBet[0] + 1, actualBet[1]]);
             }
-            else {
-                window.bet([actualBet[0] + 1, actualBet[1]]);
-            }
-            
           }, 5000);
 
           window.yourTurn(gameInfo);
@@ -264,7 +262,7 @@ $(document).ready(async function () {
       }
     }
   };
-  
+
   window.bet = function (newBet) {
     if (VerifyBet(newBet)) {
       console.log("Bet " + actualRound);
@@ -407,6 +405,7 @@ $(document).ready(async function () {
 
 function VerifyBet(newBet) {
   // Vérifier s'il s'agit d'un nouveau pari
+  console.log("verify bet");
   if (JSON.stringify(actualBet) == JSON.stringify(newBet)) {
     return false;
   }
@@ -416,6 +415,8 @@ function VerifyBet(newBet) {
     // Assurez-vous que le nombre de dés pariés pour le paco est supérieur à la moitié du pari précédent
     if (newBet[0] >= Math.ceil(actualBet[0] / 2)) {
       return true;
+    } else {
+      return false;
     }
   }
 
@@ -424,22 +425,25 @@ function VerifyBet(newBet) {
     // Assurez-vous que le nombre de dés pariés est au moins le double de l'ancien pari + 1
     if (newBet[0] >= 2 * actualBet[0] + 1 && newBet[1] >= 1) {
       return true;
+    } else {
+      return false;
     }
-  }
-
-  // Vérifier si le nouveau pari surenchérit sur l'ancien pari
-  if (
-    (newBet[0] > actualBet[0] && newBet[1] == actualBet[1]) ||
-    (newBet[0] >= actualBet[0] && newBet[1] > actualBet[1])
-  ) {
-    return true;
   }
 
   // Si le pari précédent était un paco, vous pouvez surenchérir sur la valeur ou le nombre
   if (actualBet[1] === 1 && newBet[1] === 1) {
     if (newBet[0] > actualBet[0]) {
       return true;
+    } else {
+      return false;
     }
+  }
+  // Vérifier si le nouveau pari surenchérit sur l'ancien pari
+  if (
+    (newBet[0] > actualBet[0] && newBet[1] == actualBet[1]) ||
+    (newBet[0] >= actualBet[0] && newBet[1] > actualBet[1])
+  ) {
+    return true;
   }
 
   // Si aucune des conditions ci-dessus n'est satisfaite, le pari n'est pas valide
