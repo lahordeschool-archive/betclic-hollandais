@@ -249,7 +249,7 @@ module.exports = function (io) {
     });
 
     socket.on("bet", (data) => {
-      router.betAction(data, socket, poolsController, false);
+      router.betAction(data, socket, false);
     });
 
     socket.on("MajRequest", (address) => {
