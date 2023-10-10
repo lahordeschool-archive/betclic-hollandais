@@ -12,7 +12,7 @@ var actualtotalDices = 0;
 var actualPlayerIndex = 0;
 var playerDices = [];
 var isSpecialManche = false;
-
+var betList = [];
 var iterration = 0;
 
 function rollDice(dices) {
@@ -159,13 +159,16 @@ $(document).ready(async function () {
         actualPlayerIndex = gameInfo.CurrentPlayer;
         playerDices = gameInfo.YourDices;
         isSpecialManche = gameInfo.IsSpecialManche;
-
+        if(gameInfo && gameInfo.betList){
+            betList = gameInfo.betList;
+        }
         UI.displayDices();
         UI.refreshDisplay();
 
         if (!window.location.pathname.includes("/training")) {
           console.log("game info");
           console.log(gameInfo);
+          
           window.yourTurn(gameInfo);
         } else {
           $("#betButton").removeAttr("disabled");
